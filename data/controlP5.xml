@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<controlP5 colorLabel="ffffffff" colorValue="ffffffff" colorForeground="ff00698c" date="Fri Nov 11 19:42:05 EST 2011" colorBackground="ff003652" colorActive="ff08a2cf" lock="false" filepath="controlP5.xml" urlpath="">
+<window height="600" name="main" background="00000000" width="800" class="Main">
+<tab name="global" width="40" id="-1" visible="1.0" open="1.0" label="global" moveable="0.0"/>
+<tab name="default" width="45" id="-1" visible="1.0" open="1.0" label="default" moveable="0.0">
+<controller name="resume" id="-1" width="70" visible="1.0" type="button" y="30.0" label="resume" x="10.0" value="1.0" height="20" moveable="1.0"/>
+<controller name="quit" id="-1" width="70" visible="1.0" type="button" y="30.0" label="quit" x="90.0" value="1.0" height="20" moveable="1.0"/>
+</tab>
+</window>
+</controlP5>
+
