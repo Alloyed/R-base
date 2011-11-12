@@ -1,3 +1,4 @@
+package client;
 /*
  * ROBOTGAME IS SERIOUS BUSINESS
  * 
@@ -23,7 +24,7 @@ import controlP5.*;
 import processing.core.*; 
 
 
-public class Main extends PApplet {
+public class Client extends PApplet {
 	private static final long serialVersionUID = 1L;
 	//Config options
 	Boolean ROTATE_FORCE = true; // does W point up, or to the cursor?
@@ -102,15 +103,12 @@ public class Main extends PApplet {
 		}
 	}
 	
-	public void exit()
-	{
+	public void exit() {
 		settings.save();
 		super.exit();
 	}
 	
-	void doPhysics()
-	{
-		
+	void doPhysics() {
 		Vec2 dir = new Vec2(mouseX, mouseY).sub(pc.getWorldCenter().mul(64));
 		float ang = atan2(dir.y, dir.x);
 		pc.setTransform(pc.getWorldCenter(), ang);
@@ -192,6 +190,6 @@ public class Main extends PApplet {
 	}
 
 	public static void main(String[] args) {
-		PApplet.main(new String[] { "--present", "Main" });
+		PApplet.main(new String[] { "--present", "client.Client" });
 	}
 }
