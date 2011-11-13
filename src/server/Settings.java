@@ -1,4 +1,4 @@
-package client;
+package server;
 
 /*Client-only settings*/
 public class Settings extends common.Settings {

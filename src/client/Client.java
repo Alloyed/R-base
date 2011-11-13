@@ -1,4 +1,5 @@
 package client;
+
 /*
  * ROBOTGAME IS SERIOUS BUSINESS
  * 
@@ -6,10 +7,6 @@ package client;
  * 
  * WITH COMMENTS
  *  
- *  TODO:Work out classes for robots, bullets, levels, etc., get multiple bodies, flesh out UI, all of networking, find something for craig and darshan to do
- *  PROBABLE PROBLEMS: No built-in "window" in gui, cannot control mouse acceleration
- *  Scales: Box2d works in meters/kilograms/seconds, in the window, 64 px = 1 m.
- *  	a robot is 1 m long/wide, and need some density/friction/restitution/speed adjustments to be fun to play as.
  */
 
 //Util
@@ -21,27 +18,23 @@ import org.jbox2d.common.*;
 //gooey
 import controlP5.*;
 //graphix
-import processing.core.*; 
-
+import processing.core.*;
 
 public class Client extends PApplet {
 	private static final long serialVersionUID = 1L;
-	//Config options
-	Boolean ROTATE_FORCE = true; // does W point up, or to the cursor?
-	Integer WINDOW_WIDTH=800,WINDOW_HEIGHT=600;
+	// Config options
 	Settings settings;
-	
-	//Game state
+
+	// Game state
 	World physics;
 	ControlP5 gooey;
 	boolean menuOn = true;
 	ArrayList<ControllerInterface> mainMenu;
-	
+
 	// This stuff would be a good example of 'user data' for bodies
 	Body pc;
 	boolean upPressed, leftPressed, rightPressed, downPressed;
 	float speed = 75; // vroom vroom
-	
 
 	public void quit() {
 		exit();
@@ -54,16 +47,10 @@ public class Client extends PApplet {
 
 	@Override
 	public void setup() {
-		settings = new Settings("data/Settings.xml");
-		//This should be simpler to do, but changing it probably involves Deep Java Magic
-		if (settings.get("ROTATE_FORCE")!= null)
-			ROTATE_FORCE = (Boolean)settings.get("ROTATE_FORCE");
-		if (settings.get("WINDOW_HEIGHT")!= null)
-			WINDOW_HEIGHT = (Integer)settings.get("WINDOW_HEIGHT");
-		if (settings.get("WINDOW_WIDTH")!= null)
-			WINDOW_WIDTH = (Integer)settings.get("WINDOW_WIDTH");
+		settings = new Settings("ClientSettings.xml");
+
 		// Graphix stuf
-		size(WINDOW_WIDTH, WINDOW_HEIGHT);
+		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT);
 		frameRate(60);
 		background(0);
 		smooth();
@@ -102,17 +89,17 @@ public class Client extends PApplet {
 			background(150);
 		}
 	}
-	
+
 	public void exit() {
 		settings.save();
 		super.exit();
 	}
-	
+
 	void doPhysics() {
 		Vec2 dir = new Vec2(mouseX, mouseY).sub(pc.getWorldCenter().mul(64));
 		float ang = atan2(dir.y, dir.x);
 		pc.setTransform(pc.getWorldCenter(), ang);
-		
+
 		Vec2 move = new Vec2(0, 0);
 		if (upPressed)
 			move.addLocal(0, -speed);
@@ -122,20 +109,21 @@ public class Client extends PApplet {
 			move.addLocal(speed, 0);
 		if (downPressed)
 			move.addLocal(0, speed);
-		if (ROTATE_FORCE) {
+		if (settings.ROTATE_FORCE) {
 			ang += HALF_PI;
-			move.set(move.x * cos(ang) - move.y * sin(ang), 
-					move.x * sin(ang) + move.y * cos(ang));
+			move.set(move.x * cos(ang) - move.y * sin(ang), move.x * sin(ang)
+					+ move.y * cos(ang));
 		}
-		
+
 		pc.applyForce(move, pc.getWorldCenter());
-		
-		pc.setLinearDamping(pc.getFixtureList().getFriction()*pc.getMass()*9.8f); //How... Normal.
-		
+
+		pc.setLinearDamping(pc.getFixtureList().getFriction() * pc.getMass()
+				* 9.8f); // How... Normal.
+
 		physics.step(1f / 60f, 8, 3);
 		physics.clearForces();
 	}
-	
+
 	void drawWorld() {
 		background(20);
 		Vec2 v = pc.getPosition();
@@ -158,8 +146,6 @@ public class Client extends PApplet {
 				c.hide();
 		}
 	}
-	
-	
 
 	@Override
 	public void keyPressed() {
