@@ -7,7 +7,8 @@ PROBABLE PROBLEMS: No built-in "window" in gui, cannot control mouse acceleratio
 Scales: Box2d works in meters/kilograms/seconds, in the window, 64 px = 1 m right now. a robot is 1 m long/wide.
 
 --Jon's Thoughts--
-TODO:all of networking
+TODO: Client: Everything
+      Server: Handle Events
 
 --Craig's Thoughts--
 TODO: Work out classes for robots, bullets, levels, etc., store bodies
