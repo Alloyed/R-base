@@ -64,7 +64,6 @@ public class Settings {
 			top.addChild(child);
 		}
 
-		System.out.println(top.toString());
 
 		try {
 			FileWriter w = new FileWriter(file);
