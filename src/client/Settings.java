@@ -9,7 +9,7 @@ import java.util.Enumeration;
 import nanoxml.XMLElement;
 
 /*Client settings*/
-public class Settings  {
+public class Settings {
 
 	public Integer WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
 	public Boolean ROTATE_FORCE = false;
@@ -18,7 +18,7 @@ public class Settings  {
 
 	/* Note: No absolute filenames. */
 	public Settings(String s) {
-		
+
 		file = "data/" + s;
 		XMLElement x = new XMLElement();
 		try {
@@ -43,7 +43,6 @@ public class Settings  {
 				else
 					value = tmp;
 				getClass().getField(name).set(this, value);
-				System.out.println(getClass().getField(name).get(this));
 			}
 			System.out.println("Settings read.");
 
@@ -57,19 +56,18 @@ public class Settings  {
 		XMLElement top = new XMLElement();
 		top.setName("R-base");
 		for (Field f : this.getClass().getDeclaredFields()) {
-			if (f.getName() != "file") { //1 exception
-			XMLElement child = new XMLElement();
-			child.setName(f.getName());
-			try {
-				child.setAttribute("type", f.get(this).getClass());
-				child.setContent(f.get(this).toString());
-			} catch (Exception e) {
-				;
-			}
-			top.addChild(child);
+			if (f.getName() != "file") { // 1 exception
+				XMLElement child = new XMLElement();
+				child.setName(f.getName());
+				try {
+					child.setAttribute("type", f.get(this).getClass());
+					child.setContent(f.get(this).toString());
+				} catch (Exception e) {
+					;
+				}
+				top.addChild(child);
 			}
 		}
-
 
 		try {
 			FileWriter w = new FileWriter(file);
