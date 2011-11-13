@@ -100,6 +100,7 @@ import java.util.Vector;
  *         &lt;<A href="mailto:cyberelf@mac.com">cyberelf@mac.com</A>&gt;
  * @version $Name: RELEASE_2_2_1 $, $Revision: 1.4 $
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class XMLElement
 {
 
@@ -309,7 +310,8 @@ public class XMLElement
      * @see nanoxml.XMLElement#XMLElement(java.util.Hashtable,boolean)
      *         XMLElement(Hashtable, boolean)
      */
-    public XMLElement(Hashtable entities)
+    
+	public XMLElement(Hashtable entities)
     {
         this(entities, false, true, true);
     }
@@ -465,7 +467,8 @@ public class XMLElement
      *
      * @see nanoxml.XMLElement#createAnotherElement()
      */
-    protected XMLElement(Hashtable entities,
+    
+	protected XMLElement(Hashtable entities,
                          boolean   skipLeadingWhitespace,
                          boolean   fillBasicConversionTable,
                          boolean   ignoreCase)
