@@ -48,7 +48,7 @@ public class Client extends PApplet {
 	@Override
 	public void setup() {
 		settings = new Settings("ClientSettings.xml");
-
+		println(settings.ROTATE_FORCE);
 		// Graphix stuf
 		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT);
 		frameRate(60);
