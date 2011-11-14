@@ -10,6 +10,7 @@ package client;
  */
 
 //Util
+import java.io.IOException;
 import java.util.ArrayList;
 //Physix
 import org.jbox2d.dynamics.*;
@@ -27,6 +28,7 @@ public class Runner extends PApplet {
 	Settings settings;
 
 	// Game state
+	Client client;
 	World physics;
 	ControlP5 gooey;
 	boolean menuOn = true;
@@ -60,16 +62,17 @@ public class Runner extends PApplet {
 	public void windowH(String s) {
 		settings.WINDOW_HEIGHT = Integer.parseInt(s);
 	}
-
+	int init = 0, last=0;
 	@Override
 	public void setup() {
 		settings = new Settings("ClientSettings.xml");
 		// Graphix stuf
 		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, P2D);
-		frameRate(60);
 		background(0);
 		smooth();
 		textMode(SCREEN);
+		frameRate(50);
+		
 		// Physix stuf
 		physics = new World(new Vec2(0, 0), false);
 
@@ -105,6 +108,9 @@ public class Runner extends PApplet {
 		gooey.controller("resume").setLabel("start");
 		logo = loadImage("logo.png");
 		imageMode(CENTER);
+		
+		//Networky Sutf
+		connect();
 	}
 
 	@Override
@@ -177,9 +183,17 @@ public class Runner extends PApplet {
 
 	public void fps() {
 		fill(255);
-		text("FPS: " + frameRate, width - 110, height);
+		text("FPS: " + (int)frameRate, width - 110, height);
 	}
-
+	
+	void connect() {
+		try {
+			client = new Client(settings.IP,settings.PORT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	void toggleMenu() {
 		menuOn = !menuOn;
 		if (menuOn)

@@ -8,12 +8,12 @@
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/gluegen-rt.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/linux32"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/windows32"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jogl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/linux32"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/windows32"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/opengl.jar"/>

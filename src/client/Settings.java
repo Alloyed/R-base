@@ -10,8 +10,8 @@ import nanoxml.XMLElement;
 
 /*Client settings*/
 public class Settings {
-
-	public Integer WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
+	public String IP = "localhost";
+	public Integer PORT = 9001, WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
 	public Boolean ROTATE_FORCE = false;
 
 	String file;
