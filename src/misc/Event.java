@@ -10,5 +10,5 @@ public enum Event {
 	KEY_PRESSED,
 	KEY_RELEASED;
 	
-	/* TODO: write interfacing stuff.
+	/* TODO: write interfacing stuff. */
 }
