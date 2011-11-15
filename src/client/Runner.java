@@ -21,7 +21,7 @@ import org.jbox2d.common.*;
 //gooey
 import controlP5.*;
 //graphix
-import physics.playerState;
+import physics.PlayerState;
 import processing.core.*;
 import processing.opengl.*;
 
@@ -42,7 +42,7 @@ public class Runner extends PApplet {
 
 	// This stuff would be a good example of 'user data' for bodies
 	Body pc;
-	playerState pcState;
+	PlayerState pcState;
 	float speed = 75; // vroom vroom
 
 	/* Gooey methods. TODO:find some way to move this to another class. */
@@ -131,8 +131,7 @@ public class Runner extends PApplet {
 
 		pc = physics.createBody(d);
 		pc.createFixture(fd);
-		pc.setUserData(new physics.playerState());
-		pcState = new playerState();
+		pcState = new PlayerState();
 		
 		// Gooey Stuf
 		gooey = new ControlP5(this);
@@ -169,7 +168,7 @@ public class Runner extends PApplet {
 		fps();
 	}
 
-	void doPhysics(playerState s) {
+	void doPhysics(PlayerState s) {
 		Vec2 dir = s.aim.sub(pc.getWorldCenter().mul(64));
 		float ang = atan2(dir.y, dir.x);
 		pc.setTransform(pc.getWorldCenter(), ang);
