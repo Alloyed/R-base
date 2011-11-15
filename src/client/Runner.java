@@ -11,6 +11,7 @@ package client;
 
 //Util
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 //Physix
 import org.jbox2d.dynamics.*;
@@ -188,7 +189,7 @@ public class Runner extends PApplet {
 	
 	void connect() {
 		try {
-			client = new Client(settings.IP,settings.PORT);
+			client = new Client(InetAddress.getByName(settings.IP),settings.PORT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -217,6 +218,11 @@ public class Runner extends PApplet {
 				downPressed = true;
 			else if (key == 'd')
 				rightPressed = true;
+		}
+		try {
+			client.sendEvent(key);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

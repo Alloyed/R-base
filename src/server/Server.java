@@ -1,8 +1,6 @@
 package server;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.ArrayList;
 
 /*
  * All this thing does is wait for new clients.
@@ -12,24 +10,14 @@ import java.util.ArrayList;
  */
 
 public class Server {
-
-	ServerSocket s;
-	ArrayList<ServerThread> clients;
+	Network n;
 	
 	Server(int port) throws IOException {
-		s = new ServerSocket(port);
-		clients = new ArrayList<ServerThread>();
-	}
-	
-	void loop() throws IOException {
-		while(true) {
-			clients.add(new ServerThread(s.accept()) {{ run(); }});
-		}
+		n = new Network(port);
+		System.out.println("Server Successfully Started.");
 	}
 	
 	public static void main(String[] args) throws IOException {
 		Server s = new Server(9001);
-		
-		s.loop();
 	}
 }
