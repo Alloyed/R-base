@@ -1,27 +1,35 @@
 package server;
 
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.ArrayList;
 
-/* This thing creates the Network server. Then handles all
- * of the events it passes here by polling Network.
+/*
+ * All this thing does is wait for new clients.
+ * Then ServerThread takes over for each one.
  * 
  * TODO: handle events, collate clients, provide global map, etc.
  */
 
 public class Server {
-	Network n;
+
+	ServerSocket s;
+	ArrayList<ServerThread> clients;
 	
 	Server(int port) throws IOException {
-		n = new Network(port);
+		s = new ServerSocket(port);
+		clients = new ArrayList<ServerThread>();
 	}
 	
-	public void run() throws IOException {
-		n.getEvent();
+	void loop() throws IOException {
+		while(true) {
+			clients.add(new ServerThread(s.accept()) {{ run(); }});
+		}
 	}
 	
 	public static void main(String[] args) throws IOException {
 		Server s = new Server(9001);
 		
-		s.run();
+		s.loop();
 	}
 }
