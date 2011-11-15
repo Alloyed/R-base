@@ -19,9 +19,11 @@ import org.jbox2d.common.*;
 //gooey
 import controlP5.*;
 //graphix
+import physics.playerState;
 import processing.core.*;
 import processing.opengl.*;
 
+@SuppressWarnings("unused")
 public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
 	// Config options
@@ -34,11 +36,11 @@ public class Runner extends PApplet {
 	boolean menuOn = true;
 	ArrayList<ControllerInterface> mainMenu;
 	PImage logo;
+	float sc = 1;
 
 	// This stuff would be a good example of 'user data' for bodies
 	Body pc;
-	Vec2 aim;
-	boolean upPressed, leftPressed, rightPressed, downPressed;
+	playerState pcState;
 	float speed = 75; // vroom vroom
 
 	/* Gooey methods. TODO:find some way to move this to another class. */
@@ -53,8 +55,10 @@ public class Runner extends PApplet {
 
 	public void rotate(boolean hi) {
 		settings.ROTATE_FORCE = hi;
+		pcState.ROTATE_FORCE = hi; //TODO: make an holder object or something
 	}
-
+	
+	//TODO: make a reset button
 	public void windowW(String s) {
 		settings.WINDOW_WIDTH = Integer.parseInt(s);
 	}
@@ -62,19 +66,56 @@ public class Runner extends PApplet {
 	public void windowH(String s) {
 		settings.WINDOW_HEIGHT = Integer.parseInt(s);
 	}
-	int init = 0, last=0;
+	
+	public void ip(String s) {
+		settings.IP = s;
+	}
+	
+	public void port(String s) {
+		settings.PORT = Integer.parseInt(s);
+	}
+	
+	void connect() {
+		gooey.controller("ip").update();
+		gooey.controller("port").update();
+		try {
+			client = new Client(settings.IP,settings.PORT);
+		} catch (IOException e) {
+			println("CONNEXT PLZ");
+		}
+	}
+	
+	public void exit() {
+		settings.save();
+		super.exit();
+	}
+	
+	void initControls() {
+		// TODO: find some nicer way to do this
+		((Toggle) gooey.controller("rotate")).setValue(settings.ROTATE_FORCE);
+		((Textfield) gooey.controller("windowW"))
+				.setValue(settings.WINDOW_WIDTH.toString());
+		((Textfield) gooey.controller("windowH"))
+				.setValue(settings.WINDOW_HEIGHT.toString());
+		((Textfield) gooey.controller("ip"))
+			.setValue(settings.IP);
+		((Textfield) gooey.controller("port"))
+			.setValue(settings.PORT.toString());
+	}
+	
 	@Override
 	public void setup() {
 		settings = new Settings("ClientSettings.xml");
 		// Graphix stuf
-		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, P2D);
+		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
+		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, renderer);
 		background(0);
 		smooth();
 		textMode(SCREEN);
-		frameRate(50);
-		
+		frameRate(30);
+		sc = width < height ? width / 800f : height / 600f;
 		// Physix stuf
-		physics = new World(new Vec2(0, 0), false);
+		physics = new World(new Vec2(0, 0), true);
 
 		BodyDef d = new BodyDef();
 		d.position.set(1, 1); // pos
@@ -88,17 +129,13 @@ public class Runner extends PApplet {
 
 		pc = physics.createBody(d);
 		pc.createFixture(fd);
-		aim = new Vec2(0, 0);
-
+		pc.setUserData(new physics.playerState());
+		pcState = new playerState();
+		
 		// Gooey Stuf
 		gooey = new ControlP5(this);
 		gooey.load("controlP5.xml"); // See that for the gooey options.
-		// TODO: find some nicer way to do this
-		((Toggle) gooey.controller("rotate")).setValue(settings.ROTATE_FORCE);
-		((Textfield) gooey.controller("windowW"))
-				.setValue(settings.WINDOW_WIDTH.toString());
-		((Textfield) gooey.controller("windowH"))
-				.setValue(settings.WINDOW_HEIGHT.toString());
+		initControls();
 
 		for (ControllerInterface c : gooey.getControllerList()) {
 			if (c instanceof Textfield)
@@ -116,42 +153,35 @@ public class Runner extends PApplet {
 	@Override
 	public void draw() {
 
-		if (!menuOn) {
-			aim.x = mouseX;
-			aim.y = mouseY;
-		}
-		doPhysics();
+		doPhysics(pcState);
 
-		// TRANSPARENCY!
-		drawWorld();
 		if (menuOn) {
 			background(color(25, 50, 50));
 			image(logo, width / 2f, height / 2f);
+		} else {
+			drawWorld();
+			pcState.aim.x = mouseX;
+			pcState.aim.y = mouseY;
 		}
 		gooey.draw();
 		fps();
 	}
 
-	public void exit() {
-		settings.save();
-		super.exit();
-	}
-
-	void doPhysics() {
-		Vec2 dir = aim.sub(pc.getWorldCenter().mul(64));
+	void doPhysics(playerState s) {
+		Vec2 dir = s.aim.sub(pc.getWorldCenter().mul(64));
 		float ang = atan2(dir.y, dir.x);
 		pc.setTransform(pc.getWorldCenter(), ang);
 
 		Vec2 move = new Vec2(0, 0);
-		if (upPressed)
+		if (s.upPressed)
 			move.addLocal(0, -speed);
-		if (leftPressed)
+		if (s.leftPressed)
 			move.addLocal(-speed, 0);
-		if (rightPressed)
+		if (s.rightPressed)
 			move.addLocal(speed, 0);
-		if (downPressed)
+		if (s.downPressed)
 			move.addLocal(0, speed);
-		if (settings.ROTATE_FORCE) {
+		if (s.ROTATE_FORCE) {
 			ang += HALF_PI;
 			move.set(move.x * cos(ang) - move.y * sin(ang),
 					move.x * sin(ang) + move.y * cos(ang));
@@ -162,7 +192,7 @@ public class Runner extends PApplet {
 		pc.setLinearDamping(pc.getFixtureList().getFriction()
 				* (pc.getMass() * 9.8f)); // How... Normal.
 
-		physics.step(1f / 60f, 8, 3);
+		physics.step(1f / 30f, 8, 3);
 		physics.clearForces();
 	}
 
@@ -171,35 +201,38 @@ public class Runner extends PApplet {
 
 		Vec2 v = pc.getPosition();
 		pushMatrix();
-		fill(255);
-		translate(v.x * 64, v.y * 64);
-		rotate(pc.getAngle());
-		rect(-32, -32, 64, 64);
-		fill(100);
-		rect(0, -16, 32, 32);
+			fill(255);
+			noStroke();
+			translate(v.x * 64, v.y * 64);
+			scale(sc);
+			rotate(pc.getAngle());
+			rect(-32, -32, 64, 64);
+			fill(100);
+			rect(0, -16, 32, 32);
 		popMatrix();
-
+		pushMatrix();
+			noFill();
+			stroke(255);
+			strokeWeight(2);
+			translate(pcState.aim.x,pcState.aim.y);
+			rect(-2, -2, 4, 4);
+		popMatrix();
 	}
 
 	public void fps() {
 		fill(255);
-		text("FPS: " + (int)frameRate, width - 110, height);
-	}
-	
-	void connect() {
-		try {
-			client = new Client(settings.IP,settings.PORT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		text("FPS: " + (int)frameRate, width - 50, height);
 	}
 	
 	void toggleMenu() {
 		menuOn = !menuOn;
-		if (menuOn)
+		if (menuOn) {
 			gooey.show();
-		else
+			cursor();
+		} else {
 			gooey.hide();
+			noCursor();
+		}
 	}
 
 	@Override
@@ -210,13 +243,13 @@ public class Runner extends PApplet {
 		}
 		if (!menuOn) {
 			if (key == 'w')
-				upPressed = true;
+				pcState.upPressed = true;
 			else if (key == 'a')
-				leftPressed = true;
+				pcState.leftPressed = true;
 			else if (key == 's')
-				downPressed = true;
+				pcState.downPressed = true;
 			else if (key == 'd')
-				rightPressed = true;
+				pcState.rightPressed = true;
 		}
 	}
 
@@ -224,13 +257,18 @@ public class Runner extends PApplet {
 	public void keyReleased() {
 		if (!menuOn) {
 			if (key == 'w')
-				upPressed = false;
+				pcState.upPressed = false;
 			else if (key == 'a')
-				leftPressed = false;
+				pcState.leftPressed = false;
 			else if (key == 's')
-				downPressed = false;
+				pcState.downPressed = false;
 			else if (key == 'd')
-				rightPressed = false;
+				pcState.rightPressed = false;
 		}
+	}
+	
+
+	public static void main(String[] args) {
+		PApplet.main(new String[] { "--present", "--hide-stop", "client.Runner" });
 	}
 }

@@ -13,8 +13,9 @@ public class Settings {
 	public String IP = "localhost";
 	public Integer PORT = 9001, WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
 	public Boolean ROTATE_FORCE = false;
-
-	String file;
+	public Boolean USE_OPENGL = false;
+	
+	private String file;
 
 	/* Note: No absolute filenames. */
 	public Settings(String s) {

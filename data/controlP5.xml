@@ -6,6 +6,9 @@
 <tab name="default" width="45" id="-1" visible="1.0" open="1.0" label="about" moveable="0.0">
 <controller name="resume" id="-1" width="70" visible="1.0" type="button" y="30.0" label="start" x="10.0" value="1.0" height="20" moveable="1.0"/>
 <controller name="quit" id="-1" width="70" visible="1.0" type="button" y="30.0" label="quit" x="90.0" value="1.0" height="20" moveable="1.0"/>
+<controller name="ip" id="-1" width="100" visible="1.0" type="textfield" y="60.0" label="IP Address" x="10.0" value="1024" height="20" moveable="1.0"/>
+<controller name="port" id="-1" width="30" visible="1.0" type="textfield" y="60.0" label="Port" x="110.0" value="1024" height="20" moveable="1.0"/>
+<controller name="connect" id="-1" width="70" visible="1.0" type="button" y="100.0" label="Connect" x="10.0" value="1.0" height="20" moveable="1.0"/>
 </tab>
 <tab name="settings" width="47" id="-1" visible="1.0" open="1.0" label="Settings" moveable="0.0">
 <controller name="rotate" id="-1" width="20" visible="1.0" type="toggle" y="30.0" label="Move toward cursor?" x="10.0" value="0.0" height="20" moveable="1.0"/>

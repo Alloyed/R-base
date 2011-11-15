@@ -1,8 +1,11 @@
 Roboticals
 --Kyle's thoughts--
-TODO: configurable keybindings, 
-	make functions to draw individual bodies, 
-	measure relative to screen instead of pixels 
+TODO: make functions to draw individual bodies, 
+	configurable keybindings,
+	HUD/non-menu UI,
+	built-in console/chat setup,
+	Try opengl on a platform with good drivers,
+	Try rendering textured backgrounds
 
 PROBABLE PROBLEMS: No built-in "window" in gui, 
 					cannot control mouse acceleration, 
