@@ -3,7 +3,6 @@ package server;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.util.ArrayList;
 
 /* TODO: handle events, respond to the client. */
@@ -11,25 +10,24 @@ import java.util.ArrayList;
 public class Network {
 	DatagramSocket socket;
 	DatagramPacket p;
-	ArrayList<DatagramSocket> clients;
+	ArrayList<byte[]> keys;
 	byte[] buf = new byte[256];
 	
 	Network(int port) throws IOException {
 		socket = new DatagramSocket(port);
 		p = new DatagramPacket(buf, buf.length);
-		clients = new ArrayList<DatagramSocket>();
-	}
-	
-	public DatagramSocket getClientByIP(InetAddress ip) throws IOException {
-		for(DatagramSocket s : clients)
-			if(s.getInetAddress() == ip)
-				return socket;
-		
-		return null;
+		keys = new ArrayList<byte[]>();
 	}
 	
 	public DatagramPacket getEvent() throws IOException {
 		socket.receive(p);
+		if(p.getData() == "new".getBytes()) {
+			int key = (int) (Math.random()* 9854764);
+			byte[] nextKey = (""+key).getBytes();
+			keys.add(nextKey);
+			socket.send(new DatagramPacket(nextKey, nextKey.length, p.getAddress(), p.getPort()));
+			return null;
+		}
 		return p;
 	}
 	

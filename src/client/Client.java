@@ -4,21 +4,28 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.Arrays;
 
 public class Client {
-	DatagramSocket s;
-	InetAddress i;
-	int port;
+	public DatagramSocket s;
+	public DatagramPacket p;
+	public InetAddress i;
+	public int port;
+	private byte[] key;
 	
 	Client(InetAddress ip, int port) throws IOException {
 		i = ip;
 		this.port = port;
-		
 		s = new DatagramSocket(port, i);
+		
+		requestKey(ip);
 	}
 	
-	public boolean pollServer() {
-		return false;
+	public void requestKey(InetAddress ip) throws IOException {
+		s.send(new DatagramPacket("new".getBytes(), "new".getBytes().length, i, port));
+		s.setSoTimeout(5000);
+		s.receive(p);
+		key = p.getData();
 	}
 	
 	public void sendEvent(String e) throws IOException {

@@ -145,7 +145,7 @@ public class Runner extends PApplet {
 		}
 		// NOTE: controller names correspond with method names
 		gooey.controller("resume").setLabel("start");
-		logo = loadImage("logo.png");
+		logo = loadImage("logo2.png");
 		imageMode(CENTER);
 		
 		//Networky Sutf
