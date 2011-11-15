@@ -9,6 +9,6 @@ public class PlayerState implements State{
 		return null;
 	}
 	public void parseBytes(byte[] packet, int head) {
-		//TODO: this stuff.
+		;
 	}
 }
