@@ -1,7 +1,7 @@
 <R-base>
 <IP TYPE="class java.lang.String">localhost</IP>
 <PORT TYPE="class java.lang.Integer">9001</PORT>
-<WINDOW_WIDTH TYPE="class java.lang.Integer">1000</WINDOW_WIDTH>
+<WINDOW_WIDTH TYPE="class java.lang.Integer">800</WINDOW_WIDTH>
 <WINDOW_HEIGHT TYPE="class java.lang.Integer">600</WINDOW_HEIGHT>
 <ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
 <USE_OPENGL TYPE="class java.lang.Boolean">false</USE_OPENGL>

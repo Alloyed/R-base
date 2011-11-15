@@ -21,7 +21,10 @@ import org.jbox2d.common.*;
 //gooey
 import controlP5.*;
 //graphix
+import physics.Actor;
+import physics.Player;
 import physics.PlayerState;
+import physics.Stage;
 import processing.core.*;
 import processing.opengl.*;
 
@@ -33,17 +36,13 @@ public class Runner extends PApplet {
 
 	// Game state
 	Client client;
-	World physics;
+	Stage stage;
 	ControlP5 gooey;
 	boolean menuOn = true;
 	ArrayList<ControllerInterface> mainMenu;
 	PImage logo;
 	float sc = 1;
-
-	// This stuff would be a good example of 'user data' for bodies
-	Body pc;
-	PlayerState pcState;
-	float speed = 75; // vroom vroom
+	Player pc;
 
 	/* Gooey methods. TODO:find some way to move this to another class. */
 	public void quit() {
@@ -57,7 +56,7 @@ public class Runner extends PApplet {
 
 	public void rotate(boolean hi) {
 		settings.ROTATE_FORCE = hi;
-		pcState.ROTATE_FORCE = hi; //TODO: make an holder object or something
+		pc.state.ROTATE_FORCE = hi; //TODO: make an holder object or something
 	}
 	
 	//TODO: make a reset button
@@ -117,22 +116,10 @@ public class Runner extends PApplet {
 		frameRate(30);
 		sc = width < height ? width / 800f : height / 600f;
 		// Physix stuf
-		physics = new World(new Vec2(0, 0), true);
+		stage = new Stage();
 
-		BodyDef d = new BodyDef();
-		d.position.set(1, 1); // pos
-		d.type = BodyType.DYNAMIC;
-		PolygonShape s = new PolygonShape();
-		s.setAsBox(1, 1); // size
-		FixtureDef fd = new FixtureDef();
-		fd.shape = s;
-		fd.density = .8f;
-		fd.friction = .1f;
+		pc = new Player(stage);
 
-		pc = physics.createBody(d);
-		pc.createFixture(fd);
-		pcState = new PlayerState();
-		pcState.aim = new Vec2(0,0);
 		
 		// Gooey Stuf
 		gooey = new ControlP5(this);
@@ -149,81 +136,58 @@ public class Runner extends PApplet {
 		imageMode(CENTER);
 		
 		//Networky Sutf
-		connect();
+		//connect();
 	}
 
 	@Override
 	public void draw() {
-
-		doPhysics(pcState);
-
+		stage.step();
 		if (menuOn) {
 			background(color(25, 50, 50));
 			image(logo, width / 2f, height / 2f);
 		} else {
+			pc.state.aim.x = mouseX;
+			pc.state.aim.y = mouseY;
 			drawWorld();
-			pcState.aim.x = mouseX;
-			pcState.aim.y = mouseY;
 		}
 		gooey.draw();
 		fps();
 	}
-
-	void doPhysics(PlayerState s) {
-		Vec2 dir = s.aim.sub(pc.getWorldCenter().mul(64));
-		float ang = atan2(dir.y, dir.x);
-		pc.setTransform(pc.getWorldCenter(), ang);
-
-		Vec2 move = new Vec2(0, 0);
-		if (s.upPressed)
-			move.addLocal(0, -speed);
-		if (s.leftPressed)
-			move.addLocal(-speed, 0);
-		if (s.rightPressed)
-			move.addLocal(speed, 0);
-		if (s.downPressed)
-			move.addLocal(0, speed);
-		if (s.ROTATE_FORCE) {
-			ang += HALF_PI;
-			move.set(move.x * cos(ang) - move.y * sin(ang),
-					move.x * sin(ang) + move.y * cos(ang));
-		}
-
-		pc.applyForce(move, pc.getWorldCenter());
-
-		pc.setLinearDamping(pc.getFixtureList().getFriction()
-				* (pc.getMass() * 9.8f)); // How... Normal.
-
-		physics.step(1f / 30f, 8, 3);
-		physics.clearForces();
+	
+	void draw(Actor a) {
+		Vec2 v = a.b.getWorldCenter();
+		pushMatrix();
+			fill(255);
+			noStroke();
+			rectMode(CENTER);
+			translate(v.x * 64, v.y * 64);
+			scale(sc);
+			rotate(a.b.getAngle());
+			rect(0, 0, 64, 64);
+			fill(100);
+			if (a.getClass().equals(Player.class))
+				rect(16, 0, 32, 32);
+		popMatrix();
 	}
 
 	void drawWorld() {
 		background(20);
-
-		Vec2 v = pc.getPosition();
-		pushMatrix();
-			fill(255);
-			noStroke();
-			translate(v.x * 64, v.y * 64);
-			scale(sc);
-			rotate(pc.getAngle());
-			rect(-32, -32, 64, 64);
-			fill(100);
-			rect(0, -16, 32, 32);
-		popMatrix();
+		for (Actor a:stage.actors) {
+			draw(a);
+		}
+		//crosshairs
 		pushMatrix();
 			noFill();
 			stroke(255);
 			strokeWeight(2);
-			translate(pcState.aim.x,pcState.aim.y);
+			translate(pc.state.aim.x,pc.state.aim.y);
 			rect(-2, -2, 4, 4);
 		popMatrix();
 	}
 
 	public void fps() {
 		fill(255);
-		text("FPS: " + (int)frameRate, width - 50, height);
+		text("FPS: " + (int)frameRate  + ", Actors: " + stage.actors.size(), width - 150, height);
 	}
 	
 	
@@ -246,13 +210,13 @@ public class Runner extends PApplet {
 		}
 		if (!menuOn) {
 			if (key == 'w')
-				pcState.upPressed = true;
+				pc.state.upPressed = true;
 			else if (key == 'a')
-				pcState.leftPressed = true;
+				pc.state.leftPressed = true;
 			else if (key == 's')
-				pcState.downPressed = true;
+				pc.state.downPressed = true;
 			else if (key == 'd')
-				pcState.rightPressed = true;
+				pc.state.rightPressed = true;
 		}
 	}
 
@@ -260,16 +224,21 @@ public class Runner extends PApplet {
 	public void keyReleased() {
 		if (!menuOn) {
 			if (key == 'w')
-				pcState.upPressed = false;
+				pc.state.upPressed = false;
 			else if (key == 'a')
-				pcState.leftPressed = false;
+				pc.state.leftPressed = false;
 			else if (key == 's')
-				pcState.downPressed = false;
+				pc.state.downPressed = false;
 			else if (key == 'd')
-				pcState.rightPressed = false;
+				pc.state.rightPressed = false;
 		}
 	}
 	
+	
+	public void mouseReleased() {
+		if (!menuOn)
+			new Actor(stage,new Vec2(mouseX/64f,mouseY/64f));
+	}
 
 	public static void main(String[] args) {
 		PApplet.main(new String[] { "--present", "--hide-stop", "client.Runner" });
