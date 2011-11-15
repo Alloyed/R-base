@@ -132,6 +132,7 @@ public class Runner extends PApplet {
 		pc = physics.createBody(d);
 		pc.createFixture(fd);
 		pcState = new PlayerState();
+		pcState.aim = new Vec2(0,0);
 		
 		// Gooey Stuf
 		gooey = new ControlP5(this);
@@ -252,11 +253,6 @@ public class Runner extends PApplet {
 				pcState.downPressed = true;
 			else if (key == 'd')
 				pcState.rightPressed = true;
-		}
-		try {
-			client.sendEvent(key);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
