@@ -1,20 +1,30 @@
 package client;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
-import java.util.Scanner;
-
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class Client {
-	DataOutputStream out;
-	DataInputStream in;
+	DatagramSocket s;
+	InetAddress dest;
+	int port;
 	
 	Client(String ip, int port) throws IOException {
-		Socket s = new Socket(ip, port);
-		out = new DataOutputStream(s.getOutputStream());
-		in = new DataInputStream(System.in);
+		dest = InetAddress.getByName(ip);
+		this.port = port;
+
+		s = new DatagramSocket(port, InetAddress.getByName(ip));
 	}
 	
+	public boolean sendEvent(String e) throws IOException {
+		byte[] buf = e.getBytes();
+		s.send(new DatagramPacket(buf, buf.length, dest, port));
+		
+		return false;
+	}
+	
+	public void getState() {
+		
+	}
 }
