@@ -11,7 +11,9 @@ package client;
 
 //Util
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.net.InetAddress;
 //Physix
 import org.jbox2d.dynamics.*;
 import org.jbox2d.collision.shapes.PolygonShape;
@@ -79,7 +81,7 @@ public class Runner extends PApplet {
 		gooey.controller("ip").update();
 		gooey.controller("port").update();
 		try {
-			client = new Client(settings.IP,settings.PORT);
+			client = new Client(InetAddress.getByName(settings.IP),settings.PORT);
 		} catch (IOException e) {
 			println("CONNEXT PLZ");
 		}
@@ -224,6 +226,7 @@ public class Runner extends PApplet {
 		text("FPS: " + (int)frameRate, width - 50, height);
 	}
 	
+	
 	void toggleMenu() {
 		menuOn = !menuOn;
 		if (menuOn) {
@@ -250,6 +253,11 @@ public class Runner extends PApplet {
 				pcState.downPressed = true;
 			else if (key == 'd')
 				pcState.rightPressed = true;
+		}
+		try {
+			client.sendEvent(key);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
