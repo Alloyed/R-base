@@ -21,8 +21,9 @@ public class Stage {
 		}
 		
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
-			b.setLinearDamping(b.getFixtureList().getFriction()
-					* (b.getMass() * 9.8f)); // How... Normal.
+			float friction = b.getFixtureList().getFriction() * (b.getMass() * 9.8f);
+			b.setLinearDamping(friction); //Is this even the right way to do this?
+			b.setAngularDamping(friction);
 		}
 		w.step(1f / 30f, 8, 3);
 		w.clearForces();

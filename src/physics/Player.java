@@ -1,7 +1,6 @@
 package physics;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
 
 public class Player extends Actor {
 	public PlayerState state;
@@ -13,7 +12,7 @@ public class Player extends Actor {
 	}
 	
 	void force() {
-		Vec2 dir = state.aim.sub(b.getWorldCenter().mul(64));
+		Vec2 dir = state.aim.sub(b.getWorldCenter());
 		float ang = (float)Math.atan2(dir.y, dir.x);
 		b.setTransform(b.getWorldCenter(), ang);
 

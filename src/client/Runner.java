@@ -41,7 +41,8 @@ public class Runner extends PApplet {
 	boolean menuOn = true;
 	ArrayList<ControllerInterface> mainMenu;
 	PImage logo;
-	float sc = 1;
+	float scale = 1;
+	float meterScale = 64;
 	Player pc;
 
 	/* Gooey methods. TODO:find some way to move this to another class. */
@@ -115,7 +116,8 @@ public class Runner extends PApplet {
 		smooth();
 		textMode(SCREEN);
 		frameRate(30);
-		sc = width < height ? width / 800f : height / 600f;
+		scale = width < height ? width / 800f : height / 600f;
+		meterScale = scale*64f;
 		// Physix stuf
 		stage = new Stage();
 
@@ -147,8 +149,8 @@ public class Runner extends PApplet {
 			background(color(25, 50, 50));
 			image(logo, width / 2f, height / 2f);
 		} else {
-			pc.state.aim.x = mouseX;
-			pc.state.aim.y = mouseY;
+			pc.state.aim.x = mouseX/meterScale;
+			pc.state.aim.y = mouseY/meterScale;
 			drawWorld();
 		}
 		gooey.draw();
@@ -161,8 +163,8 @@ public class Runner extends PApplet {
 			fill(255);
 			noStroke();
 			rectMode(CENTER);
-			translate(v.x * 64, v.y * 64);
-			scale(sc);
+			translate(v.x * meterScale, v.y * meterScale);
+			scale(scale);
 			rotate(a.b.getAngle());
 			rect(0, 0, 64, 64);
 			fill(100);
@@ -181,7 +183,7 @@ public class Runner extends PApplet {
 			noFill();
 			stroke(255);
 			strokeWeight(2);
-			translate(pc.state.aim.x,pc.state.aim.y);
+			translate(pc.state.aim.x*meterScale,pc.state.aim.y*meterScale);
 			rect(-2, -2, 4, 4);
 		popMatrix();
 	}
@@ -238,7 +240,7 @@ public class Runner extends PApplet {
 	
 	public void mouseReleased() {
 		if (!menuOn)
-			new Actor(stage,new Vec2(mouseX/64f,mouseY/64f));
+			new Actor(stage,new Vec2(mouseX/meterScale,mouseY/meterScale));
 	}
 
 	public static void main(String[] args) {

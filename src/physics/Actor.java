@@ -14,11 +14,11 @@ public class Actor {
 		d.position.set(pos);
 		d.type = BodyType.DYNAMIC;
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(size, size);
+		shape.setAsBox(size/2f, size/2f);
 		FixtureDef fd = new FixtureDef();
 		fd.shape = shape;
-		fd.density = .8f;
-		fd.friction = .1f;
+		fd.density = 1.6f;
+		fd.friction = .3f;
 
 		b = s.w.createBody(d);
 		b.createFixture(fd);
