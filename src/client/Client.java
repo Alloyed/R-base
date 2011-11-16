@@ -25,10 +25,20 @@ public class Client {
 	}
 	
 	public void requestKey(InetAddress ip) throws IOException {
-		s.send(new DatagramPacket("new".getBytes(), "new".getBytes().length, i, port));
+		s.send(new DatagramPacket(new byte[] {70}, 1, i, port));
 		s.setSoTimeout(5000);
+		System.out.println(s.getSoTimeout());
 		s.receive(p);
 		key = p.getData();
+		System.out.println();
+	}
+	
+	public String getKey() {
+		String s = "";
+		for(byte k : key) {
+			s += ""+k;
+		}
+		return s;
 	}
 	
 	public void sendEvent(PlayerState p) throws IOException {

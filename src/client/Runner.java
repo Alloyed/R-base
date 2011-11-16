@@ -83,7 +83,7 @@ public class Runner extends PApplet {
 		try {
 			client = new Client(InetAddress.getByName(settings.IP),settings.PORT);
 		} catch (IOException e) {
-			println("CONNEXT PLZ");
+			e.printStackTrace();
 		}
 	}
 	
