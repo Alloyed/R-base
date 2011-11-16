@@ -82,8 +82,8 @@ public class Runner extends PApplet {
 		gooey.controller("port").update();
 		try {
 			client = new Client(InetAddress.getByName(settings.IP),settings.PORT);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			println("CONNEXT PLZ");
 		}
 	}
 	
@@ -147,6 +147,9 @@ public class Runner extends PApplet {
 		gooey.controller("resume").setLabel("start");
 		logo = loadImage("logo2.png");
 		imageMode(CENTER);
+		
+		//Networky Sutf
+		connect();
 	}
 
 	@Override
