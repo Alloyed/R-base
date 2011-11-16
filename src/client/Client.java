@@ -11,12 +11,15 @@ public class Client {
 	public DatagramPacket p;
 	public InetAddress i;
 	public int port;
-	private byte[] key;
+	private byte[] key, buf;
 	
 	Client(InetAddress ip, int port) throws IOException {
 		i = ip;
 		this.port = port;
 		s = new DatagramSocket(port, i);
+		
+		buf = new byte[256];
+		p = new DatagramPacket(buf, buf.length);
 		
 		requestKey(ip);
 	}
