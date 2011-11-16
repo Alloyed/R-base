@@ -79,10 +79,11 @@ public class Runner extends PApplet {
 	void connect() {
 		gooey.controller("ip").update();
 		gooey.controller("port").update();
+		println(settings.IP+ " "+settings.PORT);
 		try {
 			client = new Client(InetAddress.getByName(settings.IP),settings.PORT);
-		} catch (IOException e) {
-			println("CONNEXT PLZ");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
