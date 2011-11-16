@@ -10,9 +10,11 @@ package client;
  */
 
 //Util
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.net.InetAddress;
 //Physix
 import org.jbox2d.dynamics.*;
@@ -33,18 +35,21 @@ public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
 	// Config options
 	Settings settings;
-
+	
 	// Game state
 	Client client;
 	Stage stage;
+	Player pc;
+	
+	//Gui stuff
+	float scale = 1;
+	float meterScale = 64;
 	ControlP5 gooey;
 	boolean menuOn = true;
 	ArrayList<ControllerInterface> mainMenu;
 	PImage logo;
-	float scale = 1;
-	float meterScale = 64;
-	Player pc;
-
+	HashMap<String,Sprite> sprites;
+	
 	/* Gooey methods. TODO:find some way to move this to another class. */
 	public void quit() {
 		exit();
@@ -113,14 +118,17 @@ public class Runner extends PApplet {
 		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
 		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, renderer);
 		background(0);
-		smooth();
+		//smooth();
 		textMode(SCREEN);
 		frameRate(30);
 		scale = width < height ? width / 800f : height / 600f;
 		meterScale = scale*64f;
+		sprites = new HashMap<String,Sprite>();
+		for (File f: new File("data/images").listFiles()) {
+			sprites.put(f.getName(), new Sprite(this, f.toString()));
+		}
 		// Physix stuf
 		stage = new Stage();
-
 		pc = new Player(stage);
 
 		
@@ -156,7 +164,7 @@ public class Runner extends PApplet {
 		gooey.draw();
 		fps();
 	}
-	
+	/*
 	void draw(Actor a) {
 		Vec2 v = a.b.getWorldCenter();
 		float rad = a.size;
@@ -173,7 +181,13 @@ public class Runner extends PApplet {
 				rect(16, 0, 32, 32);
 		popMatrix();
 	}
-
+	*/
+	void draw(Actor a) {
+		Vec2 v = a.b.getWorldCenter();
+		Sprite s = sprites.get(a.image);
+		s.draw(v.x, v.y, a.b.getAngle(), a.size);
+	}
+	
 	void drawWorld() {
 		background(20);
 		for (Actor a:stage.actors) {

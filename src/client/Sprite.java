@@ -30,6 +30,9 @@ public class Sprite {
 			p.shapeMode(p.CENTER);
 			p.translate(x * p.meterScale, y * p.meterScale);
 			p.scale(p.scale*size);
+			p.rotate(ang);
+			p.fill(255);
+			p.rect(0,0,32,32);
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else
