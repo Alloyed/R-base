@@ -18,7 +18,7 @@ public class Client {
 		i = ip;
 		this.port = port;
 		s = new DatagramSocket();
-		key = new byte[256];
+		key = new byte[16];
 		p = new DatagramPacket(key, key.length);
 		
 		requestKey(ip);
@@ -30,7 +30,7 @@ public class Client {
 		System.out.println(s.getSoTimeout());
 		s.receive(p);
 		key = p.getData();
-		System.out.println();
+		System.out.println("Server response: "+getKey());
 	}
 	
 	public String getKey() {
