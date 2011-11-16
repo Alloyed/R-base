@@ -27,7 +27,6 @@ public class Client {
 	public void requestKey(InetAddress ip) throws IOException {
 		s.send(new DatagramPacket("new".getBytes(), "new".getBytes().length, i, port));
 		s.setSoTimeout(5000);
-		p = new DatagramPacket(new byte[]{},0);
 		s.receive(p);
 		key = p.getData();
 	}
