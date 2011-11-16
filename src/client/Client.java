@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.util.Arrays;
+
+import physics.PlayerState;
 
 public class Client {
 	public DatagramSocket s;
@@ -16,7 +17,7 @@ public class Client {
 	Client(InetAddress ip, int port) throws IOException {
 		i = ip;
 		this.port = port;
-		s = new DatagramSocket(port, i);
+		s = new DatagramSocket();
 		
 		requestKey(ip);
 	}
@@ -28,8 +29,8 @@ public class Client {
 		key = p.getData();
 	}
 	
-	public void sendEvent(String e) throws IOException {
-		byte[] buf = e.getBytes();
+	public void sendEvent(PlayerState p) throws IOException {
+		byte[] buf = p.getBytes();
 		s.send(new DatagramPacket(buf, buf.length));
 	}
 

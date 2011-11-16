@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /* TODO: handle events, respond to the client. */
 
-public class Network {
+public class Network extends Thread {
 	DatagramSocket socket;
 	DatagramPacket p;
 	ArrayList<byte[]> keys;
@@ -17,6 +17,16 @@ public class Network {
 		socket = new DatagramSocket(port);
 		p = new DatagramPacket(buf, buf.length);
 		keys = new ArrayList<byte[]>();
+	}
+	
+	public void run() {
+		while(true) {
+			try {
+				Server.giveEvent(getEvent());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public DatagramPacket getEvent() throws IOException {
