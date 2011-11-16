@@ -18,6 +18,7 @@ public class Client {
 		i = ip;
 		this.port = port;
 		s = new DatagramSocket();
+		p = new DatagramPacket();
 		
 		requestKey(ip);
 	}

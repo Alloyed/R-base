@@ -36,6 +36,7 @@ public class Network extends Thread {
 			byte[] nextKey = (""+key).getBytes();
 			keys.add(nextKey);
 			socket.send(new DatagramPacket(nextKey, nextKey.length, p.getAddress(), p.getPort()));
+			System.out.println("New client at: "+p.getAddress());
 			return null;
 		}
 		return p;

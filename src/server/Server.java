@@ -25,8 +25,6 @@ public class Server {
 			//TODO: process events
 			return;
 		}
-		
-		
 	}
 	
 	public static void main(String[] args) throws IOException {
