@@ -159,6 +159,7 @@ public class Runner extends PApplet {
 	
 	void draw(Actor a) {
 		Vec2 v = a.b.getWorldCenter();
+		float rad = a.size;
 		pushMatrix();
 			fill(255);
 			noStroke();
@@ -166,7 +167,7 @@ public class Runner extends PApplet {
 			translate(v.x * meterScale, v.y * meterScale);
 			scale(scale);
 			rotate(a.b.getAngle());
-			rect(0, 0, 64, 64);
+			rect(0, 0, 64*a.size, 64*a.size);
 			fill(100);
 			if (a.getClass().equals(Player.class))
 				rect(16, 0, 32, 32);
@@ -240,7 +241,7 @@ public class Runner extends PApplet {
 	
 	public void mouseReleased() {
 		if (!menuOn)
-			new Actor(stage,new Vec2(mouseX/meterScale,mouseY/meterScale));
+			new Actor(stage,new Vec2(mouseX/meterScale,mouseY/meterScale),.25f);
 	}
 
 	public static void main(String[] args) {

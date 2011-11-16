@@ -7,9 +7,10 @@ import org.jbox2d.dynamics.*;
 public class Actor {
 	public Body b;
 	public Stage s;
+	public float size;
 	public Actor(Stage s, Vec2 pos, float size) {
 		this.s = s;
-		
+		this.size = size;
 		BodyDef d = new BodyDef();
 		d.position.set(pos);
 		d.type = BodyType.DYNAMIC;
