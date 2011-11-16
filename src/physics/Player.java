@@ -5,9 +5,11 @@ import org.jbox2d.common.Vec2;
 public class Player extends Actor {
 	public PlayerState state;
 	final int speed=75;
+	
 	final float HALF_PI = (float) (Math.PI/2f);
 	public Player(Stage s) {
 		super(s);
+		image = "player.png";
 		state = new PlayerState();
 	}
 	

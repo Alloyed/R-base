@@ -118,7 +118,8 @@ public class Runner extends PApplet {
 		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
 		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, renderer);
 		background(0);
-		//smooth();
+		smooth();
+		hint(ENABLE_OPENGL_4X_SMOOTH);
 		textMode(SCREEN);
 		frameRate(30);
 		scale = width < height ? width / 800f : height / 600f;

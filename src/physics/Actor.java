@@ -8,7 +8,7 @@ public class Actor {
 	public Body b;
 	public Stage s;
 	public float size;
-	public final String image="player.png";
+	public String image="box.png";
 	public Actor(Stage s, Vec2 pos, float size) {
 		this.s = s;
 		this.size = size;

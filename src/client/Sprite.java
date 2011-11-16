@@ -26,6 +26,7 @@ public class Sprite {
 	public void draw(float x, float y, float ang, float size) {
 		p.pushStyle();
 		p.pushMatrix(); {
+			p.noStroke();
 			p.imageMode(p.CENTER);
 			p.shapeMode(p.CENTER);
 			p.translate(x * p.meterScale, y * p.meterScale);
