@@ -10,9 +10,11 @@ package client;
  */
 
 //Util
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.net.InetAddress;
 //Physix
 import org.jbox2d.dynamics.*;
@@ -21,7 +23,10 @@ import org.jbox2d.common.*;
 //gooey
 import controlP5.*;
 //graphix
+import physics.Actor;
+import physics.Player;
 import physics.PlayerState;
+import physics.Stage;
 import processing.core.*;
 import processing.opengl.*;
 
@@ -30,21 +35,23 @@ public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
 	// Config options
 	Settings settings;
-
+	
 	// Game state
 	Client client;
-	World physics;
+	Stage stage;
+	Player pc;
+	
+	//Gui stuff
+	float scale = 1;
+	float meterScale = 64;
 	ControlP5 gooey;
 	boolean menuOn = true;
 	ArrayList<ControllerInterface> mainMenu;
 	PImage logo;
-	float sc = 1;
-
-	// This stuff would be a good example of 'user data' for bodies
-	Body pc;
-	PlayerState pcState;
-	float speed = 75; // vroom vroom
-
+	PFont font;
+	ControlFont cfont;
+	HashMap<String,Sprite> sprites;
+	
 	/* Gooey methods. TODO:find some way to move this to another class. */
 	public void quit() {
 		exit();
@@ -57,10 +64,12 @@ public class Runner extends PApplet {
 
 	public void rotate(boolean hi) {
 		settings.ROTATE_FORCE = hi;
-		pcState.ROTATE_FORCE = hi; //TODO: make an holder object or something
+		pc.state.ROTATE_FORCE = hi; //TODO: make an holder object or something
 	}
-	
-	//TODO: make a reset button
+	public void userName(String s) {
+		settings.USERNAME = s;
+		pc.label = s;
+	}
 	public void windowW(String s) {
 		settings.WINDOW_WIDTH = Integer.parseInt(s);
 	}
@@ -80,11 +89,16 @@ public class Runner extends PApplet {
 	void connect() {
 		gooey.controller("ip").update();
 		gooey.controller("port").update();
+		println(settings.IP+ " "+settings.PORT);
 		try {
 			client = new Client(InetAddress.getByName(settings.IP),settings.PORT);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void reset() {
+		setup();
 	}
 	
 	public void exit() {
@@ -103,124 +117,92 @@ public class Runner extends PApplet {
 			.setValue(settings.IP);
 		((Textfield) gooey.controller("port"))
 			.setValue(settings.PORT.toString());
+		((Textfield) gooey.controller("userName"))
+			.setValue(settings.USERNAME.toString());
 	}
 	
 	@Override
 	public void setup() {
-		settings = new Settings("ClientSettings.xml");
+		if (settings == null)
+			settings = new Settings("ClientSettings.xml");
 		// Graphix stuf
 		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
 		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, renderer);
 		background(0);
 		smooth();
-		textMode(SCREEN);
+		hint(ENABLE_OPENGL_4X_SMOOTH);
 		frameRate(30);
-		sc = width < height ? width / 800f : height / 600f;
-		// Physix stuf
-		physics = new World(new Vec2(0, 0), true);
-
-		BodyDef d = new BodyDef();
-		d.position.set(1, 1); // pos
-		d.type = BodyType.DYNAMIC;
-		PolygonShape s = new PolygonShape();
-		s.setAsBox(1, 1); // size
-		FixtureDef fd = new FixtureDef();
-		fd.shape = s;
-		fd.density = .8f;
-		fd.friction = .1f;
-
-		pc = physics.createBody(d);
-		pc.createFixture(fd);
-		pcState = new PlayerState();
-		pcState.aim = new Vec2(0,0);
+		scale = width < height ? width / 800f : height / 600f;
+		meterScale = scale*64f;
 		
-		// Gooey Stuf
-		gooey = new ControlP5(this);
-		gooey.load("controlP5.xml"); // See that for the gooey options.
-		initControls();
+		if (logo == null) {
+			sprites = new HashMap<String,Sprite>();
+			for (File f: new File("data/images").listFiles()) {
+				sprites.put(f.getName(), new Sprite(this, f.toString()));
+			}
+			// Physix stuf
+			stage = new Stage();
+			for (int i=0;i<50;++i)
+				new Actor(stage,new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),1f);
+			pc = new Player(stage);
+			
+			// Gooey Stuf
+			font = createFont("uni05_53.ttf",8,false);
+			textFont(font);
+			gooey = new ControlP5(this);
+			gooey.load("controlP5.xml"); // See that for the gooey options.
+			initControls();
 
-		for (ControllerInterface c : gooey.getControllerList()) {
-			if (c instanceof Textfield)
-				((Textfield) c).setAutoClear(false);
+			for (ControllerInterface c : gooey.getControllerList()) {
+				if (c instanceof Textfield)
+					((Textfield) c).setAutoClear(false);
+			}
+			// NOTE: controller names correspond with method names
+			gooey.controller("resume").setLabel("start");
+			logo = loadImage("logo2.png");
+			imageMode(CENTER);
 		}
-		// NOTE: controller names correspond with method names
-		gooey.controller("resume").setLabel("start");
-		logo = loadImage("logo2.png");
-		imageMode(CENTER);
 	}
 
 	@Override
 	public void draw() {
-
-		doPhysics(pcState);
-
+		stage.step();
 		if (menuOn) {
 			background(color(25, 50, 50));
 			image(logo, width / 2f, height / 2f);
 		} else {
+			pc.state.aim.x = mouseX/meterScale;
+			pc.state.aim.y = mouseY/meterScale;
 			drawWorld();
-			pcState.aim.x = mouseX;
-			pcState.aim.y = mouseY;
 		}
 		gooey.draw();
 		fps();
 	}
-
-	void doPhysics(PlayerState s) {
-		Vec2 dir = s.aim.sub(pc.getWorldCenter().mul(64));
-		float ang = atan2(dir.y, dir.x);
-		pc.setTransform(pc.getWorldCenter(), ang);
-
-		Vec2 move = new Vec2(0, 0);
-		if (s.upPressed)
-			move.addLocal(0, -speed);
-		if (s.leftPressed)
-			move.addLocal(-speed, 0);
-		if (s.rightPressed)
-			move.addLocal(speed, 0);
-		if (s.downPressed)
-			move.addLocal(0, speed);
-		if (s.ROTATE_FORCE) {
-			ang += HALF_PI;
-			move.set(move.x * cos(ang) - move.y * sin(ang),
-					move.x * sin(ang) + move.y * cos(ang));
-		}
-
-		pc.applyForce(move, pc.getWorldCenter());
-
-		pc.setLinearDamping(pc.getFixtureList().getFriction()
-				* (pc.getMass() * 9.8f)); // How... Normal.
-
-		physics.step(1f / 30f, 8, 3);
-		physics.clearForces();
+	
+	void draw(Actor a) {
+		Sprite s = sprites.get(a.image);
+		s.draw(a);
 	}
-
+	
 	void drawWorld() {
 		background(20);
-
-		Vec2 v = pc.getPosition();
-		pushMatrix();
-			fill(255);
-			noStroke();
-			translate(v.x * 64, v.y * 64);
-			scale(sc);
-			rotate(pc.getAngle());
-			rect(-32, -32, 64, 64);
-			fill(100);
-			rect(0, -16, 32, 32);
-		popMatrix();
+		for (Actor a:stage.actors) {
+			draw(a);
+		}
+		//crosshairs
 		pushMatrix();
 			noFill();
 			stroke(255);
 			strokeWeight(2);
-			translate(pcState.aim.x,pcState.aim.y);
+			translate(pc.state.aim.x*meterScale,pc.state.aim.y*meterScale);
 			rect(-2, -2, 4, 4);
 		popMatrix();
 	}
 
 	public void fps() {
+		textMode(SCREEN);
 		fill(255);
-		text("FPS: " + (int)frameRate, width - 50, height);
+		text("FPS: " + (int)frameRate  + ", Actors: " + stage.actors.size(), width - 150, height);
 	}
 	
 	
@@ -242,31 +224,41 @@ public class Runner extends PApplet {
 			key = 0; // No quitting, quitter
 		}
 		if (!menuOn) {
+			if (key == 'e')
+				//TODO pick up objects instead of spawning them, toggle on/drop
+				pc.pickup(new Actor(stage,new Vec2(mouseX/meterScale,mouseY/meterScale),2));
 			if (key == 'w')
-				pcState.upPressed = true;
+				pc.state.upPressed = true;
 			else if (key == 'a')
-				pcState.leftPressed = true;
+				pc.state.leftPressed = true;
 			else if (key == 's')
-				pcState.downPressed = true;
+				pc.state.downPressed = true;
 			else if (key == 'd')
-				pcState.rightPressed = true;
+				pc.state.rightPressed = true;
 		}
 	}
 
 	@Override
 	public void keyReleased() {
 		if (!menuOn) {
+			if (key == 'e')
+				pc.drop();
 			if (key == 'w')
-				pcState.upPressed = false;
+				pc.state.upPressed = false;
 			else if (key == 'a')
-				pcState.leftPressed = false;
+				pc.state.leftPressed = false;
 			else if (key == 's')
-				pcState.downPressed = false;
+				pc.state.downPressed = false;
 			else if (key == 'd')
-				pcState.rightPressed = false;
+				pc.state.rightPressed = false;
 		}
 	}
 	
+	
+	public void mousePressed() {
+		if (!menuOn) ;
+			//pc.fire();
+	}
 
 	public static void main(String[] args) {
 		PApplet.main(new String[] { "--present", "--hide-stop", "client.Runner" });

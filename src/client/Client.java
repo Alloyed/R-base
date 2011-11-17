@@ -12,7 +12,7 @@ public class Client {
 	public DatagramPacket p;
 	public InetAddress i;
 	public int port;
-	private byte[] key;
+	private byte[] key, buf;
 	
 	Client(InetAddress ip, int port) throws IOException {
 		i = ip;
@@ -20,6 +20,9 @@ public class Client {
 		s = new DatagramSocket();
 		key = new byte[16];
 		p = new DatagramPacket(key, key.length);
+		
+		buf = new byte[256];
+		p = new DatagramPacket(buf, buf.length);
 		
 		requestKey(ip);
 	}

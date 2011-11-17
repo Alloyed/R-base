@@ -10,7 +10,7 @@ import nanoxml.XMLElement;
 
 /*Client settings*/
 public class Settings {
-	public String IP = "localhost";
+	public String IP = "localhost", USERNAME="Player";
 	public Integer PORT = 9001, WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
 	public Boolean ROTATE_FORCE = false;
 	public Boolean USE_OPENGL = false;
