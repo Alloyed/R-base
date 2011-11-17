@@ -5,12 +5,34 @@ import org.jbox2d.common.Vec2;
 public class Player extends Actor {
 	public PlayerState state;
 	final int speed=75;
+	Actor other;
 	
 	final float HALF_PI = (float) (Math.PI/2f);
 	public Player(Stage s) {
 		super(s);
-		image = "player.png";
+		important = true;
+		label = "Robot";
+		image = "player-blue.png";
 		state = new PlayerState();
+	}
+	
+	//TODO: Join player and given actor
+	public void pickup(Actor a) {
+		other = a;
+	}
+	
+	public void drop() {
+		other = null;
+	}
+	
+	public void fire() {
+		if (other == null) {
+			//TODO:Fire bullets
+		} else {
+			Vec2 v = other.b.getWorldCenter().sub(b.getWorldCenter());
+			v.normalize();
+			other.b.applyForce(v.mul(50), b.getWorldCenter());
+		}
 	}
 	
 	void force() {

@@ -64,8 +64,10 @@ public class Runner extends PApplet {
 		settings.ROTATE_FORCE = hi;
 		pc.state.ROTATE_FORCE = hi; //TODO: make an holder object or something
 	}
-	
-	//TODO: make a reset button
+	public void userName(String s) {
+		settings.USERNAME = s;
+		pc.label = s;
+	}
 	public void windowW(String s) {
 		settings.WINDOW_WIDTH = Integer.parseInt(s);
 	}
@@ -93,6 +95,10 @@ public class Runner extends PApplet {
 		}
 	}
 	
+	public void reset() {
+		setup();
+	}
+	
 	public void exit() {
 		settings.save();
 		super.exit();
@@ -109,46 +115,48 @@ public class Runner extends PApplet {
 			.setValue(settings.IP);
 		((Textfield) gooey.controller("port"))
 			.setValue(settings.PORT.toString());
+		((Textfield) gooey.controller("userName"))
+		.setValue(settings.USERNAME.toString());
 	}
 	
 	@Override
 	public void setup() {
-		settings = new Settings("ClientSettings.xml");
+		if (settings == null)
+			settings = new Settings("ClientSettings.xml");
 		// Graphix stuf
 		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
 		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, renderer);
 		background(0);
 		smooth();
 		hint(ENABLE_OPENGL_4X_SMOOTH);
-		textMode(SCREEN);
 		frameRate(30);
 		scale = width < height ? width / 800f : height / 600f;
 		meterScale = scale*64f;
-		sprites = new HashMap<String,Sprite>();
-		for (File f: new File("data/images").listFiles()) {
-			sprites.put(f.getName(), new Sprite(this, f.toString()));
-		}
-		// Physix stuf
-		stage = new Stage();
-		pc = new Player(stage);
+		if (logo == null) {
+			sprites = new HashMap<String,Sprite>();
+			for (File f: new File("data/images").listFiles()) {
+				sprites.put(f.getName(), new Sprite(this, f.toString()));
+			}
+			// Physix stuf
+			stage = new Stage();
+			for (int i=0;i<50;++i)
+				new Actor(stage,new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),1f);
+			pc = new Player(stage);
 
-		
-		// Gooey Stuf
-		gooey = new ControlP5(this);
-		gooey.load("controlP5.xml"); // See that for the gooey options.
-		initControls();
+			// Gooey Stuf
+			gooey = new ControlP5(this);
+			gooey.load("controlP5.xml"); // See that for the gooey options.
+			initControls();
 
-		for (ControllerInterface c : gooey.getControllerList()) {
-			if (c instanceof Textfield)
-				((Textfield) c).setAutoClear(false);
+			for (ControllerInterface c : gooey.getControllerList()) {
+				if (c instanceof Textfield)
+					((Textfield) c).setAutoClear(false);
+			}
+			// NOTE: controller names correspond with method names
+			gooey.controller("resume").setLabel("start");
+			logo = loadImage("logo2.png");
+			imageMode(CENTER);
 		}
-		// NOTE: controller names correspond with method names
-		gooey.controller("resume").setLabel("start");
-		logo = loadImage("logo2.png");
-		imageMode(CENTER);
-		
-		//Networky Sutf
-		//connect();
 	}
 
 	@Override
@@ -165,28 +173,10 @@ public class Runner extends PApplet {
 		gooey.draw();
 		fps();
 	}
-	/*
+	
 	void draw(Actor a) {
-		Vec2 v = a.b.getWorldCenter();
-		float rad = a.size;
-		pushMatrix();
-			fill(255);
-			noStroke();
-			rectMode(CENTER);
-			translate(v.x * meterScale, v.y * meterScale);
-			scale(scale);
-			rotate(a.b.getAngle());
-			rect(0, 0, 64*a.size, 64*a.size);
-			fill(100);
-			if (a.getClass().equals(Player.class))
-				rect(16, 0, 32, 32);
-		popMatrix();
-	}
-	*/
-	void draw(Actor a) {
-		Vec2 v = a.b.getWorldCenter();
 		Sprite s = sprites.get(a.image);
-		s.draw(v.x, v.y, a.b.getAngle(), a.size);
+		s.draw(a);
 	}
 	
 	void drawWorld() {
@@ -205,6 +195,7 @@ public class Runner extends PApplet {
 	}
 
 	public void fps() {
+		textMode(SCREEN);
 		fill(255);
 		text("FPS: " + (int)frameRate  + ", Actors: " + stage.actors.size(), width - 150, height);
 	}
@@ -228,6 +219,9 @@ public class Runner extends PApplet {
 			key = 0; // No quitting, quitter
 		}
 		if (!menuOn) {
+			if (key == 'e')
+				//TODO pick up objects instead of spawning them, toggle on/drop
+				pc.pickup(new Actor(stage,new Vec2(mouseX/meterScale,mouseY/meterScale),2));
 			if (key == 'w')
 				pc.state.upPressed = true;
 			else if (key == 'a')
@@ -242,6 +236,8 @@ public class Runner extends PApplet {
 	@Override
 	public void keyReleased() {
 		if (!menuOn) {
+			if (key == 'e')
+				pc.drop();
 			if (key == 'w')
 				pc.state.upPressed = false;
 			else if (key == 'a')
@@ -254,9 +250,9 @@ public class Runner extends PApplet {
 	}
 	
 	
-	public void mouseReleased() {
-		if (!menuOn)
-			new Actor(stage,new Vec2(mouseX/meterScale,mouseY/meterScale),.25f);
+	public void mousePressed() {
+		if (!menuOn) ;
+			//pc.fire();
 	}
 
 	public static void main(String[] args) {

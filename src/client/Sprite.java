@@ -1,5 +1,6 @@
 package client;
 
+import physics.Actor;
 import processing.core.PImage;
 import processing.core.PShape;
 
@@ -23,17 +24,20 @@ public class Sprite {
 	}
 	
 	@SuppressWarnings("static-access")
-	public void draw(float x, float y, float ang, float size) {
+	/*float x, float y, float ang, float size, String label*/
+	public void draw(Actor a) {
+		float x = a.b.getWorldCenter().x, y = a.b.getWorldCenter().y;
 		p.pushStyle();
 		p.pushMatrix(); {
 			p.noStroke();
 			p.imageMode(p.CENTER);
 			p.shapeMode(p.CENTER);
+			p.rectMode(p.CENTER);
 			p.translate(x * p.meterScale, y * p.meterScale);
-			p.scale(p.scale*size);
-			p.rotate(ang);
-			p.fill(255);
-			p.rect(0,0,32,32);
+			p.scale(p.scale*a.size);
+			p.rotate(a.b.getAngle());
+			p.noFill();
+			p.stroke(0xff,0xff,0x00);
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else
@@ -41,5 +45,8 @@ public class Sprite {
 		}
 		p.popStyle();
 		p.popMatrix();
+		p.fill(255);
+		if (a.important)
+			p.text(a.label,(x * p.meterScale),((y+a.size) * p.meterScale));
 	}
 }
