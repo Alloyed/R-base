@@ -48,6 +48,8 @@ public class Runner extends PApplet {
 	boolean menuOn = true;
 	ArrayList<ControllerInterface> mainMenu;
 	PImage logo;
+	PFont font;
+	ControlFont cfont;
 	HashMap<String,Sprite> sprites;
 	
 	/* Gooey methods. TODO:find some way to move this to another class. */
@@ -116,7 +118,7 @@ public class Runner extends PApplet {
 		((Textfield) gooey.controller("port"))
 			.setValue(settings.PORT.toString());
 		((Textfield) gooey.controller("userName"))
-		.setValue(settings.USERNAME.toString());
+			.setValue(settings.USERNAME.toString());
 	}
 	
 	@Override
@@ -132,6 +134,7 @@ public class Runner extends PApplet {
 		frameRate(30);
 		scale = width < height ? width / 800f : height / 600f;
 		meterScale = scale*64f;
+		
 		if (logo == null) {
 			sprites = new HashMap<String,Sprite>();
 			for (File f: new File("data/images").listFiles()) {
@@ -142,8 +145,10 @@ public class Runner extends PApplet {
 			for (int i=0;i<50;++i)
 				new Actor(stage,new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),1f);
 			pc = new Player(stage);
-
+			
 			// Gooey Stuf
+			font = createFont("uni05_53.ttf",8,false);
+			textFont(font);
 			gooey = new ControlP5(this);
 			gooey.load("controlP5.xml"); // See that for the gooey options.
 			initControls();
