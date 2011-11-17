@@ -5,16 +5,19 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
-/* TODO: handle events, respond to the client. */
+/* TODO: handle events, Limit one connection per IP. */
 
 public class Network extends Thread {
 	DatagramSocket socket;
 	DatagramPacket p;
 	ArrayList<byte[]> keys;
-	byte[] buf = new byte[256];
-	byte[] initBytes = new byte[] {70},
-			endBytes = new byte[] {07};
+	Random keygen = new Random();
+	byte[] buf = new byte[256],
+		initBytes = new byte[] {70},
+		endBytes = new byte[] {07},
+		nextKey = new byte[16];
 	
 	Network(int port) throws IOException {
 		socket = new DatagramSocket(port);
@@ -36,8 +39,7 @@ public class Network extends Thread {
 	public DatagramPacket getEvent() throws IOException {
 		socket.receive(p);
 		if(p.getData()[0] == initBytes[0]) {
-			int key = (int) (Math.random()* 9854764);
-			byte[] nextKey = (""+key).getBytes();
+			keygen.nextBytes(nextKey);
 			keys.add(nextKey);
 			socket.send(new DatagramPacket(nextKey, nextKey.length, p.getAddress(), p.getPort()));
 			System.out.println("New client at: "+p.getAddress());
