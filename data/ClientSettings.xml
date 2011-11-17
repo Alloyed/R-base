@@ -1,5 +1,5 @@
 <R-base>
-<IP TYPE="class java.lang.String">10.200.5.28</IP>
+<IP TYPE="class java.lang.String">localhost</IP>
 <PORT TYPE="class java.lang.Integer">9001</PORT>
 <WINDOW_WIDTH TYPE="class java.lang.Integer">1000</WINDOW_WIDTH>
 <WINDOW_HEIGHT TYPE="class java.lang.Integer">600</WINDOW_HEIGHT>
