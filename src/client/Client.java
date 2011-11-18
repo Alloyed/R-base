@@ -53,7 +53,7 @@ public class Client {
 		byte[] buf = new byte[flexBuf.size()];
 		for(int i = 0; i < flexBuf.size(); i++)
 			buf[i] = flexBuf.get(i);
-		
-		s.send(new DatagramPacket(buf, buf.length));
+		this.p.setData(buf, 0, buf.length);
+		s.send(this.p);
 	}
 }
