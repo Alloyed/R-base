@@ -151,7 +151,12 @@ public class Runner extends PApplet {
 
 	@Override
 	public void draw() {
-
+		if(client != null)
+			try {
+				client.sendEvent(pcState);
+			} catch (IOException e) {
+				
+			}
 		doPhysics(pcState);
 
 		if (menuOn) {

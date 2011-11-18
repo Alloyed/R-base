@@ -22,7 +22,6 @@ public class Server {
 	
 	public static void giveEvent(DatagramPacket p) {
 		if(p != null) {
-			System.out.println("New client.");
 			return;
 		} else {
 			//TODO: process events into current state.
