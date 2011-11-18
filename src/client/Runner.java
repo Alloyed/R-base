@@ -40,15 +40,19 @@ public class Runner extends PApplet {
 	// Game state
 	Client client;
 	Stage stage;
-	Player pc;
+	
+	
+	//Views
+	Menu menu;
+	Botmode botMode;
+	Godmode godMode;
+	UI currentMode;
 	
 	//Gui stuff
 	float scale = 1;
 	float meterScale = 64;
 	ControlP5 gooey;
-	boolean menuOn = true;
-	ArrayList<ControllerInterface> mainMenu;
-	PImage logo;
+	int mode = 0;
 	PFont font;
 	ControlFont cfont;
 	HashMap<String,Sprite> sprites;
@@ -60,16 +64,16 @@ public class Runner extends PApplet {
 
 	public void resume() {
 		gooey.controller("resume").setLabel("resume");
-		toggleMenu();
+		botMode.show();
 	}
 
 	public void rotate(boolean hi) {
 		settings.ROTATE_FORCE = hi;
-		pc.state.ROTATE_FORCE = hi; //TODO: make an holder object or something
+		botMode.pc.state.ROTATE_FORCE = hi;
 	}
 	public void userName(String s) {
 		settings.USERNAME = s;
-		pc.label = s;
+		botMode.pc.label = s;
 	}
 	public void windowW(String s) {
 		settings.WINDOW_WIDTH = Integer.parseInt(s);
@@ -136,7 +140,7 @@ public class Runner extends PApplet {
 		scale = width < height ? width / 800f : height / 600f;
 		meterScale = scale*64f;
 		
-		if (logo == null) {
+		if (menu == null) {
 			sprites = new HashMap<String,Sprite>();
 			for (File f: new File("data/images").listFiles()) {
 				sprites.put(f.getName(), new Sprite(this, f.toString()));
@@ -151,7 +155,9 @@ public class Runner extends PApplet {
 				new Actor(stage,
 						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
 						1);
-			pc = new Player(stage);
+			
+			godMode = new Godmode(this);
+			botMode = new Botmode(this);
 			
 			// Gooey Stuf
 			font = createFont("uni05_53.ttf",8,false);
@@ -164,24 +170,15 @@ public class Runner extends PApplet {
 				if (c instanceof Textfield)
 					((Textfield) c).setAutoClear(false);
 			}
-			// NOTE: controller names correspond with method names
-			gooey.controller("resume").setLabel("start");
-			logo = loadImage("logo2.png");
-			imageMode(CENTER);
+			menu = new Menu(this);
+			menu.show();
 		}
 	}
 
 	@Override
 	public void draw() {
 		stage.step();
-		if (menuOn) {
-			background(color(25, 50, 50));
-			image(logo, width / 2f, height / 2f);
-		} else {
-			pc.state.aim.x = mouseX/meterScale;
-			pc.state.aim.y = mouseY/meterScale;
-			drawWorld();
-		}
+		currentMode.draw();
 		gooey.draw();
 		fps();
 	}
@@ -190,78 +187,33 @@ public class Runner extends PApplet {
 		Sprite s = sprites.get(a.image);
 		s.draw(a);
 	}
-	
-	void drawWorld() {
-		background(20);
-		for (Actor a:stage.actors) {
-			draw(a);
-		}
-		//crosshairs
-		pushMatrix();
-			noFill();
-			stroke(255);
-			strokeWeight(2);
-			translate(pc.state.aim.x*meterScale,pc.state.aim.y*meterScale);
-			rect(-2, -2, 4, 4);
-		popMatrix();
-	}
 
 	public void fps() {
 		textMode(SCREEN);
 		fill(255);
 		text("FPS: " + (int)frameRate  + ", Actors: " + stage.actors.size(), width - 150, height);
 	}
-	
-	
-	void toggleMenu() {
-		menuOn = !menuOn;
-		if (menuOn) {
-			gooey.show();
-			cursor();
-		} else {
-			gooey.hide();
-			noCursor();
-		}
-	}
 
 	@Override
 	public void keyPressed() {
-		if (key == ESC) {
-			toggleMenu();
-			key = 0; // No quitting, quitter
-		}
-		if (!menuOn) {
-			if (key == 'w')
-				pc.state.upPressed = true;
-			else if (key == 'a')
-				pc.state.leftPressed = true;
-			else if (key == 's')
-				pc.state.downPressed = true;
-			else if (key == 'd')
-				pc.state.rightPressed = true;
+		currentMode.keyPressed();
+		if (key == ESC) { //Keeps game from stopping at ESC
+			key = 0;
 		}
 	}
 
 	@Override
 	public void keyReleased() {
-		if (!menuOn) {
-			if (key == 'e') 
-				pc.toggleHold();
-			if (key == 'w')
-				pc.state.upPressed = false;
-			else if (key == 'a')
-				pc.state.leftPressed = false;
-			else if (key == 's')
-				pc.state.downPressed = false;
-			else if (key == 'd')
-				pc.state.rightPressed = false;
-		}
+		currentMode.keyReleased();
 	}
 	
 	
 	public void mousePressed() {
-		if (!menuOn)
-			pc.fire();
+		currentMode.mousePressed();
+	}
+	
+	public void mouseReleased() {
+		
 	}
 
 	public static void main(String[] args) {
