@@ -24,6 +24,7 @@ import org.jbox2d.common.*;
 import controlP5.*;
 //graphix
 import physics.Actor;
+import physics.Building;
 import physics.Player;
 import physics.PlayerState;
 import physics.Stage;
@@ -142,8 +143,14 @@ public class Runner extends PApplet {
 			}
 			// Physix stuf
 			stage = new Stage();
-			for (int i=0;i<50;++i)
-				new Actor(stage,new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),1f);
+			for (int i=0;i<5;++i)
+				new Building(stage,
+						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
+						new Vec2(.5f,.25f));
+			for (int i=0;i<30;++i)
+				new Actor(stage,
+						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
+						1);
 			pc = new Player(stage);
 			
 			// Gooey Stuf
@@ -224,9 +231,6 @@ public class Runner extends PApplet {
 			key = 0; // No quitting, quitter
 		}
 		if (!menuOn) {
-			if (key == 'e')
-				//TODO pick up objects instead of spawning them, toggle on/drop
-				pc.pickup(new Actor(stage,new Vec2(mouseX/meterScale,mouseY/meterScale),2));
 			if (key == 'w')
 				pc.state.upPressed = true;
 			else if (key == 'a')
@@ -241,8 +245,8 @@ public class Runner extends PApplet {
 	@Override
 	public void keyReleased() {
 		if (!menuOn) {
-			if (key == 'e')
-				pc.drop();
+			if (key == 'e') 
+				pc.toggleHold();
 			if (key == 'w')
 				pc.state.upPressed = false;
 			else if (key == 'a')
@@ -256,8 +260,8 @@ public class Runner extends PApplet {
 	
 	
 	public void mousePressed() {
-		if (!menuOn) ;
-			//pc.fire();
+		if (!menuOn)
+			pc.fire();
 	}
 
 	public static void main(String[] args) {
