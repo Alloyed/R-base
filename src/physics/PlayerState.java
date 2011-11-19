@@ -6,15 +6,7 @@ import org.jbox2d.common.Vec2;
 public class PlayerState implements State {
 	public boolean upPressed, downPressed, leftPressed, rightPressed, ROTATE_FORCE;
 	public Vec2 aim;
-	
-	public byte[] toBytes(int value) {
-		return new byte[] {
-			(byte)((value >> 24) & 0xff),
-			(byte)((value >> 16) & 0xff),
-			(byte)((value >> 8) & 0xff),
-			(byte)((value >> 0) & 0xff)
-		};
-	}
+	public long lastTime = 0;
 	
 	/* Byte #		Contents
 	 * 		0	-	upPressed
@@ -24,7 +16,7 @@ public class PlayerState implements State {
 	 * 		4	-	ROTATE_FORCE
 	 * 	  5-8	-	Cursor's X distance
 	 * 	 9-12	-	Cursor's Y distance
-	 * 	13-20	-	timeStamp Data
+	 * 	13-26	-	time since last packet
 	 */
 	public byte[] getBytes() {
 		byte[] b = new byte[21];
@@ -33,15 +25,26 @@ public class PlayerState implements State {
 		b[2] = (byte) (leftPressed?1:0);
 		b[3] = (byte) (rightPressed?1:0);
 		b[4] = (byte) (ROTATE_FORCE?1:0);
-		byte[] bytes = toBytes(Float.floatToRawIntBits(aim.x));
-		for(int i = 0; i < bytes.length; i++)
-				b[5+i] = bytes[i];
 		
-		bytes = toBytes(Float.floatToRawIntBits(aim.y));
-		for(int i = 0; i < bytes.length; i++)
-				b[9+i] = bytes[i];
+		int val = Float.floatToIntBits(aim.x);
+		for(int i = 3; i > 0; i--) {//5-8 - the cursor x
+			b[5+i] = (byte) val;
+			val >>= 8;
+		}
 		
-		bytes = new org.jscience.net.ntp.TimeStamp().getData();
+		val = Float.floatToIntBits(aim.y);
+		for(int i = 3; i > 0; i--) {//9-12 - the cursor y
+			b[9+i] = (byte) val;
+			val >>= 8;
+		}
+		
+		int nextTime = (int) (System.currentTimeMillis()-lastTime);
+		for(int i = 3; i > 0; i--) {//13-16 - the time dif
+			b[13+i] = (byte) nextTime;
+			nextTime >>= 8;
+		}
+		lastTime = nextTime;
+		
 		return b;
 	}
 	
