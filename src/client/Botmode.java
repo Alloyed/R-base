@@ -44,6 +44,7 @@ public class Botmode extends UI{
 			pc.state.rightPressed = true;
 		else if (r.key == r.ESC)
 			r.menu.show();
+		return; //Don't go to the Gooey
 	}
 	
 	@Override
@@ -74,13 +75,15 @@ public class Botmode extends UI{
 	@Override
 	public void show() {
 		r.currentMode.hide();
+		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
+		pc.label = r.settings.USERNAME;
 		r.noCursor();
-		r.gooey.getGroup("bothud").show();
+		r.gooey.getGroup("botmode").show();
 		r.currentMode = this;
 	}
 	
 	@Override
 	public void hide() {
-		r.gooey.getGroup("bothud").hide();
+		r.gooey.getGroup("botmode").hide();
 	}
 }

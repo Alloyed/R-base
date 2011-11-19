@@ -58,51 +58,23 @@ public class Runner extends PApplet {
 	ControlFont cfont;
 	HashMap<String,Sprite> sprites;
 	
-	/* Gooey methods. TODO:find some way to move this to another class. */
+	/* Gooey methods.*/
 	public void quit() {
 		exit();
 	}
-
 	public void resume() {
-		gooey.controller("resume").setLabel("resume");
 		botMode.show();
 	}
-
-	public void rotate(boolean hi) {
-		settings.ROTATE_FORCE = hi;
-		botMode.pc.state.ROTATE_FORCE = hi;
-	}
-	public void userName(String s) {
-		settings.USERNAME = s;
-		botMode.pc.label = s;
-	}
-	public void windowW(String s) {
-		settings.WINDOW_WIDTH = Integer.parseInt(s);
-	}
-
-	public void windowH(String s) {
-		settings.WINDOW_HEIGHT = Integer.parseInt(s);
-	}
-	
-	public void ip(String s) {
-		settings.IP = s;
-	}
-	
-	public void port(String s) {
-		settings.PORT = Integer.parseInt(s);
-	}
-	
 	void connect() {
-		gooey.controller("ip").update();
-		gooey.controller("port").update();
+		gooey.getController("/settings/ip").update();
+		gooey.getController("/settings/port").update();
 		println(settings.IP+ " "+settings.PORT);
 		try {
-			client = new Client(InetAddress.getByName(settings.IP),settings.PORT);
+			client = new Client(InetAddress.getByName(settings.IP),Integer.parseInt(settings.PORT));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 	public void reset() {
 		setup();
 	}
@@ -113,18 +85,18 @@ public class Runner extends PApplet {
 	}
 	
 	void initControls() {
-		// TODO: find some nicer way to do this
-		((Toggle) gooey.controller("rotate")).setValue(settings.ROTATE_FORCE);
-		((Textfield) gooey.controller("windowW"))
-				.setValue(settings.WINDOW_WIDTH.toString());
-		((Textfield) gooey.controller("windowH"))
-				.setValue(settings.WINDOW_HEIGHT.toString());
-		((Textfield) gooey.controller("ip"))
-			.setValue(settings.IP);
-		((Textfield) gooey.controller("port"))
-			.setValue(settings.PORT.toString());
-		((Textfield) gooey.controller("userName"))
-			.setValue(settings.USERNAME.toString());
+		ControlGroup m = gooey.addGroup("menu", 0, 0);
+		gooey.begin(m);
+		gooey.addButton("resume");
+		gooey.addButton("quit");
+		gooey.addButton("connect");
+		gooey.addButton("reset");
+		gooey.end(m);
+		gooey.addControllersFor("/settings", settings);
+		gooey.moveTo(m, settings);
+		
+		gooey.addGroup("botmode", 0, 0);
+		gooey.addGroup("godmode", 0, 0);
 	}
 	
 	@Override
@@ -133,7 +105,7 @@ public class Runner extends PApplet {
 			settings = new Settings("ClientSettings.xml");
 		// Graphix stuf
 		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
-		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, renderer);
+		size(Integer.parseInt(settings.WINDOW_WIDTH), Integer.parseInt(settings.WINDOW_HEIGHT), renderer);
 		background(0);
 		smooth();
 		hint(ENABLE_OPENGL_4X_SMOOTH);
@@ -164,7 +136,6 @@ public class Runner extends PApplet {
 			font = createFont("uni05_53.ttf",8,false);
 			textFont(font);
 			gooey = new ControlP5(this);
-			gooey.load("controlP5.xml"); // See that for the gooey options.
 			initControls();
 
 			for (ControllerInterface c : gooey.getControllerList()) {

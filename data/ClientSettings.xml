@@ -1,9 +1,9 @@
 <R-base>
 <IP TYPE="class java.lang.String">localhost</IP>
-<USERNAME TYPE="class java.lang.String">ROBET</USERNAME>
-<PORT TYPE="class java.lang.Integer">9001</PORT>
-<WINDOW_WIDTH TYPE="class java.lang.Integer">800</WINDOW_WIDTH>
-<WINDOW_HEIGHT TYPE="class java.lang.Integer">600</WINDOW_HEIGHT>
+<PORT TYPE="class java.lang.String">9001</PORT>
+<USERNAME TYPE="class java.lang.String">ROEBRT</USERNAME>
 <ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
+<WINDOW_WIDTH TYPE="class java.lang.String">800</WINDOW_WIDTH>
+<WINDOW_HEIGHT TYPE="class java.lang.String">600</WINDOW_HEIGHT>
 <USE_OPENGL TYPE="class java.lang.Boolean">false</USE_OPENGL>
 </R-base>

@@ -17,7 +17,6 @@ public class Menu extends UI {
 		super(r);
 		logo = r.loadImage("logo2.png");
 		r.imageMode(PConstants.CENTER);
-		r.gooey.controller("resume").setLabel("start");
 	}
 	
 	@Override
