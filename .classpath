@@ -4,19 +4,19 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/jbox2d-library-2.1.2.1-SNAPSHOT-jar-with-dependencies.jar"/>
-	<classpathentry kind="lib" path="lib/controlP5.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/gluegen-rt.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/windows32"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/all"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jogl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/windows32"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/all"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/opengl.jar"/>
-	<classpathentry kind="lib" path="lib/jscience.jar"/>
+	<classpathentry kind="lib" path="lib/nanoxml.jar"/>
+	<classpathentry kind="lib" path="lib/controlp5-svn.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
