@@ -12,6 +12,7 @@ import processing.core.PImage;
 public class Menu extends UI {
 	PImage logo;
 	ArrayList<ControllerInterface> mainMenu;
+	UI lastMode;
 	public Menu(Runner r) {
 		super(r);
 		logo = r.loadImage("logo2.png");
@@ -27,8 +28,8 @@ public class Menu extends UI {
 
 	@Override
 	public void keyPressed() {
-		// TODO Auto-generated method stub
-		
+		if (r.key == r.ESC)
+			lastMode.show();
 	}
 
 	@Override
@@ -51,16 +52,17 @@ public class Menu extends UI {
 
 	@Override
 	public void show() {
-		r.gooey.show();
+		r.currentMode.hide();
+		r.gooey.getGroup("menu").show();
 		r.cursor();
+		lastMode = r.currentMode;
 		r.currentMode = this;
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		r.gooey.hide();
-		r.noCursor();
+		r.gooey.getGroup("menu").hide();
 	}
 
 }

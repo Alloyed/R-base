@@ -41,13 +41,16 @@ public class Godmode extends UI {
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
+		r.currentMode.hide();
+		r.gooey.getGroup("godhud").show();
+		r.cursor();
+		r.currentMode = this;
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+		r.gooey.getGroup("godhud").hide();
 	}
 	
 }

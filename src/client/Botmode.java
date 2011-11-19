@@ -74,11 +74,13 @@ public class Botmode extends UI{
 	@Override
 	public void show() {
 		r.currentMode.hide();
+		r.noCursor();
+		r.gooey.getGroup("bothud").show();
 		r.currentMode = this;
 	}
 	
 	@Override
 	public void hide() {
-		
+		r.gooey.getGroup("bothud").hide();
 	}
 }

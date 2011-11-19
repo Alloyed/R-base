@@ -34,6 +34,7 @@ import processing.opengl.*;
 @SuppressWarnings("unused")
 public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
+	final String[] servers = {"localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30"};
 	// Config options
 	Settings settings;
 	
@@ -171,6 +172,7 @@ public class Runner extends PApplet {
 					((Textfield) c).setAutoClear(false);
 			}
 			menu = new Menu(this);
+			currentMode = menu;
 			menu.show();
 		}
 	}
