@@ -21,10 +21,11 @@ Scales: Box2d works in meters/kilograms/seconds,
 	
 
 --Jon's Thoughts--
-TODO: Yay! Basically everything is working. It's just a matter of setting up the event
-	sending from the server to the client and having both sides interpolate motion
-	in case of hangs.
+TODO: Client: Everything
+      Server: Handle Events
 
-POSSIBLE PROBLEMS:
-	Possible timeout from client could kill the network. (I guess UDP helps here).
-	Um...a lot of other things we haven't seen yet.
+--Craig's Thoughts--
+TODO: Work out classes for robots, bullets, levels, etc., store bodies
+
+--Darshan's thoughts--
+TODO: PR
