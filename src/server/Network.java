@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import physics.PlayerState;
+
 /* TODO: handle events, Limit one connection per IP. */
 
 public class Network extends Thread {
 	DatagramSocket socket;
 	DatagramPacket p;
-	physics.PlayerState state = new physics.PlayerState();
+	ArrayList<PlayerState> states;
 	ArrayList<byte[]> keys;
 	Random keygen = new Random();
 	byte[] buf = new byte[256],
@@ -25,6 +27,7 @@ public class Network extends Thread {
 		socket.setSoTimeout(0);
 		p = new DatagramPacket(buf, buf.length);
 		keys = new ArrayList<byte[]>();
+		states = new ArrayList<PlayerState>();
 	}
 	
 	public void run() {
@@ -44,6 +47,20 @@ public class Network extends Thread {
 					return false;
 		return true;
 	}
+
+	public void sendBack() throws IOException {
+		ArrayList<Byte> flexBuf = new ArrayList<Byte>();
+		for(PlayerState pS : states)
+			for(byte b : pS.getBytes())
+				flexBuf.add(b);
+		
+		byte[] buf = new byte[flexBuf.size()];
+		for(int i = 0; i < flexBuf.size(); i++)
+			buf[i] = flexBuf.get(i);
+		
+		this.p.setData(buf, 0, buf.length);
+		socket.send(this.p);
+	}
 	
 	public DatagramPacket getEvent() throws IOException {
 		socket.receive(p);
@@ -56,7 +73,6 @@ public class Network extends Thread {
 		} else if(p.getData() == null || !matchKeys(p.getData())) {
 			return null;
 		} else {
-			System.out.println(state.parseBytes(p.getData()));
 		}
 		return p;
 	}
