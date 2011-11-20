@@ -69,10 +69,12 @@ public class Runner extends PApplet {
 	}
 	
 	void connect() {
-		gooey.getController("/settings/ip").update();
-		gooey.getController("/settings/port").update();
 		println(settings.IP+ " "+settings.PORT);
 		try {
+			if (client != null) {
+				client.s.close();
+				client = null;
+			}
 			client = new Client(InetAddress.getByName(settings.IP),Integer.parseInt(settings.PORT));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -109,6 +111,7 @@ public class Runner extends PApplet {
 		gooey.addButton("connect");
 		gooey.addButton("reset");
 		ListBox l = gooey.addListBox("servers", 150, 70, 100, 100);
+		l.moveTo(m);
 		l.addItems(servers);
 		gooey.end(m);
 		gooey.addControllersFor("/settings", settings);
@@ -179,7 +182,7 @@ public class Runner extends PApplet {
 		currentMode.draw();
 		if(client != null)
 			try {
-				client.sendEvent(pcState);
+				client.sendEvent(botMode.pc.state);
 			} catch (IOException e) {
 				
 			}

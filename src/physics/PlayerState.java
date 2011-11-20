@@ -7,7 +7,9 @@ public class PlayerState implements State {
 	public boolean upPressed, downPressed, leftPressed, rightPressed, ROTATE_FORCE;
 	public Vec2 aim;
 	public long lastTime = 0;
-	
+	public PlayerState() {
+		aim = new Vec2(0,0);
+	}
 	/* Byte #		Contents
 	 * 		0	-	upPressed
 	 * 		1	-	downPressed
