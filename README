@@ -21,9 +21,11 @@ Scales: Box2d works in meters/kilograms/seconds,
 	
 
 --Jon's Thoughts--
-TODO: Client: Everything
-      Server: Handle Events
+TODO: Yay! Basically everything is working. It's just a matter of setting up the event
+	sending from the server to the client and having both sides interpolate motion
+	in case of hangs.
 
+<<<<<<< HEAD
 --Craig's Thoughts--
 TODO: Work out classes for bullets, levels, etc.
 
@@ -38,3 +40,8 @@ TODO: PR
 	if a source file gives errors claiming that other classes outside its package cannot be found, go to:
 	right click on file->build path->exclude from build path
 	and then do that again, this time including to build path 
+=======
+POSSIBLE PROBLEMS:
+	Possible timeout from client could kill the network. (I guess UDP helps here).
+	Um...a lot of other things we haven't seen yet.
+>>>>>>> networking

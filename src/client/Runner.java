@@ -177,6 +177,12 @@ public class Runner extends PApplet {
 	public void draw() {
 		stage.step();
 		currentMode.draw();
+		if(client != null)
+			try {
+				client.sendEvent(pcState);
+			} catch (IOException e) {
+				
+			}
 		gooey.draw();
 		fps();
 	}
