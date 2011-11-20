@@ -4,19 +4,23 @@ import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 
+/*The main representation of an in-game object, right now*/
 public class Actor {
-	public Body b;
+	public Body b; //The physical representation of the object.
 	public Stage s;
-	public float sizeW, sizeH; //Can't find an easy way to get this out of a fixture
-	public boolean important = false; 
-	public String label="Box";
-	public String image="box.png";
+	public int id; //Unique ID
+	public float sizeW, sizeH; //width and height of the box. I Can't find an easy way to get this out of a fixture
+	public boolean isImportant = false; //Important things, right now, get their labels drawn.
+	public String label="Box"; //What gets drawn next to the box to identify it, if it's important
+	public String image="box.png"; //The filename of the sprite used to represent it
+	public boolean isHeld; //Has the actor been picked up by another?
 	
+	//Makes an actor: TODO: make addActor() methods in Stage
 	public Actor(Stage s, Vec2 pos, Vec2 size) {
 		this.s = s;
 		this.sizeW = size.x;
 		this.sizeH = size.y;
-		
+		id = s.getNewId();
 		BodyDef d = new BodyDef();
 		FixtureDef fd = new FixtureDef();
 		d.position.set(pos);
@@ -51,7 +55,7 @@ public class Actor {
 	
 	}
 	
-	//Actors are moving, but useless boxes by default.
+	//Actors are moving, but useless boxes by default. Change this to give them their own free will
 	void force() {
 		
 	}

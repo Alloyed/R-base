@@ -23,8 +23,9 @@ public class Sprite {
 			sprite = p.loadImage(file);
 	}
 	
+	/* Draws the specified Actor a. See Actor for the variables you can use to customize this. 
+	 */
 	@SuppressWarnings("static-access")
-	/*float x, float y, float ang, float size, String label*/
 	public void draw(Actor a) {
 		float x = a.b.getWorldCenter().x, y = a.b.getWorldCenter().y;
 		p.pushStyle();
@@ -38,6 +39,8 @@ public class Sprite {
 			p.rotate(a.b.getAngle());
 			p.noFill();
 			p.stroke(0xff,0xff,0x00);
+			if (a.isHeld)
+				p.tint(p.color(150));
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else
@@ -46,7 +49,7 @@ public class Sprite {
 		p.popStyle();
 		p.popMatrix();
 		p.fill(255);
-		if (a.important)
+		if (a.isImportant)
 			p.text(a.label,(x * p.meterScale),((y+a.sizeH) * p.meterScale));
 	}
 }

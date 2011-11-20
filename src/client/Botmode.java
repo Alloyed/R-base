@@ -2,6 +2,7 @@ package client;
 
 import physics.Actor;
 import physics.Player;
+import processing.core.PConstants;
 
 public class Botmode extends UI{
 	Player pc;
@@ -42,9 +43,8 @@ public class Botmode extends UI{
 			pc.state.downPressed = true;
 		else if (r.key == 'd')
 			pc.state.rightPressed = true;
-		else if (r.key == r.ESC)
+		else if (r.key == PConstants.ESC)
 			r.menu.show();
-		return; //Don't go to the Gooey
 	}
 	
 	@Override
