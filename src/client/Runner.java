@@ -34,6 +34,7 @@ import processing.opengl.*;
 @SuppressWarnings("unused")
 public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
+	//TODO: store this in the settings file
 	final String[] servers = {"localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30"};
 	// Config options
 	Settings settings;
@@ -62,9 +63,11 @@ public class Runner extends PApplet {
 	public void quit() {
 		exit();
 	}
+	
 	public void resume() {
 		botMode.show();
 	}
+	
 	void connect() {
 		gooey.getController("/settings/ip").update();
 		gooey.getController("/settings/port").update();
@@ -75,6 +78,7 @@ public class Runner extends PApplet {
 			e.printStackTrace();
 		}
 	}
+	
 	public void reset() {
 		setup();
 	}
@@ -84,16 +88,37 @@ public class Runner extends PApplet {
 		super.exit();
 	}
 	
+	
 	void initControls() {
+		gooey.addListener(new ControlListener() {
+
+			@Override
+			public void controlEvent(ControlEvent e) {
+				if (e.isGroup()) {
+					String s = servers[(int)e.getGroup().getValue()];
+					Textfield t = (Textfield) gooey.getController("IP",settings);
+					t.setValue(s);
+				}
+			}
+		});
+		
 		ControlGroup m = gooey.addGroup("menu", 0, 0);
 		gooey.begin(m);
 		gooey.addButton("resume");
 		gooey.addButton("quit");
 		gooey.addButton("connect");
 		gooey.addButton("reset");
+		ListBox l = gooey.addListBox("servers", 150, 70, 100, 100);
+		l.addItems(servers);
 		gooey.end(m);
 		gooey.addControllersFor("/settings", settings);
 		gooey.moveTo(m, settings);
+		//Ah well, we can't have everything we want.
+		((Textfield)gooey.getController("/settings/IP")).setValue(settings.IP);
+		((Textfield)gooey.getController("/settings/PORT")).setValue(settings.PORT);
+		((Textfield)gooey.getController("/settings/USERNAME")).setValue(settings.USERNAME);
+		((Textfield)gooey.getController("/settings/WINDOW_WIDTH")).setValue(settings.WINDOW_WIDTH);
+		((Textfield)gooey.getController("/settings/WINDOW_HEIGHT")).setValue(settings.WINDOW_HEIGHT);
 		
 		gooey.addGroup("botmode", 0, 0);
 		gooey.addGroup("godmode", 0, 0);

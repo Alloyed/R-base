@@ -1,5 +1,5 @@
 <R-base>
-<IP TYPE="class java.lang.String">localhost</IP>
+<IP TYPE="class java.lang.String">10.200.5.30</IP>
 <PORT TYPE="class java.lang.String">9001</PORT>
 <USERNAME TYPE="class java.lang.String">ROEBRT</USERNAME>
 <ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
