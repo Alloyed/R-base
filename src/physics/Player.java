@@ -24,16 +24,20 @@ public class Player extends Actor {
 		state = new PlayerState();
 	}
 	
-	public Vec2 getPointAhead() {
+	public Vec2 getPointAhead(float dist) {
 		Vec2 dir = state.aim.sub(b.getWorldCenter());
 		float ang = (float)Math.atan2(dir.y, dir.x);
-		return b.getWorldCenter().add(new Vec2((float)Math.cos(ang),(float)Math.sin(ang)));
+		return b.getWorldCenter().add(new Vec2(dist*(float)Math.cos(ang),dist*(float)Math.sin(ang)));
 	}
 	
-	public Vec2 getLocalPointAhead() {
+	public Vec2 getLocalPointAhead(float dist) {
 		Vec2 dir = state.aim.sub(b.getWorldCenter());
 		float ang = (float)Math.atan2(dir.y, dir.x);
-		return new Vec2((float)Math.cos(ang),(float)Math.sin(ang));
+		return new Vec2(dist*(float)Math.cos(ang),dist*(float)Math.sin(ang));
+	}
+	
+	public Vec2 getPointAhead() {
+		return getPointAhead(1);
 	}
 	
 	//TODO: Join player and given actor
@@ -77,7 +81,7 @@ public class Player extends Actor {
 			drop();
 		}
 		a.b.setBullet(true);
-		a.b.applyLinearImpulse(getLocalPointAhead().mul(100), b.getWorldCenter());
+		a.b.applyLinearImpulse(getLocalPointAhead(100), b.getWorldCenter());
 	}
 	
 	void force() {
@@ -102,6 +106,6 @@ public class Player extends Actor {
 
 		b.applyForce(move, b.getWorldCenter());
 		if (held != null)
-			held.b.setTransform(b.getWorldPoint(getLocalPointAhead().mul(1.2f)), held.b.getAngle());
+			held.b.setTransform(getPointAhead(), held.b.getAngle());
 	}
 }
