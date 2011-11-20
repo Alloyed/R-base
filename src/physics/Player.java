@@ -102,6 +102,6 @@ public class Player extends Actor {
 
 		b.applyForce(move, b.getWorldCenter());
 		if (held != null)
-			held.b.applyLinearImpulse(held.b.getLocalPoint(getPointAhead()), held.b.getWorldCenter());
+			held.b.setTransform(b.getWorldPoint(getLocalPointAhead().mul(1.2f)), held.b.getAngle());
 	}
 }
