@@ -89,7 +89,7 @@ public class Runner extends PApplet {
 		gooey.begin(m);
 		gooey.addButton("resume");
 		gooey.addButton("quit");
-		gooey.addButton("connect");
+		//gooey.addButton("connect");
 		gooey.addButton("reset");
 		gooey.end(m);
 		gooey.addControllersFor("/settings", settings);
