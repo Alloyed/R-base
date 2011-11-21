@@ -126,6 +126,20 @@ public class Runner extends PApplet {
 		gooey.addGroup("botmode", 0, 0);
 		gooey.addGroup("godmode", 0, 0);
 	}
+	//End Gooey methods
+	
+	public void initPhysics() {
+				stage = new Stage();
+				for (int i=0;i<5;++i)
+					new Prop(new Vec2(.5f,.25f)).place(stage,
+							new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
+				for (int i=0;i<30;++i)
+					new Actor(1).place(stage,
+							new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
+					
+				godMode = new Godmode(this);
+				botMode = new Botmode(this);
+	}
 	
 	@Override
 	public void setup() {
@@ -147,17 +161,7 @@ public class Runner extends PApplet {
 				sprites.put(f.getName(), new Sprite(this, f.toString()));
 			}
 			
-			// Physix stuf
-			stage = new Stage();
-			for (int i=0;i<5;++i)
-				new Prop(new Vec2(.5f,.25f)).place(stage,
-						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
-			for (int i=0;i<30;++i)
-				new Actor(1).place(stage,
-						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
-			
-			godMode = new Godmode(this);
-			botMode = new Botmode(this);
+			initPhysics();
 			
 			// Gooey Stuf
 			font = createFont("uni05_53.ttf",8,false);
@@ -178,6 +182,10 @@ public class Runner extends PApplet {
 	@Override
 	public void draw() {
 		stage.step();
+		if (botMode.pc.wear < 1) {
+			menu.show();
+			initPhysics();
+		}
 		currentMode.draw();
 		if(client != null)
 			try {

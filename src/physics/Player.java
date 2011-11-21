@@ -128,6 +128,6 @@ public class Player extends Actor {
 		a.place(s,b.getWorldCenter());
 		a.b.setTransform(b.getWorldCenter(), b.getAngle());
 		a.b.applyLinearImpulse(b.getLinearVelocity(), a.b.getWorldCenter());
-		a.image = "player-blue.png";
+		a.image = "player-blue.png"; 
 	}
 }
