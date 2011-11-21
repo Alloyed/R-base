@@ -146,6 +146,7 @@ public class Runner extends PApplet {
 			for (File f: new File("data/images").listFiles()) {
 				sprites.put(f.getName(), new Sprite(this, f.toString()));
 			}
+			
 			// Physix stuf
 			stage = new Stage();
 			for (int i=0;i<5;++i)
@@ -190,6 +191,8 @@ public class Runner extends PApplet {
 	
 	void draw(Actor a) {
 		Sprite s = sprites.get(a.image);
+		if (s == null)
+			println(a.image);
 		s.draw(a);
 	}
 
