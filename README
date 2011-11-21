@@ -1,28 +1,31 @@
 Roboticals
 --Kyle's thoughts--
-TODO: configurable keybindings, 
-	make functions to draw individual bodies, 
-	measure relative to screen instead of pixels 
-
-PROBABLE PROBLEMS: No built-in "window" in gui, 
-					cannot control mouse acceleration, 
-					cannot change cursor in fullscreen mode
-					
-Renderers:Java2d's framerate gets worse as you increase the screen size
-		Processing2D works fine, but if you try to draw screen sized rectangles, it gets slower than java2d. 
-			If our game has too much happening at once this might be a problem.
-		Opengl just crashes on my machine(lol, ATI). I'll leave the files there just in case, though.
+TODO: 
+	configurable keybindings,
+	HUD/non-menu UI,
+	built-in console/chat setup,
+	Clean switch from P2D to opengl,
+	physics
 
 Scales: Box2d works in meters/kilograms/seconds, 
-	in the window, 64 px = 1 m right now. a robot is 1 m long/wide.
+	in the window, 64 px = 1 m right now. a robot is 1 m long/wide. LOL NVM
 	
 
 --Jon's Thoughts--
-TODO: Client: Everything
-      Server: Handle Events
+TODO: Yay! Basically everything is working. It's just a matter of setting up the event
+	sending from the server to the client and having both sides interpolate motion
+	in case of hangs.
+POSSIBLE PROBLEMS:
+        Possible timeout from client could kill the network. (I guess UDP helps here).
+        Um...a lot of other things we haven't seen yet.
 
---Craig's Thoughts--
-TODO: Work out classes for robots, bullets, levels, etc., store bodies
 
---Darshan's thoughts--
-TODO: PR
+
+--Eclipse-is-a-piece-of-shit notes--
+	if eclipse complains that it can't find controlP5.xml, go to: 
+	run->run configurations->the run config for the client->arguments->working directory
+	and set it to: ${workspace_loc:R-base}
+	
+	if a source file gives errors claiming that other classes outside its package cannot be found, go to:
+	right click on file->build path->exclude from build path
+	and then do that again, this time including to build path 

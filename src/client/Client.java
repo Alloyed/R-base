@@ -4,32 +4,59 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.ArrayList;
+
+import physics.PlayerState;
 
 public class Client {
-	DatagramSocket s;
-	InetAddress i;
-	int port;
+	public DatagramSocket s;
+	public DatagramPacket p;
+	public InetAddress i;
+	public int port;
+	private byte[] key, buf;
 	
 	Client(InetAddress ip, int port) throws IOException {
 		i = ip;
 		this.port = port;
+		s = new DatagramSocket();
+		key = new byte[16];
+		p = new DatagramPacket(key, key.length);
 		
-		s = new DatagramSocket(port, i);
+		buf = new byte[256];
+		p = new DatagramPacket(buf, buf.length);
+		
+		requestKey(ip);
 	}
 	
-	public boolean pollServer() {
-		return false;
+	public void requestKey(InetAddress ip) throws IOException {
+		s.send(new DatagramPacket(new byte[] {70}, 1, i, port));
+		s.setSoTimeout(5000);
+		System.out.println(s.getSoTimeout());
+		s.receive(p);
+		key = p.getData();
+		System.out.println("Server response: "+getKey());
 	}
 	
-	public void sendEvent(String e) throws IOException {
-		byte[] buf = e.getBytes();
-		s.send(new DatagramPacket(buf, buf.length));
+	public String getKey() {
+		String s = "";
+		for(byte k : key) {
+			s += ""+k;
+		}
+		return s;
 	}
-
-	/* Stupid char-to-string doesn't-work-in-Java
-	 * failure-of-everything */
-	public void sendEvent(char c) throws IOException {
-		byte[] buf = Character.toString(c).getBytes();
-		s.send(new DatagramPacket(buf, buf.length));
+	
+	public void sendEvent(PlayerState p) throws IOException {
+		ArrayList<Byte> flexBuf = new ArrayList<Byte>();
+		
+		for(byte b : key)
+			flexBuf.add(b);
+		for(byte b : p.getBytes())
+			flexBuf.add(b);
+				
+		byte[] buf = new byte[flexBuf.size()];
+		for(int i = 0; i < flexBuf.size(); i++)
+			buf[i] = flexBuf.get(i);
+		this.p.setData(buf, 0, buf.length);
+		s.send(this.p);
 	}
 }
