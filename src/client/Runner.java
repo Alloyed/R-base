@@ -10,9 +10,11 @@ package client;
  */
 
 //Util
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.net.InetAddress;
 //Physix
 import org.jbox2d.dynamics.*;
@@ -21,70 +23,60 @@ import org.jbox2d.common.*;
 //gooey
 import controlP5.*;
 //graphix
+import physics.Actor;
+import physics.Building;
+import physics.Player;
 import physics.PlayerState;
+import physics.Stage;
 import processing.core.*;
 import processing.opengl.*;
 
 @SuppressWarnings("unused")
 public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
+	final String[] servers = {"localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30"};
 	// Config options
 	Settings settings;
-
+	
 	// Game state
 	Client client;
-	World physics;
+	Stage stage;
+	
+	
+	//Views
+	Menu menu;
+	Botmode botMode;
+	Godmode godMode;
+	UI currentMode;
+	
+	//Gui stuff
+	float scale = 1;
+	float meterScale = 64;
 	ControlP5 gooey;
-	boolean menuOn = true;
-	ArrayList<ControllerInterface> mainMenu;
-	PImage logo;
-	float sc = 1;
-
-	// This stuff would be a good example of 'user data' for bodies
-	Body pc;
-	PlayerState pcState;
-	float speed = 75; // vroom vroom
-
-	/* Gooey methods. TODO:find some way to move this to another class. */
+	int mode = 0;
+	PFont font;
+	ControlFont cfont;
+	HashMap<String,Sprite> sprites;
+	
+	/* Gooey methods.*/
 	public void quit() {
 		exit();
 	}
-
 	public void resume() {
-		gooey.controller("resume").setLabel("resume");
-		toggleMenu();
+		botMode.show();
 	}
-
-	public void rotate(boolean hi) {
-		settings.ROTATE_FORCE = hi;
-		pcState.ROTATE_FORCE = hi; //TODO: make an holder object or something
-	}
-	
-	//TODO: make a reset button
-	public void windowW(String s) {
-		settings.WINDOW_WIDTH = Integer.parseInt(s);
-	}
-
-	public void windowH(String s) {
-		settings.WINDOW_HEIGHT = Integer.parseInt(s);
-	}
-	
-	public void ip(String s) {
-		settings.IP = s;
-	}
-	
-	public void port(String s) {
-		settings.PORT = Integer.parseInt(s);
-	}
-	
 	void connect() {
-		gooey.controller("ip").update();
-		gooey.controller("port").update();
+		gooey.getController("/settings/ip").update();
+		gooey.getController("/settings/port").update();
+		println(settings.IP+ " "+settings.PORT);
 		try {
-			client = new Client(InetAddress.getByName(settings.IP),settings.PORT);
-		} catch (IOException e) {
+			client = new Client(InetAddress.getByName(settings.IP),Integer.parseInt(settings.PORT));
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public void reset() {
+		setup();
 	}
 	
 	public void exit() {
@@ -93,185 +85,109 @@ public class Runner extends PApplet {
 	}
 	
 	void initControls() {
-		// TODO: find some nicer way to do this
-		((Toggle) gooey.controller("rotate")).setValue(settings.ROTATE_FORCE);
-		((Textfield) gooey.controller("windowW"))
-				.setValue(settings.WINDOW_WIDTH.toString());
-		((Textfield) gooey.controller("windowH"))
-				.setValue(settings.WINDOW_HEIGHT.toString());
-		((Textfield) gooey.controller("ip"))
-			.setValue(settings.IP);
-		((Textfield) gooey.controller("port"))
-			.setValue(settings.PORT.toString());
+		ControlGroup m = gooey.addGroup("menu", 0, 0);
+		gooey.begin(m);
+		gooey.addButton("resume");
+		gooey.addButton("quit");
+		//gooey.addButton("connect");
+		gooey.addButton("reset");
+		gooey.end(m);
+		gooey.addControllersFor("/settings", settings);
+		gooey.moveTo(m, settings);
+		
+		gooey.addGroup("botmode", 0, 0);
+		gooey.addGroup("godmode", 0, 0);
 	}
 	
 	@Override
 	public void setup() {
-		settings = new Settings("ClientSettings.xml");
+		if (settings == null)
+			settings = new Settings("ClientSettings.xml");
 		// Graphix stuf
 		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
-		size(settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT, renderer);
+		size(Integer.parseInt(settings.WINDOW_WIDTH), Integer.parseInt(settings.WINDOW_HEIGHT), renderer);
 		background(0);
 		smooth();
-		textMode(SCREEN);
+		hint(ENABLE_OPENGL_4X_SMOOTH);
 		frameRate(30);
-		sc = width < height ? width / 800f : height / 600f;
-		// Physix stuf
-		physics = new World(new Vec2(0, 0), true);
-
-		BodyDef d = new BodyDef();
-		d.position.set(1, 1); // pos
-		d.type = BodyType.DYNAMIC;
-		PolygonShape s = new PolygonShape();
-		s.setAsBox(1, 1); // size
-		FixtureDef fd = new FixtureDef();
-		fd.shape = s;
-		fd.density = .8f;
-		fd.friction = .1f;
-
-		pc = physics.createBody(d);
-		pc.createFixture(fd);
-		pcState = new PlayerState();
-		pcState.aim = new Vec2(0,0);
+		scale = width < height ? width / 800f : height / 600f;
+		meterScale = scale*64f;
 		
-		// Gooey Stuf
-		gooey = new ControlP5(this);
-		gooey.load("controlP5.xml"); // See that for the gooey options.
-		initControls();
+		if (menu == null) {
+			sprites = new HashMap<String,Sprite>();
+			for (File f: new File("data/images").listFiles()) {
+				sprites.put(f.getName(), new Sprite(this, f.toString()));
+			}
+			// Physix stuf
+			stage = new Stage();
+			for (int i=0;i<5;++i)
+				new Building(stage,
+						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
+						new Vec2(.5f,.25f));
+			for (int i=0;i<30;++i)
+				new Actor(stage,
+						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
+						1);
+			
+			godMode = new Godmode(this);
+			botMode = new Botmode(this);
+			
+			// Gooey Stuf
+			font = createFont("uni05_53.ttf",8,false);
+			textFont(font);
+			gooey = new ControlP5(this);
+			initControls();
 
-		for (ControllerInterface c : gooey.getControllerList()) {
-			if (c instanceof Textfield)
-				((Textfield) c).setAutoClear(false);
+			for (ControllerInterface c : gooey.getControllerList()) {
+				if (c instanceof Textfield)
+					((Textfield) c).setAutoClear(false);
+			}
+			menu = new Menu(this);
+			currentMode = menu;
+			menu.show();
 		}
-		// NOTE: controller names correspond with method names
-		gooey.controller("resume").setLabel("start");
-		logo = loadImage("logo2.png");
-		imageMode(CENTER);
 	}
 
 	@Override
 	public void draw() {
-		if(client != null)
-			try {
-				client.sendEvent(pcState);
-			} catch (IOException e) {
-				
-			}
-		doPhysics(pcState);
-
-		if (menuOn) {
-			background(color(25, 50, 50));
-			image(logo, width / 2f, height / 2f);
-		} else {
-			drawWorld();
-			pcState.aim.x = mouseX;
-			pcState.aim.y = mouseY;
-		}
+		stage.step();
+		currentMode.draw();
 		gooey.draw();
 		fps();
 	}
-
-	void doPhysics(PlayerState s) {
-		Vec2 dir = s.aim.sub(pc.getWorldCenter().mul(64));
-		float ang = atan2(dir.y, dir.x);
-		pc.setTransform(pc.getWorldCenter(), ang);
-
-		Vec2 move = new Vec2(0, 0);
-		if (s.upPressed)
-			move.addLocal(0, -speed);
-		if (s.leftPressed)
-			move.addLocal(-speed, 0);
-		if (s.rightPressed)
-			move.addLocal(speed, 0);
-		if (s.downPressed)
-			move.addLocal(0, speed);
-		if (s.ROTATE_FORCE) {
-			ang += HALF_PI;
-			move.set(move.x * cos(ang) - move.y * sin(ang),
-					move.x * sin(ang) + move.y * cos(ang));
-		}
-
-		pc.applyForce(move, pc.getWorldCenter());
-
-		pc.setLinearDamping(pc.getFixtureList().getFriction()
-				* (pc.getMass() * 9.8f)); // How... Normal.
-
-		physics.step(1f / 30f, 8, 3);
-		physics.clearForces();
-	}
-
-	void drawWorld() {
-		background(20);
-
-		Vec2 v = pc.getPosition();
-		pushMatrix();
-			fill(255);
-			noStroke();
-			translate(v.x * 64, v.y * 64);
-			scale(sc);
-			rotate(pc.getAngle());
-			rect(-32, -32, 64, 64);
-			fill(100);
-			rect(0, -16, 32, 32);
-		popMatrix();
-		pushMatrix();
-			noFill();
-			stroke(255);
-			strokeWeight(2);
-			translate(pcState.aim.x,pcState.aim.y);
-			rect(-2, -2, 4, 4);
-		popMatrix();
+	
+	void draw(Actor a) {
+		Sprite s = sprites.get(a.image);
+		s.draw(a);
 	}
 
 	public void fps() {
+		textMode(SCREEN);
 		fill(255);
-		text("FPS: " + (int)frameRate, width - 50, height);
-	}
-	
-	
-	void toggleMenu() {
-		menuOn = !menuOn;
-		if (menuOn) {
-			gooey.show();
-			cursor();
-		} else {
-			gooey.hide();
-			noCursor();
-		}
+		text("FPS: " + (int)frameRate  + ", Actors: " + stage.actors.size(), width - 150, height);
 	}
 
 	@Override
 	public void keyPressed() {
-		if (key == ESC) {
-			toggleMenu();
-			key = 0; // No quitting, quitter
-		}
-		if (!menuOn) {
-			if (key == 'w')
-				pcState.upPressed = true;
-			else if (key == 'a')
-				pcState.leftPressed = true;
-			else if (key == 's')
-				pcState.downPressed = true;
-			else if (key == 'd')
-				pcState.rightPressed = true;
+		currentMode.keyPressed();
+		if (key == ESC) { //Keeps game from stopping at ESC
+			key = 0;
 		}
 	}
 
 	@Override
 	public void keyReleased() {
-		if (!menuOn) {
-			if (key == 'w')
-				pcState.upPressed = false;
-			else if (key == 'a')
-				pcState.leftPressed = false;
-			else if (key == 's')
-				pcState.downPressed = false;
-			else if (key == 'd')
-				pcState.rightPressed = false;
-		}
+		currentMode.keyReleased();
 	}
 	
+	
+	public void mousePressed() {
+		currentMode.mousePressed();
+	}
+	
+	public void mouseReleased() {
+		
+	}
 
 	public static void main(String[] args) {
 		PApplet.main(new String[] { "--present", "--hide-stop", "client.Runner" });

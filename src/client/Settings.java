@@ -6,14 +6,27 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
 
+import controlP5.ControlElement;
+
 import nanoxml.XMLElement;
 
 /*Client settings*/
 public class Settings {
+	@ControlElement (x=10,y=60, properties={"width=80","listen=true"})
 	public String IP = "localhost";
-	public Integer PORT = 9001, WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
-	public Boolean ROTATE_FORCE = false;
-	public Boolean USE_OPENGL = false;
+	@ControlElement (x=100,y=60, properties={"width=40","listen=true"})
+	public String PORT = "9001";
+	
+	@ControlElement (x=400,y=30)
+	public String USERNAME="Player";
+	@ControlElement (x=520,y=30,label="point at cursor?", 
+			properties={"height=20","width=20"})
+	public boolean ROTATE_FORCE = true;
+	@ControlElement (x=400,y=70, properties = {"label=width", "width=30","listen=true"})
+	public String WINDOW_WIDTH = "800";
+	@ControlElement (x=440,y=70, properties = {"label=height", "width=30","listen=true"})
+	public String WINDOW_HEIGHT = "600";
+	public boolean USE_OPENGL = false;
 	
 	private String file;
 

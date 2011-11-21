@@ -53,11 +53,8 @@ public class Network extends Thread {
 			socket.send(new DatagramPacket(nextKey, nextKey.length, p.getAddress(), p.getPort()));
 			System.out.println("New client at: "+p.getAddress());
 			return null;
-		} else if(p.getData() == null || !matchKeys(p.getData())) {
+		} else if(p.getData() == null || !matchKeys(p.getData()))
 			return null;
-		} else {
-			System.out.println(state.parseBytes(p.getData()));
-		}
 		return p;
 	}
 	
