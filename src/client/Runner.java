@@ -24,7 +24,7 @@ import org.jbox2d.common.*;
 import controlP5.*;
 //graphix
 import physics.Actor;
-import physics.Building;
+import physics.Prop;
 import physics.Player;
 import physics.PlayerState;
 import physics.Stage;
@@ -149,13 +149,11 @@ public class Runner extends PApplet {
 			// Physix stuf
 			stage = new Stage();
 			for (int i=0;i<5;++i)
-				new Building(stage,
-						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
-						new Vec2(.5f,.25f));
+				new Prop(new Vec2(.5f,.25f)).place(stage,
+						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
 			for (int i=0;i<30;++i)
-				new Actor(stage,
-						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
-						1);
+				new Actor(1).place(stage,
+						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
 			
 			godMode = new Godmode(this);
 			botMode = new Botmode(this);

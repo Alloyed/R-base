@@ -39,8 +39,11 @@ public class Sprite {
 			p.rotate(a.b.getAngle());
 			p.noFill();
 			p.stroke(0xff,0xff,0x00);
+			float c = .5f*a.wear/a.maxWear;
 			if (a.isHeld)
-				p.tint(p.color(150));
+				p.tint(p.color(150,150,255));
+			else
+				p.tint(p.color((c+.5f)*255f));
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else
@@ -49,7 +52,8 @@ public class Sprite {
 		p.popStyle();
 		p.popMatrix();
 		p.fill(255);
-		if (a.isImportant)
-			p.text(a.label,(x * p.meterScale),((y+a.sizeH) * p.meterScale));
+		if (a.isImportant) {
+			p.text(a.label + " " + a.wear,(x * p.meterScale),((y+a.sizeH) * p.meterScale));
+		}
 	}
 }

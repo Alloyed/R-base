@@ -1,5 +1,7 @@
 package client;
 
+import org.jbox2d.common.Vec2;
+
 import physics.Actor;
 import physics.Player;
 import processing.core.PConstants;
@@ -9,7 +11,8 @@ public class Botmode extends UI{
 	
 	public Botmode(Runner r) {
 		super(r);
-		pc = new Player(r.stage);
+		pc = new Player();
+		pc.place(r.stage, new Vec2(1,1));
 	}
 	
 	@Override

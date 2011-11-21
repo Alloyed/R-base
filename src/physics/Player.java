@@ -1,5 +1,7 @@
 package physics;
 
+import java.util.LinkedList;
+
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
@@ -10,14 +12,20 @@ public class Player extends Actor {
 	public PlayerState state;
 	final int speed=75;
 	public Actor held;
-	
+	public LinkedList<Actor> inventory;
+	public final float maxWear = 500;
 	final float HALF_PI = (float) (Math.PI/2f);
-	public Player(Stage s) {
-		super(s);
+	public Player() {
+		super();
+		wear = 500;
 		isImportant = true;
 		label = "Robot";
 		image = "player-blue.png";
 		state = new PlayerState();
+		inventory = new LinkedList<Actor>();
+		for (int i=0; i<50; ++i) {
+			inventory.add(new Bullet(.3f));
+		}
 	}
 	
 	public Vec2 getLocalPointAhead(float dist) {
@@ -77,12 +85,15 @@ public class Player extends Actor {
 	/*Fire either an object being held or a bullet*/
 	public void fire() {
 		Actor a;
-		if (held == null) {
-			a = new Actor(s, getPointAhead(),.1f);
-		} else {
+		if (held != null) {
 			a = held;
 			drop();
+		} else if (!inventory.isEmpty()) {
+			a = inventory.pollFirst();
+		} else {
+			return;
 		}
+		a.place(s,getPointAhead());
 		a.b.setBullet(true);
 		a.b.applyLinearImpulse(getLocalPointAhead(100), b.getWorldCenter());
 	}
@@ -110,5 +121,13 @@ public class Player extends Actor {
 		b.applyForce(move, b.getWorldCenter());
 		if (held != null)
 			held.b.setTransform(getPointAhead(), held.b.getAngle());
+	}
+	
+	public void destroy() {
+		Actor a = new Actor(sizeH);
+		a.place(s,b.getWorldCenter());
+		a.b.setTransform(b.getWorldCenter(), b.getAngle());
+		a.b.applyLinearImpulse(b.getLinearVelocity(), a.b.getWorldCenter());
+		a.image = "player-blue.png";
 	}
 }
