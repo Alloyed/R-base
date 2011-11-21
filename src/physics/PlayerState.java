@@ -9,6 +9,10 @@ public class PlayerState implements State {
 	public long current = lastTime;
 	public static int byteSize = 28;
 
+	public PlayerState() {
+		aim = new Vec2(0, 0);
+	}
+	
 	/* Byte #		Contents
 	 * 		0	-	upPressed
 	 * 		1	-	downPressed
