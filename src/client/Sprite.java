@@ -34,7 +34,7 @@ public class Sprite {
 			p.shapeMode(p.CENTER);
 			p.rectMode(p.CENTER);
 			p.translate(x * p.meterScale, y * p.meterScale);
-			p.scale(p.scale*a.size);
+			p.scale(p.scale*a.sizeW,p.scale*a.sizeH);
 			p.rotate(a.b.getAngle());
 			p.noFill();
 			p.stroke(0xff,0xff,0x00);
@@ -47,6 +47,6 @@ public class Sprite {
 		p.popMatrix();
 		p.fill(255);
 		if (a.important)
-			p.text(a.label,(x * p.meterScale),((y+a.size) * p.meterScale));
+			p.text(a.label,(x * p.meterScale),((y+a.sizeH) * p.meterScale));
 	}
 }

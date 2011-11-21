@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 import physics.PlayerState;
 
@@ -45,14 +46,17 @@ public class Client {
 	}
 	
 	public void sendEvent(PlayerState p) throws IOException {
-		byte[] buf = p.getBytes();
-		s.send(new DatagramPacket(buf, buf.length));
-	}
-
-	/* Stupid char-to-string doesn't-work-in-Java
-	 * failure-of-everything */
-	public void sendEvent(char c) throws IOException {
-		byte[] buf = Character.toString(c).getBytes();
-		s.send(new DatagramPacket(buf, buf.length));
+		ArrayList<Byte> flexBuf = new ArrayList<Byte>();
+		
+		for(byte b : key)
+			flexBuf.add(b);
+		for(byte b : p.getBytes())
+			flexBuf.add(b);
+				
+		byte[] buf = new byte[flexBuf.size()];
+		for(int i = 0; i < flexBuf.size(); i++)
+			buf[i] = flexBuf.get(i);
+		this.p.setData(buf, 0, buf.length);
+		s.send(this.p);
 	}
 }

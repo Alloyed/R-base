@@ -12,6 +12,7 @@ import java.util.Random;
 public class Network extends Thread {
 	DatagramSocket socket;
 	DatagramPacket p;
+	physics.PlayerState state = new physics.PlayerState();
 	ArrayList<byte[]> keys;
 	Random keygen = new Random();
 	byte[] buf = new byte[256],
@@ -36,6 +37,14 @@ public class Network extends Thread {
 		}
 	}
 	
+	public boolean matchKeys(byte[] b) {
+		for(byte[] key : keys)
+			for(int i = 0; i < key.length; i++)
+				if(key[i] != b[i])
+					return false;
+		return true;
+	}
+	
 	public DatagramPacket getEvent() throws IOException {
 		socket.receive(p);
 		if(p.getData()[0] == initBytes[0]) {
@@ -44,8 +53,8 @@ public class Network extends Thread {
 			socket.send(new DatagramPacket(nextKey, nextKey.length, p.getAddress(), p.getPort()));
 			System.out.println("New client at: "+p.getAddress());
 			return null;
-		}
-		System.out.println("Invalid receive: "+Arrays.toString(p.getData()));
+		} else if(p.getData() == null || !matchKeys(p.getData()))
+			return null;
 		return p;
 	}
 	
