@@ -199,7 +199,10 @@ public class Runner extends PApplet {
 	public void fps() {
 		textMode(SCREEN);
 		fill(255);
-		text("FPS: " + (int)frameRate  + ", Actors: " + stage.actors.size(), width - 150, height);
+		text("FPS: " + (int)frameRate  + 
+				", Actors: " + stage.actors.size() + 
+				",Bullets: " + botMode.pc.inventory.size(), 
+				width - 150, height);
 	}
 
 	@Override

@@ -6,18 +6,30 @@ import org.jbox2d.dynamics.*;
 
 /*The main representation of an in-game object, right now*/
 public class Actor {
-	public Body b; //The physical representation of the object.
+	//The physical representation of the object.
+	public Body b;
+	//The stage it belongs to
 	public Stage s;
-	public int id; //Unique ID, doesn't work right now
-	public float sizeW, sizeH; //width and height of the box. I Can't find an easy way to get this out of a fixture
-	public boolean isImportant = false; //Important things, right now, get their labels drawn.
-	public String label="Box"; //What gets drawn next to the box to identify it, if it's important
-	public String image="box.png"; //The filename of the sprite used to represent it
-	public boolean isHeld; //Has the actor been picked up by another?
+	//Unique ID, doesn't work right now
+	public int id; 
+	//dimensions of the box. I can't find an easy way to get this out of a fixture
+	public float sizeW, sizeH; 
+	//Important things, right now, get their labels drawn.
+	public boolean isImportant = false;
+	//What gets drawn next to the box to identify it, if the box's labeled important
+	public String label="Box"; 
+	//The filename of the sprite used to represent it
+	public String image="box.png";
+	//Has the actor been picked up by another?
+	public boolean isHeld;
+	//Health, damage, etc.
 	public float wear;
+	//The starting health.
 	public final float maxWear = 130;
+	
 	BodyDef d;
 	FixtureDef fd;
+	
 	//Makes an actor: TODO: make addActor() methods in Stage
 	public Actor(Vec2 size) {
 		this.sizeW = size.x;
@@ -33,6 +45,7 @@ public class Actor {
 		fd.friction = .3f;
 		
 		makeBody(d,fd);
+		id = Stage.getNewId();
 	}
 	
 	public Actor(float size) {
@@ -43,6 +56,7 @@ public class Actor {
 		this(new Vec2(1,1));
 	}
 	
+	//Places the Actor on the stage, in a given position
 	public void place(Stage st, Vec2 pos) {
 		s = st;
 		d.position.set(pos);
@@ -52,6 +66,7 @@ public class Actor {
 		s.actors.add(this);
 	}
 	
+	//Takes the Actor off the stage
 	public void store() {
 		if (s != null) {
 		s.actors.remove(this);
@@ -70,6 +85,7 @@ public class Actor {
 		
 	}
 	
+	//What happens when the box wears out?
 	public void destroy() {
 		if (sizeH > .4) 
 		for (int i = 0; i < 4; ++i) {

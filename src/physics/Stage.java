@@ -44,7 +44,7 @@ public class Stage {
 	}
 	public World w;
 	public LinkedList<Actor> actors;
-	int nextId;
+	static int nextId = 0;
 	public Stage() {
 		w = new World(new Vec2(0, 0), true);
 		actors = new LinkedList<Actor>();
@@ -76,7 +76,7 @@ public class Stage {
 		w.clearForces();
 	}
 
-	public int getNewId() {
+	public static int getNewId() {
 		return nextId++;
 	}
 }

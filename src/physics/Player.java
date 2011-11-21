@@ -23,7 +23,7 @@ public class Player extends Actor {
 		image = "player-blue.png";
 		state = new PlayerState();
 		inventory = new LinkedList<Actor>();
-		for (int i=0; i<50; ++i) {
+		for (int i=0; i<5; ++i) {
 			inventory.add(new Bullet(.3f));
 		}
 	}
@@ -90,10 +90,10 @@ public class Player extends Actor {
 			drop();
 		} else if (!inventory.isEmpty()) {
 			a = inventory.pollFirst();
+			a.place(s,getPointAhead()); //TODO: scale to size of object
 		} else {
 			return;
 		}
-		a.place(s,getPointAhead());
 		a.b.setBullet(true);
 		a.b.applyLinearImpulse(getLocalPointAhead(100), b.getWorldCenter());
 	}
