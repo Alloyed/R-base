@@ -24,7 +24,7 @@ import org.jbox2d.common.*;
 import controlP5.*;
 //graphix
 import physics.Actor;
-import physics.Building;
+import physics.Prop;
 import physics.Player;
 import physics.PlayerState;
 import physics.Stage;
@@ -34,6 +34,7 @@ import processing.opengl.*;
 @SuppressWarnings("unused")
 public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
+	//TODO: store this in the settings file
 	final String[] servers = {"localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30"};
 	// Config options
 	Settings settings;
@@ -62,19 +63,24 @@ public class Runner extends PApplet {
 	public void quit() {
 		exit();
 	}
+	
 	public void resume() {
 		botMode.show();
 	}
+	
 	void connect() {
-		gooey.getController("/settings/ip").update();
-		gooey.getController("/settings/port").update();
 		println(settings.IP+ " "+settings.PORT);
 		try {
+			if (client != null) {
+				client.s.close();
+				client = null;
+			}
 			client = new Client(InetAddress.getByName(settings.IP),Integer.parseInt(settings.PORT));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
 	public void reset() {
 		setup();
 	}
@@ -84,19 +90,55 @@ public class Runner extends PApplet {
 		super.exit();
 	}
 	
+	
 	void initControls() {
+		gooey.addListener(new ControlListener() {
+
+			@Override
+			public void controlEvent(ControlEvent e) {
+				if (e.isGroup()) {
+					String s = servers[(int)e.getGroup().getValue()];
+					Textfield t = (Textfield) gooey.getController("IP",settings);
+					t.setValue(s);
+				}
+			}
+		});
+		
 		ControlGroup m = gooey.addGroup("menu", 0, 0);
 		gooey.begin(m);
 		gooey.addButton("resume");
 		gooey.addButton("quit");
 		//gooey.addButton("connect");
 		gooey.addButton("reset");
+		ListBox l = gooey.addListBox("servers", 150, 70, 100, 100);
+		l.moveTo(m);
+		l.addItems(servers);
 		gooey.end(m);
 		gooey.addControllersFor("/settings", settings);
 		gooey.moveTo(m, settings);
+		//Ah well, we can't have everything we want.
+		((Textfield)gooey.getController("/settings/IP")).setValue(settings.IP);
+		((Textfield)gooey.getController("/settings/PORT")).setValue(settings.PORT);
+		((Textfield)gooey.getController("/settings/USERNAME")).setValue(settings.USERNAME);
+		((Textfield)gooey.getController("/settings/WINDOW_WIDTH")).setValue(settings.WINDOW_WIDTH);
+		((Textfield)gooey.getController("/settings/WINDOW_HEIGHT")).setValue(settings.WINDOW_HEIGHT);
 		
 		gooey.addGroup("botmode", 0, 0);
 		gooey.addGroup("godmode", 0, 0);
+	}
+	//End Gooey methods
+	
+	public void initPhysics() {
+				stage = new Stage();
+				for (int i=0;i<5;++i)
+					new Prop(new Vec2(.5f,.25f)).place(stage,
+							new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
+				for (int i=0;i<30;++i)
+					new Actor(1).place(stage,
+							new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
+					
+				godMode = new Godmode(this);
+				botMode = new Botmode(this);
 	}
 	
 	@Override
@@ -118,19 +160,8 @@ public class Runner extends PApplet {
 			for (File f: new File("data/images").listFiles()) {
 				sprites.put(f.getName(), new Sprite(this, f.toString()));
 			}
-			// Physix stuf
-			stage = new Stage();
-			for (int i=0;i<5;++i)
-				new Building(stage,
-						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
-						new Vec2(.5f,.25f));
-			for (int i=0;i<30;++i)
-				new Actor(stage,
-						new Vec2(random(0,width)/meterScale,random(0,height)/meterScale),
-						1);
 			
-			godMode = new Godmode(this);
-			botMode = new Botmode(this);
+			initPhysics();
 			
 			// Gooey Stuf
 			font = createFont("uni05_53.ttf",8,false);
@@ -151,20 +182,39 @@ public class Runner extends PApplet {
 	@Override
 	public void draw() {
 		stage.step();
+<<<<<<< HEAD
 		currentMode.draw();
+=======
+		if (botMode.pc.wear < 1) {
+			menu.show();
+			initPhysics();
+		}
+		currentMode.draw();
+		if(client != null)
+			try {
+				client.sendEvent(botMode.pc.state);
+			} catch (IOException e) {
+				
+			}
+>>>>>>> graphics
 		gooey.draw();
 		fps();
 	}
 	
 	void draw(Actor a) {
 		Sprite s = sprites.get(a.image);
+		if (s == null)
+			println(a.image);
 		s.draw(a);
 	}
 
 	public void fps() {
 		textMode(SCREEN);
 		fill(255);
-		text("FPS: " + (int)frameRate  + ", Actors: " + stage.actors.size(), width - 150, height);
+		text("FPS: " + (int)frameRate  + 
+				", Actors: " + stage.actors.size() + 
+				",Bullets: " + botMode.pc.inventory.size(), 
+				width - 150, height);
 	}
 
 	@Override
