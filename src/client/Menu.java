@@ -27,7 +27,7 @@ public class Menu extends UI {
 
 	@Override
 	public void keyPressed() {
-		if (r.key == r.ESC)
+		if (r.key == PConstants.ESC)
 			lastMode.show();
 	}
 
