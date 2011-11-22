@@ -12,12 +12,12 @@ import nanoxml.XMLElement;
 
 /*Client settings*/
 public class Settings {
-	@ControlElement (x=300,y=80, properties={"width=80", "listen=true"})
+	@ControlElement (x=280,y=80, properties={"width=80", "listen=true"})
 	public String IP = "localhost";
-	@ControlElement (x=390,y=80, properties={"width=30", "listen=true"})
+	@ControlElement (x=370,y=80, properties={"width=30", "listen=true"})
 	public String PORT = "9001";
 	
-	@ControlElement (x=300,y=35, properties={"width=120"})
+	@ControlElement (x=280,y=35, properties={"width=120"})
 	public String USERNAME="Player";
 	@ControlElement (x=100,y=240,label="Point at cursor?", 
 			properties={"height=20","width=20"})

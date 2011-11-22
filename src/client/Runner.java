@@ -114,11 +114,11 @@ public class Runner extends PApplet {
 				.setSize(100, 30).setColor(Colors.goGreen);
 		gooey.addButton("quit").setPosition(30, 80)
 				.setSize(100, 30).setColor(Colors.quitRed);
-		gooey.addButton("connect").setPosition(380, 130)
-				.setHeight(30).setWidth(100);
+		gooey.addButton("connect").setPosition(350, 130)
+				.setSize(100, 30).setColor(Colors.connectOrange);
 		gooey.addButton("reset").setPosition(30, 130)
 				.setSize(100, 30);
-		ListBox l = gooey.addListBox("Servers", 450, 45, 100, 100);
+		ListBox l = gooey.addListBox("Servers", 420, 45, 100, 100);
 		l.moveTo(m);
 		l.addItems(servers);
 		gooey.end(m);
