@@ -58,7 +58,7 @@ public class Runner extends PApplet {
 	int mode = 0;
 	PFont font;
 	ControlFont cfont;
-	HashMap<String,Sprite> sprites;
+	Skin skin;
 	
 	/* Gooey methods.*/
 	public void quit() {
@@ -123,6 +123,7 @@ public class Runner extends PApplet {
 		((Textfield)gooey.getController("/settings/USERNAME")).setValue(settings.USERNAME);
 		((Textfield)gooey.getController("/settings/WINDOW_WIDTH")).setValue(settings.WINDOW_WIDTH);
 		((Textfield)gooey.getController("/settings/WINDOW_HEIGHT")).setValue(settings.WINDOW_HEIGHT);
+		((Textfield)gooey.getController("/settings/SKIN_FOLDER")).setValue(settings.SKIN_FOLDER);
 		
 		gooey.addGroup("botmode", 0, 0);
 		gooey.addGroup("godmode", 0, 0);
@@ -161,11 +162,7 @@ public class Runner extends PApplet {
 		meterScale = scale*64f;
 		
 		if (menu == null) {
-			sprites = new HashMap<String,Sprite>();
-			for (File f: new File("data/images").listFiles()) {
-				sprites.put(f.getName(), new Sprite(this, f.toString()));
-			}
-			
+			skin = new Skin(this, settings);
 			initPhysics();
 			
 			// Gooey Stuf
@@ -193,7 +190,6 @@ public class Runner extends PApplet {
 	@Override
 	public void draw() {
 		stage.step();
-		currentMode.draw();
 		if (botMode.pc.wear < 1) {
 			menu.show();
 			initPhysics();
@@ -210,7 +206,13 @@ public class Runner extends PApplet {
 	}
 	
 	void draw(Actor a) {
+<<<<<<< HEAD
 		Sprite s = sprites.get(a.image);
+=======
+		Sprite s = skin.sprites.get(a.image);
+		if (s == null)
+			println(a.image);
+>>>>>>> 94eac36b4808f26f7e3ce0da24bc046e71c6e792
 		s.draw(a);
 	}
 	

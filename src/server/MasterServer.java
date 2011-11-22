@@ -13,7 +13,6 @@ public class MasterServer {
 	MasterServer(int port) throws IOException {
 		servers = new ArrayList<Host>();
 		s = new DatagramSocket();
-		run();
 	}
 	
 	public void addServer(InetAddress ip, int port) {
@@ -35,6 +34,7 @@ public class MasterServer {
 	
 	public static void main(String[] args) throws IOException {
 		MasterServer m = new MasterServer(9001);
+		m.run();
 	}
 
 }

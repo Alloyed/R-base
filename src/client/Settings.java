@@ -19,7 +19,7 @@ public class Settings {
 	
 	@ControlElement (x=400,y=30)
 	public String USERNAME="Player";
-	@ControlElement (x=520,y=30,label="point at cursor?", 
+	@ControlElement (x=520,y=30,label="Point at cursor?", 
 			properties={"height=20","width=20"})
 	public boolean ROTATE_FORCE = true;
 	@ControlElement (x=400,y=70, properties = {"label=width", "width=30","listen=true"})
@@ -27,6 +27,9 @@ public class Settings {
 	@ControlElement (x=440,y=70, properties = {"label=height", "width=30","listen=true"})
 	public String WINDOW_HEIGHT = "600";
 	public boolean USE_OPENGL = false;
+	
+	@ControlElement (x=400,y=110, properties = {"label=skin", "width=70","listen=true"})
+	public String SKIN_FOLDER = "skin";
 	
 	private String file;
 
