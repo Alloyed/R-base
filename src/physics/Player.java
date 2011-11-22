@@ -13,14 +13,14 @@ public class Player extends Actor {
 	final int speed=75;
 	public Actor held;
 	public LinkedList<Actor> inventory;
-	public final float maxWear = 500;
 	final float HALF_PI = (float) (Math.PI/2f);
 	public Player() {
 		super();
+		maxWear = 500;
 		wear = 500;
 		isImportant = true;
 		label = "Robot";
-		image = "player-blue.png";
+		baseImage = "player";
 		state = new PlayerState();
 		inventory = new LinkedList<Actor>();
 		for (int i=0; i<5; ++i) {
@@ -138,6 +138,10 @@ public class Player extends Actor {
 		a.place(s,b.getWorldCenter());
 		a.b.setTransform(b.getWorldCenter(), b.getAngle());
 		a.b.applyLinearImpulse(b.getLinearVelocity(), a.b.getWorldCenter());
-		a.image = "player-blue.png"; 
+		a.baseImage = "player"; 
+	}
+
+	public boolean isDead() {
+		return wear > 1;
 	}
 }

@@ -190,7 +190,7 @@ public class Runner extends PApplet {
 	@Override
 	public void draw() {
 		stage.step();
-		if (botMode.pc.wear < 1) {
+		if (botMode.pc.isDead()) {
 			menu.show();
 			initPhysics();
 		}
@@ -206,7 +206,7 @@ public class Runner extends PApplet {
 	}
 	
 	void draw(Actor a) {
-		Sprite s = skin.sprites.get(a.image);
+		Sprite s = skin.sprites.get(a.baseImage);
 		s.draw(a);
 	}
 	

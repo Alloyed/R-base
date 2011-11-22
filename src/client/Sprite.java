@@ -42,7 +42,7 @@ public class Sprite {
 			
 			p.noFill();
 			p.stroke(0xff,0xff,0x00);
-			float c = .5f*a.wear/a.maxWear;
+			float c = .5f*a.wearFrac;
 			if (a.isHeld)
 				p.tint(p.color(150,150,255));
 			else
@@ -58,7 +58,7 @@ public class Sprite {
 		if (a.isImportant) {
 			Vec2 spot = p.worldToScreen(a.b.getWorldCenter().
 											add(new Vec2(-a.sizeW/2,a.sizeH)));
-			p.text(a.label + " " + a.wear,spot.x, spot.y);
+			p.text(a.label, spot.x, spot.y);
 		}
 		p.popMatrix();
 	}

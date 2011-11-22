@@ -19,13 +19,14 @@ public class Actor {
 	//What gets drawn next to the box to identify it, if the box's labeled important
 	public String label="Box"; 
 	//The filename of the sprite used to represent it
-	public String image="box.png";
+	public String baseImage="box";
+	public String[] modifiers;
 	//Has the actor been picked up by another?
 	public boolean isHeld;
 	//Health, damage, etc.
-	public float wear;
-	//The starting health.
-	public final float maxWear = 130;
+	float wear;
+	float maxWear = 130;
+	public float wearFrac;
 	
 	BodyDef d;
 	FixtureDef fd;
@@ -34,6 +35,8 @@ public class Actor {
 	public Actor(Vec2 size) {
 		this.sizeW = size.x;
 		this.sizeH = size.y;
+		modifiers = new String[5];
+		modifiers[4] = ".png";
 		wear = maxWear;
 		d = new BodyDef();
 		fd = new FixtureDef();
@@ -85,6 +88,14 @@ public class Actor {
 		
 	}
 	
+	public void hurt(float force) {
+		wear -= force;
+		wearFrac = wear/maxWear;
+		modifiers[0] = wearFrac < .25f ? "-dmg3" :
+						wearFrac < .5f ? "-dmg2" :
+						wearFrac < .75f ? "-dmg1" : "";
+	}
+	
 	//What happens when the box wears out?
 	public void destroy() {
 		if (sizeH > .4) 
@@ -92,5 +103,12 @@ public class Actor {
 			new Actor(new Vec2(sizeW/4,sizeH/4))
 				.place(s, b.getWorldCenter());
 		}
+	}
+	
+	public String getImage() {
+		String s = baseImage;
+		for (String m : modifiers)
+			s += m;
+		return s;
 	}
 }

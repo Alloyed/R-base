@@ -29,8 +29,8 @@ public class Stage {
 				force += f;
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
-			A.wear -= force;
-			B.wear -= force;
+			A.hurt(force);
+			B.hurt(force);
 			if (A instanceof Player && B.sizeH < .4) {
 				((Player)A).take(B);
 			}
@@ -72,7 +72,7 @@ public class Stage {
 				actors.remove(a);
 			}
 		}
-			
+		
 		w.clearForces();
 	}
 

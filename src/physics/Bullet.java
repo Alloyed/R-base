@@ -8,7 +8,7 @@ public class Bullet extends Actor {
 	public final int maxWear = 2;
 	public Bullet(float size) {
 		super(size);
-		image = "bullet.png";
+		baseImage = "bullet";
 	}
 	public void makeBody(BodyDef d, FixtureDef fd) {
 		CircleShape s = new CircleShape();
