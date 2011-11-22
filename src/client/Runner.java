@@ -156,7 +156,7 @@ public class Runner extends PApplet {
 		background(0);
 		smooth();
 		hint(ENABLE_OPENGL_4X_SMOOTH);
-		frameRate(30);
+		frameRate(Stage.fps);
 		scale = width < height ? width / 800f : height / 600f;
 		meterScale = scale*64f;
 		

@@ -40,6 +40,8 @@ public class Stage {
 		public void preSolve(Contact arg0, Manifold arg1) {
 		}
 	}
+	public static float fps = 60;
+	public static float frame = 1/60f;
 	public World w;
 	public LinkedList<Actor> actors;
 	static int nextId = 0;
@@ -61,7 +63,7 @@ public class Stage {
 			b.setLinearDamping(friction);
 			b.setAngularDamping(friction);
 		}
-		w.step(1f / 30f, 8, 3);
+		w.step(frame, 8, 3);
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
 			Actor a = (Actor) b.getUserData();
 			if (a.wear <= 1) {
