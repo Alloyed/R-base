@@ -206,13 +206,7 @@ public class Runner extends PApplet {
 	}
 	
 	void draw(Actor a) {
-<<<<<<< HEAD
-		Sprite s = sprites.get(a.image);
-=======
 		Sprite s = skin.sprites.get(a.image);
-		if (s == null)
-			println(a.image);
->>>>>>> 94eac36b4808f26f7e3ce0da24bc046e71c6e792
 		s.draw(a);
 	}
 	
