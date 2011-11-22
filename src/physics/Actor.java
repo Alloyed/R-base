@@ -12,11 +12,13 @@ public class Actor {
 	public Stage s;
 	//Unique ID, doesn't work right now
 	public int id; 
-	//dimensions of the box. I can't find an easy way to get this out of a fixture
+	//dimensions of the box. 
+	//I can't find an easy way to get this out of a fixture
 	public float sizeW, sizeH; 
 	//Important things, right now, get their labels drawn.
 	public boolean isImportant = false;
-	//What gets drawn next to the box to identify it, if the box's labeled important
+	//What gets drawn next to the box to identify it, 
+	//if the box's labeled important
 	public String label="Box"; 
 	//The filename of the sprite used to represent it
 	public String baseImage="box";
@@ -83,7 +85,8 @@ public class Actor {
 	
 	}
 	
-	//Actors are moving, but useless boxes by default. Change this to give them their own free will
+	//Actors are moving, but useless boxes by default.
+	//Change this to give them their own free will
 	void force() {
 		
 	}

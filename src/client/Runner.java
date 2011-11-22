@@ -37,7 +37,8 @@ import processing.opengl.*;
 public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
 	//TODO: store this in the settings file
-	final String[] servers = {"localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30"};
+	final String[] servers = 
+		{ "localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30" };
 	// Config options
 	Settings settings;
 	
@@ -70,13 +71,14 @@ public class Runner extends PApplet {
 	}
 	
 	void connect() {
-		println(settings.IP+ " "+settings.PORT);
+		println(settings.IP + " " + settings.PORT);
 		try {
 			if (client != null) {
 				client.s.close();
 				client = null;
 			}
-			client = new Client(InetAddress.getByName(settings.IP),Integer.parseInt(settings.PORT));
+			client = new Client(InetAddress.getByName(settings.IP),
+					Integer.parseInt(settings.PORT));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -99,7 +101,8 @@ public class Runner extends PApplet {
 			public void controlEvent(ControlEvent e) {
 				if (e.isGroup()) {
 					String s = servers[(int)e.getGroup().getValue()];
-					Textfield t = (Textfield) gooey.getController("IP",settings);
+					Textfield t = (Textfield)gooey.getController("IP",
+							settings);
 					t.setValue(s);
 				}
 			}
@@ -118,12 +121,18 @@ public class Runner extends PApplet {
 		gooey.addControllersFor("/settings", settings);
 		gooey.moveTo(m, settings);
 		//Ah well, we can't have everything we want.
-		((Textfield)gooey.getController("/settings/IP")).setValue(settings.IP);
-		((Textfield)gooey.getController("/settings/PORT")).setValue(settings.PORT);
-		((Textfield)gooey.getController("/settings/USERNAME")).setValue(settings.USERNAME);
-		((Textfield)gooey.getController("/settings/WINDOW_WIDTH")).setValue(settings.WINDOW_WIDTH);
-		((Textfield)gooey.getController("/settings/WINDOW_HEIGHT")).setValue(settings.WINDOW_HEIGHT);
-		((Textfield)gooey.getController("/settings/SKIN_FOLDER")).setValue(settings.SKIN_FOLDER);
+		((Textfield)gooey.getController("/settings/IP"))
+			.setValue(settings.IP);
+		((Textfield)gooey.getController("/settings/PORT"))
+			.setValue(settings.PORT);
+		((Textfield)gooey.getController("/settings/USERNAME"))
+			.setValue(settings.USERNAME);
+		((Textfield)gooey.getController("/settings/WINDOW_WIDTH"))
+			.setValue(settings.WINDOW_WIDTH);
+		((Textfield)gooey.getController("/settings/WINDOW_HEIGHT"))
+			.setValue(settings.WINDOW_HEIGHT);
+		((Textfield)gooey.getController("/settings/SKIN_FOLDER"))
+			.setValue(settings.SKIN_FOLDER);
 		
 		gooey.addGroup("botmode", 0, 0);
 		gooey.addGroup("godmode", 0, 0);
@@ -133,14 +142,19 @@ public class Runner extends PApplet {
 	public void initPhysics() {
 				stage = new Stage();
 				//boundaries. These numbers were pulled straight from my ass.
-				new Prop(new Vec2(16.5f,4)).place(stage, new Vec2(6.25f, -4));
-				new Prop(new Vec2(4,16.5f)).place(stage, new Vec2(-4, 4.6875f));
-				new Prop(new Vec2(4,16.5f)).place(stage, new Vec2(16.5f, 4.6875f));
-				new Prop(new Vec2(16.5f,4)).place(stage, new Vec2(6.25f,13.375f));
+				new Prop(new Vec2(16.5f,4))
+					.place(stage, new Vec2(6.25f, -4));
+				new Prop(new Vec2(4,16.5f))
+					.place(stage, new Vec2(-4, 4.6875f));
+				new Prop(new Vec2(4,16.5f))
+					.place(stage, new Vec2(16.5f, 4.6875f));
+				new Prop(new Vec2(16.5f,4))
+					.place(stage, new Vec2(6.25f,13.375f));
 				
 				for (int i=0;i<30;++i)
 					new Actor(1).place(stage,
-							new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
+							new Vec2(random(0,width)/meterScale,
+									random(0,height)/meterScale));
 					
 				godMode = new Godmode(this);
 				botMode = new Botmode(this);
@@ -153,7 +167,8 @@ public class Runner extends PApplet {
 			settings = new Settings("ClientSettings.xml");
 		// Graphix stuf
 		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
-		size(Integer.parseInt(settings.WINDOW_WIDTH), Integer.parseInt(settings.WINDOW_HEIGHT), renderer);
+		size(Integer.parseInt(settings.WINDOW_WIDTH), 
+				Integer.parseInt(settings.WINDOW_HEIGHT), renderer);
 		background(0);
 		smooth();
 		hint(ENABLE_OPENGL_4X_SMOOTH);
@@ -216,11 +231,11 @@ public class Runner extends PApplet {
 	float camAngle;
 	 
 	public void camtranslate(float x, float y) {
-		translate((x*meterScale)-zeroX,(y*meterScale)-zeroY);
+		translate((x * meterScale) - zeroX,(y * meterScale) - zeroY);
 	}
 	
 	public void camScale(float x, float y) {
-		scale(scale*x,scale*y); //wat
+		scale(scale * x,scale * y); //wat
 	}
 	
 	//Note: does not work
@@ -230,8 +245,8 @@ public class Runner extends PApplet {
 	
 	//Moves pos to center, not top right
 	public void setCam(Vec2 pos, float ang) {
-		zeroX = (pos.x*meterScale)-(width/2f);
-		zeroY = (pos.y*meterScale)-(height/2f);
+		zeroX = (pos.x * meterScale) - (width / 2f);
+		zeroY = (pos.y * meterScale) - (height / 2f);
 		camAngle = ang;
 	}
 	
@@ -276,6 +291,8 @@ public class Runner extends PApplet {
 	}
 
 	public static void main(String[] args) {
-		PApplet.main(new String[] { "--present", "--hide-stop", "client.Runner" });
+		PApplet.main(new String[] { "--present", 
+									"--hide-stop",
+									"client.Runner" });
 	}
 }

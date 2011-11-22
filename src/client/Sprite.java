@@ -25,7 +25,8 @@ public class Sprite {
 			sprite = p.loadImage(file);
 	}
 	
-	/* Draws the specified Actor a. See Actor for the variables you can use to customize this. 
+	/* Draws the specified Actor a. 
+	 * See Actor for the variables you can use to customize this. 
 	 */
 	@SuppressWarnings("static-access")
 	public void draw(Actor a) {

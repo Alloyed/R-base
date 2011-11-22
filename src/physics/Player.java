@@ -38,7 +38,9 @@ public class Player extends Actor {
 		return b.getWorldCenter().add(getLocalPointAhead(dist));
 	}
 
-	/*Get the point where it would pick things up and hold them, if it had hands*/
+	/* Get the point where it would pick things up and hold them, 
+	 * if it had hands
+	 */
 	public Vec2 getPointAhead() {
 		return getPointAhead(1);
 	}
@@ -124,8 +126,10 @@ public class Player extends Actor {
 			move.addLocal(0, speed);
 		if (state.ROTATE_FORCE) {
 			ang += HALF_PI;
-			move.set(move.x * (float)Math.cos(ang) - move.y * (float)Math.sin(ang),
-					move.x * (float)Math.sin(ang) + move.y * (float)Math.cos(ang));
+			move.set(move.x * (float)Math.cos(ang)
+					- move.y * (float)Math.sin(ang),
+					move.x * (float)Math.sin(ang)
+					+ move.y * (float)Math.cos(ang));
 		}
 
 		b.applyForce(move, b.getWorldCenter());

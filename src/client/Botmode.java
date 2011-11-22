@@ -17,7 +17,8 @@ public class Botmode extends UI{
 	
 	@Override
 	public void draw() {
-		pc.state.aim = new Vec2((r.mouseX+r.zeroX)/r.meterScale,(r.mouseY+r.zeroY)/r.meterScale);
+		pc.state.aim = new Vec2((r.mouseX+r.zeroX)/r.meterScale, 
+				(r.mouseY+r.zeroY)/r.meterScale);
 		
 		r.background(20);
 		r.setCam(pc.b.getWorldCenter(), pc.b.getAngle());

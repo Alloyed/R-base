@@ -10,7 +10,9 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
-/*The representation of the in-game world. It's more useless right now than it should be.*/
+/*The representation of the in-game world. 
+ * It's more useless right now than it should be.
+ */
 public class Stage {
 	class HEYLISTEN implements ContactListener {
 
@@ -59,7 +61,8 @@ public class Stage {
 		}
 		
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
-			float friction = b.getFixtureList().getFriction() * (b.getMass() * 9.8f); //Am i even doing this right?
+			float friction = b.getFixtureList().getFriction() *
+					(b.getMass() * 9.8f); //Am i even doing this right?
 			b.setLinearDamping(friction);
 			b.setAngularDamping(friction);
 		}
