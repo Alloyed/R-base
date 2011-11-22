@@ -130,9 +130,12 @@ public class Runner extends PApplet {
 	
 	public void initPhysics() {
 				stage = new Stage();
-				for (int i=0;i<5;++i)
-					new Prop(new Vec2(.5f,.25f)).place(stage,
-							new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
+				//boundaries: TODO: Make maps
+				new Prop(new Vec2(13,4)).place(stage, new Vec2(6.25f, -4));
+				new Prop(new Vec2(4,13)).place(stage, new Vec2(-4, 4.6875f));
+				new Prop(new Vec2(4,13)).place(stage, new Vec2(16.5f, 4.6875f));
+				new Prop(new Vec2(13,4)).place(stage, new Vec2(6.25f,13.375f));
+				
 				for (int i=0;i<30;++i)
 					new Actor(1).place(stage,
 							new Vec2(random(0,width)/meterScale,random(0,height)/meterScale));
@@ -141,6 +144,7 @@ public class Runner extends PApplet {
 				botMode = new Botmode(this);
 	}
 	
+	//Initializes everything
 	@Override
 	public void setup() {
 		if (settings == null)
@@ -179,6 +183,7 @@ public class Runner extends PApplet {
 		}
 	}
 
+	//Is looped over to draw things
 	@Override
 	public void draw() {
 		stage.step();
