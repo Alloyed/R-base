@@ -178,6 +178,8 @@ public class Runner extends PApplet {
 		
 		if (menu == null) {
 			skin = new Skin(this, settings);
+			for (String s : skin.sprites.keySet())
+				println(s);
 			initPhysics();
 			
 			// Gooey Stuf
@@ -221,8 +223,11 @@ public class Runner extends PApplet {
 	}
 	
 	void draw(Actor a) {
-		Sprite s = skin.sprites.get(a.baseImage);
-		s.draw(a);
+		Sprite s = skin.sprites.get(a.getImage());
+		if (s == null)
+			println("DOESNT EXITST: " + a.getImage());
+		else
+			s.draw(a);
 	}
 	
 	//Camera stuf, Horribly hacky

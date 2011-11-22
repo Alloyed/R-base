@@ -146,6 +146,6 @@ public class Player extends Actor {
 	}
 
 	public boolean isDead() {
-		return wear > 1;
+		return wear < 1;
 	}
 }

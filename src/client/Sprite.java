@@ -43,11 +43,8 @@ public class Sprite {
 			
 			p.noFill();
 			p.stroke(0xff,0xff,0x00);
-			float c = .5f*a.wearFrac;
 			if (a.isHeld)
 				p.tint(p.color(150,150,255));
-			else
-				p.tint(p.color((c+.5f)*255f));
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else

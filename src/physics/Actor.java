@@ -111,7 +111,8 @@ public class Actor {
 	public String getImage() {
 		String s = baseImage;
 		for (String m : modifiers)
-			s += m;
+			if (m != null)
+				s += m;
 		return s;
 	}
 }
