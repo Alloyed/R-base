@@ -15,7 +15,8 @@ public class Client {
 	public DatagramPacket p;
 	public InetAddress i;
 	public int port;
-	private byte[] key, buf;
+	private byte[] key;
+	private ArrayList<Byte> flexBuf;
 	
 	Client(InetAddress ip, int port) throws IOException {
 		i = ip;
@@ -23,9 +24,7 @@ public class Client {
 		s = new DatagramSocket();
 		key = new byte[16];
 		p = new DatagramPacket(key, key.length);
-		
-		buf = new byte[256];
-		p = new DatagramPacket(buf, buf.length);
+		flexBuf = new ArrayList<Byte>();
 		
 		requestKey(ip);
 	}
@@ -48,8 +47,6 @@ public class Client {
 	}
 	
 	public void sendEvent(PlayerState p) throws IOException {
-		ArrayList<Byte> flexBuf = new ArrayList<Byte>();
-		
 		for(byte b : key)
 			flexBuf.add(b);
 		for(byte b : p.getBytes())
@@ -58,17 +55,24 @@ public class Client {
 		byte[] buf = new byte[flexBuf.size()];
 		for(int i = 0; i < flexBuf.size(); i++)
 			buf[i] = flexBuf.get(i);
-		this.p.setData(buf, 0, buf.length);
+		this.p.setData(buf);
 		s.send(this.p);
+		flexBuf.clear();
 	}
 	
-	public Object callback(String object, String method, Object[] args) throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	@SuppressWarnings("rawtypes")
+	public Object callback(String object, String method, Object[] args, boolean addToPacket) throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		Class<?> c = Class.forName(object, true, null);
 		Class[] partypes = new Class[args.length];
 		for(int i = 0; i < args.length; i++)
 			partypes[i] = args[i].getClass();
 		Method m = c.getMethod(method, partypes);
 		Object o = m.invoke(c, args);
+		
+		if(addToPacket)
+			for(byte b : m.getName().getBytes())
+				flexBuf.add(b);
+		
 		return o;
 	}
 }

@@ -40,4 +40,7 @@ public class ServerState implements State {
 		return null;
 	}
 
+	public void addParam(byte[] b) {
+		clients.add(new PlayerState(b));
+	}
 }
