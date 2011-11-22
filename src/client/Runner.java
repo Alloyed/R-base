@@ -182,9 +182,7 @@ public class Runner extends PApplet {
 	@Override
 	public void draw() {
 		stage.step();
-<<<<<<< HEAD
 		currentMode.draw();
-=======
 		if (botMode.pc.wear < 1) {
 			menu.show();
 			initPhysics();
@@ -196,7 +194,6 @@ public class Runner extends PApplet {
 			} catch (IOException e) {
 				
 			}
->>>>>>> graphics
 		gooey.draw();
 		fps();
 	}
