@@ -6,5 +6,5 @@
 <WINDOW_WIDTH TYPE="class java.lang.String">800</WINDOW_WIDTH>
 <WINDOW_HEIGHT TYPE="class java.lang.String">600</WINDOW_HEIGHT>
 <USE_OPENGL TYPE="class java.lang.Boolean">false</USE_OPENGL>
-<SKIN_FOLDER TYPE="class java.lang.String">skin</SKIN_FOLDER>
+<SKIN_FOLDER TYPE="class java.lang.String">suave</SKIN_FOLDER>
 </R-base>

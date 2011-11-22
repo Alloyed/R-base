@@ -13,14 +13,14 @@ public class Player extends Actor {
 	final int speed=75;
 	public Actor held;
 	public LinkedList<Actor> inventory;
-	public final float maxWear = 500;
 	final float HALF_PI = (float) (Math.PI/2f);
 	public Player() {
 		super();
+		maxWear = 500;
 		wear = 500;
 		isImportant = true;
 		label = "Robot";
-		image = "player-blue.png";
+		baseImage = "player";
 		state = new PlayerState();
 		inventory = new LinkedList<Actor>();
 		for (int i=0; i<5; ++i) {
@@ -38,13 +38,15 @@ public class Player extends Actor {
 		return b.getWorldCenter().add(getLocalPointAhead(dist));
 	}
 
-	/*Get the point where it would pick things up and hold them, if it had hands*/
+	/* Get the point where it would pick things up and hold them, 
+	 * if it had hands
+	 */
 	public Vec2 getPointAhead() {
 		return getPointAhead(1);
 	}
 	
 	/*Pickup another object in the world and hold it*/
-	public void pickup() {
+	public void hold() {
 		AABB area = new AABB();
 		Vec2 center = getPointAhead();
 		area.lowerBound.set(center.sub(new Vec2(.1f,.1f)));
@@ -70,24 +72,34 @@ public class Player extends Actor {
 	}
 	
 	/*Drop the object being held*/
-	public void drop() {
+	public void release() {
 		held.isHeld = false;
 		held = null;
 	}
 	
 	public void toggleHold() {
 		if (held == null)
-			pickup();
+			hold();
 		else
-			drop();
+			release();
 	}
 	
-	/*Fire either an object being held or a bullet*/
+	/*Take some scrap*/
+	public void take(Actor a) {
+		if (a != null && s.actors.contains(a)) { //Is it a pickup-able thing?
+			inventory.add(a);
+			a.wear = a.maxWear;
+			a.store();
+			s.actors.remove(a);
+		}
+	}
+	
+	/*Fire either the object being held or some scrap*/
 	public void fire() {
 		Actor a;
 		if (held != null) {
 			a = held;
-			drop();
+			release();
 		} else if (!inventory.isEmpty()) {
 			a = inventory.pollFirst();
 			a.place(s,getPointAhead()); //TODO: scale to size of object
@@ -114,8 +126,10 @@ public class Player extends Actor {
 			move.addLocal(0, speed);
 		if (state.ROTATE_FORCE) {
 			ang += HALF_PI;
-			move.set(move.x * (float)Math.cos(ang) - move.y * (float)Math.sin(ang),
-					move.x * (float)Math.sin(ang) + move.y * (float)Math.cos(ang));
+			move.set(move.x * (float)Math.cos(ang)
+					- move.y * (float)Math.sin(ang),
+					move.x * (float)Math.sin(ang)
+					+ move.y * (float)Math.cos(ang));
 		}
 
 		b.applyForce(move, b.getWorldCenter());
@@ -128,6 +142,10 @@ public class Player extends Actor {
 		a.place(s,b.getWorldCenter());
 		a.b.setTransform(b.getWorldCenter(), b.getAngle());
 		a.b.applyLinearImpulse(b.getLinearVelocity(), a.b.getWorldCenter());
-		a.image = "player-blue.png"; 
+		a.baseImage = "player"; 
+	}
+
+	public boolean isDead() {
+		return wear < 1;
 	}
 }
