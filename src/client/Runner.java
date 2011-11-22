@@ -182,6 +182,7 @@ public class Runner extends PApplet {
 	@Override
 	public void draw() {
 		stage.step();
+		currentMode.draw();
 		if (botMode.pc.wear < 1) {
 			menu.show();
 			initPhysics();
