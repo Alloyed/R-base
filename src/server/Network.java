@@ -57,8 +57,4 @@ public class Network extends Thread {
 			return null;
 		return p;
 	}
-	
-	void handleEvent(String s) {
-		// TODO: this stuff
-	}
 }

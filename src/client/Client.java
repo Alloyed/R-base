@@ -1,6 +1,8 @@
 package client;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -58,5 +60,15 @@ public class Client {
 			buf[i] = flexBuf.get(i);
 		this.p.setData(buf, 0, buf.length);
 		s.send(this.p);
+	}
+	
+	public Object callback(String object, String method, Object[] args) throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		Class<?> c = Class.forName(object, true, null);
+		Class[] partypes = new Class[args.length];
+		for(int i = 0; i < args.length; i++)
+			partypes[i] = args[i].getClass();
+		Method m = c.getMethod(method, partypes);
+		Object o = m.invoke(c, args);
+		return o;
 	}
 }
