@@ -1,5 +1,7 @@
 package client;
 
+import org.jbox2d.common.Vec2;
+
 import physics.Actor;
 import processing.core.PImage;
 import processing.core.PShape;
@@ -34,9 +36,10 @@ public class Sprite {
 			p.imageMode(p.CENTER);
 			p.shapeMode(p.CENTER);
 			p.rectMode(p.CENTER);
-			p.translate(x * p.meterScale, y * p.meterScale);
-			p.scale(p.scale*a.sizeW,p.scale*a.sizeH);
-			p.rotate(a.b.getAngle());
+			p.camtranslate(x, y);
+			p.camScale(a.sizeW, a.sizeH);
+			p.camrotate(a.b.getAngle());
+			
 			p.noFill();
 			p.stroke(0xff,0xff,0x00);
 			float c = .5f*a.wear/a.maxWear;
@@ -50,10 +53,13 @@ public class Sprite {
 				p.image((PImage)sprite,0,0);
 		}
 		p.popStyle();
-		p.popMatrix();
+		
 		p.fill(255);
 		if (a.isImportant) {
-			p.text(a.label + " " + a.wear,(x * p.meterScale),((y+a.sizeH) * p.meterScale));
+			Vec2 spot = p.worldToScreen(a.b.getWorldCenter().
+											add(new Vec2(-a.sizeW/2,a.sizeH)));
+			p.text(a.label + " " + a.wear,spot.x, spot.y);
 		}
+		p.popMatrix();
 	}
 }

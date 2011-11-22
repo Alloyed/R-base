@@ -32,9 +32,7 @@ public class Stage {
 			A.wear -= force;
 			B.wear -= force;
 			if (A instanceof Player && B.sizeH < .4) {
-				B.wear = B.maxWear;
-				B.store();
-				((Player)A).inventory.add(B);
+				((Player)A).take(B);
 			}
 		}
 

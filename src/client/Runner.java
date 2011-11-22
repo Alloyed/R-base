@@ -10,6 +10,8 @@ package client;
  */
 
 //Util
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -43,7 +45,6 @@ public class Runner extends PApplet {
 	Client client;
 	Stage stage;
 	
-	
 	//Views
 	Menu menu;
 	Botmode botMode;
@@ -52,7 +53,7 @@ public class Runner extends PApplet {
 	
 	//Gui stuff
 	float scale = 1;
-	float meterScale = 64;
+	float meterScale = 64; //1 m = meterScale pixels
 	ControlP5 gooey;
 	int mode = 0;
 	PFont font;
@@ -130,11 +131,11 @@ public class Runner extends PApplet {
 	
 	public void initPhysics() {
 				stage = new Stage();
-				//boundaries: TODO: Make maps
-				new Prop(new Vec2(13,4)).place(stage, new Vec2(6.25f, -4));
-				new Prop(new Vec2(4,13)).place(stage, new Vec2(-4, 4.6875f));
-				new Prop(new Vec2(4,13)).place(stage, new Vec2(16.5f, 4.6875f));
-				new Prop(new Vec2(13,4)).place(stage, new Vec2(6.25f,13.375f));
+				//boundaries. These numbers were pulled straight from my ass.
+				new Prop(new Vec2(16.5f,4)).place(stage, new Vec2(6.25f, -4));
+				new Prop(new Vec2(4,16.5f)).place(stage, new Vec2(-4, 4.6875f));
+				new Prop(new Vec2(4,16.5f)).place(stage, new Vec2(16.5f, 4.6875f));
+				new Prop(new Vec2(16.5f,4)).place(stage, new Vec2(6.25f,13.375f));
 				
 				for (int i=0;i<30;++i)
 					new Actor(1).place(stage,
@@ -168,6 +169,11 @@ public class Runner extends PApplet {
 			initPhysics();
 			
 			// Gooey Stuf
+			try {
+				robot = new Robot();
+			} catch (AWTException e) {
+				e.printStackTrace();
+			}
 			font = createFont("uni05_53.ttf",8,false);
 			textFont(font);
 			gooey = new ControlP5(this);
@@ -205,11 +211,43 @@ public class Runner extends PApplet {
 	
 	void draw(Actor a) {
 		Sprite s = sprites.get(a.image);
-		if (s == null)
-			println(a.image);
 		s.draw(a);
 	}
-
+	
+	//Camera stuf, Horribly hacky
+	Robot robot;
+	float zeroX, zeroY;
+	float camAngle;
+	 
+	public void camtranslate(float x, float y) {
+		translate((x*meterScale)-zeroX,(y*meterScale)-zeroY);
+	}
+	
+	public void camScale(float x, float y) {
+		scale(scale*x,scale*y); //wat
+	}
+	
+	//Note: does not work
+	public void camrotate(float theta) {
+		rotate(theta);
+	}
+	
+	//Moves pos to center, not top right
+	public void setCam(Vec2 pos, float ang) {
+		zeroX = (pos.x*meterScale)-(width/2f);
+		zeroY = (pos.y*meterScale)-(height/2f);
+		camAngle = ang;
+	}
+	
+	public Vec2 screenToWorld(Vec2 in) {
+		return new Vec2((in.x-zeroX)/meterScale,(in.y-zeroY)/meterScale);
+	}
+	
+	public Vec2 worldToScreen(Vec2 in) {
+		return new Vec2(in.x*meterScale-zeroX,in.y*meterScale-zeroY);
+	}
+	
+	
 	public void fps() {
 		textMode(SCREEN);
 		fill(255);
