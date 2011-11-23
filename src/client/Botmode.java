@@ -78,7 +78,6 @@ public class Botmode extends UI{
 	
 	@Override
 	public void show() {
-		r.println("HEOISE");
 		r.currentMode.hide();
 		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
 		pc.label = r.settings.USERNAME;

@@ -33,7 +33,7 @@ public class Stage {
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
 			A.hurt(force);
 			B.hurt(force);
-			if (A instanceof Player && B.sizeH < .4) {
+			if (A instanceof Player && B.sizeH < .6) {
 				((Player)A).take(B);
 			}
 		}

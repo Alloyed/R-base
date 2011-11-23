@@ -16,7 +16,7 @@ public class Bullet extends Actor {
 		fd.shape = s;
 		//lol, heavy.
 		fd.friction = .4f;
-		fd.density = 10;
+		fd.density = 50;
 		d.bullet = true;
 	}
 }

@@ -10,14 +10,14 @@ import org.jbox2d.dynamics.Fixture;
 /*A player in the world. TODO:Teams, a lot more*/
 public class Player extends Actor {
 	public PlayerState state;
-	final int speed=75;
+	final int speed=150;
 	public Actor held;
 	public LinkedList<Actor> inventory;
 	final float HALF_PI = (float) (Math.PI/2f);
 	public Player() {
 		super();
-		maxWear = 500;
-		wear = 500;
+		maxWear = 5000;
+		wear = 5000;
 		isImportant = true;
 		label = "Robot";
 		baseImage = "player";
@@ -107,7 +107,7 @@ public class Player extends Actor {
 			return;
 		}
 		a.b.setBullet(true);
-		a.b.applyLinearImpulse(getLocalPointAhead(100), b.getWorldCenter());
+		a.b.applyLinearImpulse(getLocalPointAhead(100).mul(a.b.getMass()), b.getWorldCenter());
 	}
 	
 	void force() {
@@ -117,13 +117,14 @@ public class Player extends Actor {
 
 		Vec2 move = new Vec2(0, 0);
 		if (state.upPressed)
-			move.addLocal(0, -speed);
+			move.addLocal(0, -1);
 		if (state.leftPressed)
-			move.addLocal(-speed, 0);
+			move.addLocal(-1, 0);
 		if (state.rightPressed)
-			move.addLocal(speed, 0);
+			move.addLocal(1, 0);
 		if (state.downPressed)
-			move.addLocal(0, speed);
+			move.addLocal(0, 1);
+		move.normalize();
 		if (state.ROTATE_FORCE) {
 			ang += HALF_PI;
 			move.set(move.x * (float)Math.cos(ang)
@@ -132,7 +133,7 @@ public class Player extends Actor {
 					+ move.y * (float)Math.cos(ang));
 		}
 
-		b.applyForce(move, b.getWorldCenter());
+		b.applyForce(move.mul(speed), b.getWorldCenter());
 		if (held != null)
 			held.b.setTransform(getPointAhead(), held.b.getAngle());
 	}

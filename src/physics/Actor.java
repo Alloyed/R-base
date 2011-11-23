@@ -62,13 +62,24 @@ public class Actor {
 	}
 	
 	//Places the Actor on the stage, in a given position
-	public void place(Stage st, Vec2 pos) {
+	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
+		if (st == null) {
+			System.out.println("No stage, you brok some ting.");
+			return;
+		}
 		s = st;
 		d.position.set(pos);
+		d.angle = ang;
+		d.linearVelocity.set(vel);
+		d.angularVelocity = velAng;
 		b = s.w.createBody(d);
 		b.createFixture(fd);
 		b.setUserData(this);
 		s.actors.add(this);
+	}
+	
+	public void place (Stage st, Vec2 pos) {
+		place(st, pos, 0, new Vec2(0,0), 0);
 	}
 	
 	//Takes the Actor off the stage
@@ -101,10 +112,13 @@ public class Actor {
 	
 	//What happens when the box wears out?
 	public void destroy() {
+		if (s == null)
+			return;
 		if (sizeH > .4) 
 		for (int i = 0; i < 4; ++i) {
-			new Actor(new Vec2(sizeW/4,sizeH/4))
-				.place(s, b.getWorldCenter());
+			new Actor(new Vec2(sizeW/2,sizeH/2))
+				.place(s, b.getWorldCenter(), b.getAngle(),
+							b.getLinearVelocity(), b.getAngularVelocity());
 		}
 	}
 	
