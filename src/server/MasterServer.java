@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class MasterServer {
 	public ArrayList<Host> servers;
 	public DatagramSocket s;
+	public String ip = "10.200.5.30";
 	
 	MasterServer(int port) throws IOException {
 		servers = new ArrayList<Host>();
@@ -26,6 +27,17 @@ public class MasterServer {
 		addServer(p.getAddress(), p.getPort());
 		p.setData(new byte[] {0});
 		s.send(p);
+	}
+	
+	public byte[] getBytes() {
+		ArrayList<Byte> flexBuf = new ArrayList<Byte>();
+		
+		for(Host h : servers)
+			for(byte b : h.toString().getBytes())
+				flexBuf.add(b);
+		
+		byte[] b = new byte[flexBuf.size()];
+		return b;
 	}
 	
 	public ArrayList<Host> getServers() {
