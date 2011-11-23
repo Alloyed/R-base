@@ -1,0 +1,12 @@
+All images have a base, and some modifiers.
+to make a filename we do
+<base>-<modifier1>-<modifier2, etc>.png
+the .png ending is hardcoded right now, although we can support svgs too
+The existing bases are:
+player
+bullet
+box
+the existing modifiers are, in the order you should add them in. none is always an option:
+dmg1 or dmg2 or dmg3 (This means "damaged". the larger the numbers the more damage)
+blue or orange (for teams, only players should have teams right now)
+
