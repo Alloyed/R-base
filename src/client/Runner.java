@@ -112,18 +112,24 @@ public class Runner extends PApplet {
 		gooey.begin(m);
 		gooey.addButton("resume").setPosition(30, 30)
 				.setSize(100, 30).setColor(Colors.goGreen);
-		gooey.addButton("quit").setPosition(30, 80)
+		gooey.addButton("quit").setPosition(30, 70)
 				.setSize(100, 30).setColor(Colors.quitRed);
-		gooey.addButton("connect").setPosition(350, 130)
+		gooey.addButton("connect").setPosition(670, 120)
 				.setSize(100, 30).setColor(Colors.connectOrange);
-		gooey.addButton("reset").setPosition(30, 130)
+		gooey.addButton("reset").setPosition(30, 110)
 				.setSize(100, 30);
-		ListBox l = gooey.addListBox("Servers", 420, 45, 100, 100);
+		
+		ListBox l = gooey.addListBox("", 670, 190, 100, 500);
+		l.setHeight(400);
+		l.setBarHeight(20);
+		l.setItemHeight(30);
 		l.moveTo(m);
 		l.addItems(servers);
+		
 		gooey.end(m);
 		gooey.addControllersFor("/settings", settings);
 		gooey.moveTo(m, settings);
+		
 		//Ah well, we can't have everything we want.
 		((Textfield)gooey.getController("/settings/IP"))
 			.setValue(settings.IP);

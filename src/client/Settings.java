@@ -12,23 +12,25 @@ import nanoxml.XMLElement;
 
 /*Client settings*/
 public class Settings {
-	@ControlElement (x=280,y=80, properties={"width=80", "listen=true"})
+	@ControlElement (x=30,y=220, properties = {"label=width", "width=40", "listen=true"})
+	public String WINDOW_WIDTH = "800";
+	@ControlElement (x=80,y=220, properties = {"label=height", "width=40", "listen=true"})
+	public String WINDOW_HEIGHT = "600";
+	
+	@ControlElement (x=650,y=70, properties={"width=80", "listen=true"})
 	public String IP = "localhost";
-	@ControlElement (x=370,y=80, properties={"width=30", "listen=true"})
+	@ControlElement (x=740,y=70, properties={"width=30", "listen=true"})
 	public String PORT = "9001";
 	
-	@ControlElement (x=280,y=35, properties={"width=120"})
+	@ControlElement (x=650,y=30, properties={"width=120"})
 	public String USERNAME="Player";
-	@ControlElement (x=100,y=240,label="Point at cursor?", 
+	@ControlElement (x=100,y=260,label="Point at cursor?", 
 			properties={"height=20","width=20"})
 	public boolean ROTATE_FORCE = true;
-	@ControlElement (x=30,y=200, properties = {"label=width", "width=40", "listen=true"})
-	public String WINDOW_WIDTH = "800";
-	@ControlElement (x=80,y=200, properties = {"label=height", "width=40", "listen=true"})
-	public String WINDOW_HEIGHT = "600";
+	
 	public boolean USE_OPENGL = false;
 	
-	@ControlElement (x=30,y=240, properties = {"label=skin", "width=60", "listen=true"})
+	@ControlElement (x=30,y=260, properties = {"label=skin", "width=60", "listen=true"})
 	public String SKIN_FOLDER = "skin";
 	
 	private String file;
