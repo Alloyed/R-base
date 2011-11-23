@@ -17,10 +17,11 @@ public class Botmode extends UI{
 	
 	@Override
 	public void draw() {
-		pc.state.aim.x = r.mouseX/r.meterScale;
-		pc.state.aim.y = r.mouseY/r.meterScale;
+		pc.state.aim = new Vec2((r.mouseX+r.zeroX)/r.meterScale, 
+				(r.mouseY+r.zeroY)/r.meterScale);
 		
 		r.background(20);
+		r.setCam(pc.b.getWorldCenter(), pc.b.getAngle());
 		for (Actor a:r.stage.actors) {
 			r.draw(a);
 		}
@@ -30,7 +31,7 @@ public class Botmode extends UI{
 			r.noFill();
 			r.stroke(255);
 			r.strokeWeight(2);
-			r.translate(pc.state.aim.x*r.meterScale,pc.state.aim.y*r.meterScale);
+			r.camtranslate(pc.state.aim.x,pc.state.aim.y);
 			r.rect(-2, -2, 4, 4);
 		r.popMatrix();
 		
@@ -77,6 +78,7 @@ public class Botmode extends UI{
 	
 	@Override
 	public void show() {
+		r.println("HEOISE");
 		r.currentMode.hide();
 		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
 		pc.label = r.settings.USERNAME;

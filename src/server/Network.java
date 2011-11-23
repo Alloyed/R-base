@@ -1,10 +1,10 @@
 package server;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 /* TODO: handle events, Limit one connection per IP. */
@@ -58,7 +58,24 @@ public class Network extends Thread {
 		return p;
 	}
 	
-	void handleEvent(String s) {
-		// TODO: this stuff
+	@SuppressWarnings("rawtypes")
+	public Object callback(String object, String method, Object[] args, boolean sendCall) throws Exception {
+		Class<?> c = Class.forName(object, true, null);
+		Class[] partypes = new Class[args.length];
+		for(int i = 0; i < args.length; i++)
+			partypes[i] = args[i].getClass();
+		Method m = c.getMethod(method, partypes);
+		Object o = m.invoke(c, args);
+		
+		if(sendCall) {
+			p.setData(m.getName().getBytes());
+			try {
+				socket.send(p);
+			} catch (IOException e) {
+				//TODO: Handle the problem
+			}
+		}
+		
+		return o;
 	}
 }

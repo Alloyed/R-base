@@ -59,7 +59,7 @@ public class PlayerState implements State {
 		return b;
 	}
 
-	public Comparable getParam(String name, byte[] b) {
+	public Object getParam(String name, byte[] b) {
 		if(name.equals("up")) {
 			return b[0] != 0;
 		} else if(name.equals("down")) {

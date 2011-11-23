@@ -10,7 +10,9 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
-/*The representation of the in-game world. It's more useless right now than it should be.*/
+/*The representation of the in-game world. 
+ * It's more useless right now than it should be.
+ */
 public class Stage {
 	class HEYLISTEN implements ContactListener {
 
@@ -29,12 +31,10 @@ public class Stage {
 				force += f;
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
-			A.wear -= force;
-			B.wear -= force;
+			A.hurt(force);
+			B.hurt(force);
 			if (A instanceof Player && B.sizeH < .4) {
-				B.wear = B.maxWear;
-				B.store();
-				((Player)A).inventory.add(B);
+				((Player)A).take(B);
 			}
 		}
 
@@ -42,6 +42,8 @@ public class Stage {
 		public void preSolve(Contact arg0, Manifold arg1) {
 		}
 	}
+	public static float fps = 60;
+	public static float frame = 1/60f;
 	public World w;
 	public LinkedList<Actor> actors;
 	static int nextId = 0;
@@ -59,11 +61,12 @@ public class Stage {
 		}
 		
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
-			float friction = b.getFixtureList().getFriction() * (b.getMass() * 9.8f); //Am i even doing this right?
+			float friction = b.getFixtureList().getFriction() *
+					(b.getMass() * 9.8f); //Am i even doing this right?
 			b.setLinearDamping(friction);
 			b.setAngularDamping(friction);
 		}
-		w.step(1f / 30f, 8, 3);
+		w.step(frame, 8, 3);
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
 			Actor a = (Actor) b.getUserData();
 			if (a.wear <= 1) {
@@ -72,7 +75,7 @@ public class Stage {
 				actors.remove(a);
 			}
 		}
-			
+		
 		w.clearForces();
 	}
 
