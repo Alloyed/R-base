@@ -12,7 +12,7 @@ public class Skin {
 		
 		if(dir.exists())
 			for (File f : dir.listFiles())
-				sprites.put(f.getName(), new Sprite(p, f.toString()));
-
+				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg"))
+					sprites.put(f.getName(), new Sprite(p, f.toString()));
 	}
 }
