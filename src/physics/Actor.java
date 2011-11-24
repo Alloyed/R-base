@@ -32,6 +32,7 @@ public class Actor {
 	
 	BodyDef d;
 	FixtureDef fd;
+	public boolean toStore = false;
 	
 	//Makes an actor: TODO: make addActor() methods in Stage
 	public Actor(Vec2 size) {
@@ -44,12 +45,12 @@ public class Actor {
 		fd = new FixtureDef();
 		d.type = BodyType.DYNAMIC;
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(sizeW/2f, sizeH/2f);
+		shape.setAsBox(sizeW / 2f, sizeH / 2f);
 		fd.shape = shape;
 		fd.density = 1.6f;
 		fd.friction = .3f;
 		
-		makeBody(d,fd);
+		makeBody(d, fd);
 		id = Stage.getNewId();
 	}
 	
@@ -58,7 +59,7 @@ public class Actor {
 	}
 	
 	public Actor() {
-		this(new Vec2(1,1));
+		this(new Vec2(1, 1));
 	}
 	
 	//Places the Actor on the stage, in a given position
@@ -79,16 +80,13 @@ public class Actor {
 	}
 	
 	public void place (Stage st, Vec2 pos) {
-		place(st, pos, 0, new Vec2(0,0), 0);
+		toStore = false;
+		place(st, pos, 0, new Vec2(0, 0), 0);
 	}
 	
 	//Takes the Actor off the stage
 	public void store() {
-		if (s != null) {
-		s.actors.remove(this);
-		s.w.destroyBody(b);
-		s = null;
-		}
+		toStore = true;
 	}
 	
 	//Override this to do what you want to the defs before they are used
@@ -104,7 +102,7 @@ public class Actor {
 	
 	public void hurt(float force) {
 		wear -= force;
-		wearFrac = wear/maxWear;
+		wearFrac = wear / maxWear;
 		modifiers[0] = wearFrac < .25f ? "-dmg3" :
 						wearFrac < .5f ? "-dmg2" :
 						wearFrac < .75f ? "-dmg1" : "";
@@ -116,7 +114,7 @@ public class Actor {
 			return;
 		if (sizeH > .4) 
 		for (int i = 0; i < 4; ++i) {
-			new Actor(new Vec2(sizeW/2,sizeH/2))
+			new Actor(new Vec2(sizeW / 2,sizeH / 2))
 				.place(s, b.getWorldCenter(), b.getAngle(),
 							b.getLinearVelocity(), b.getAngularVelocity());
 		}

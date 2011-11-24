@@ -5,7 +5,7 @@ public class Godmode extends UI {
 
 	public Godmode(Runner r) {
 		super(r);
-		// TODO Auto-generated constructor stub
+		r.gooey.addGroup("godmode", 0, 0);
 	}
 
 	@Override

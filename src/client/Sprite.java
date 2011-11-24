@@ -14,15 +14,24 @@ public class Sprite {
 	String file;
 	boolean isVector = false;
 	Object sprite;
+	final float width, height;
+	
 	public Sprite(Runner p, String file) {
 		this.p = p;
 		this.file = file;
 		if (file.endsWith(".svg"))
 			isVector = true;
-		if (isVector)
-			sprite = p.loadShape(file);
-		else
-			sprite = p.loadImage(file);
+		if (isVector) {
+			PShape shape = p.loadShape(file);
+			width = shape.width/64f;
+			height = shape.height/64f;
+			sprite = shape;
+		} else {
+			PImage image = p.loadImage(file);
+			width = image.width/64f;
+			height = image.height/64f;
+			sprite = image;
+		}
 	}
 	
 	/* Draws the specified Actor a. 
@@ -38,7 +47,7 @@ public class Sprite {
 			p.shapeMode(p.CENTER);
 			p.rectMode(p.CENTER);
 			p.camtranslate(x, y);
-			p.camScale(a.sizeW, a.sizeH);
+			p.camScale(a.sizeW * width, a.sizeH * height);
 			p.camrotate(a.b.getAngle());
 			
 			p.noFill();

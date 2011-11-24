@@ -31,9 +31,11 @@ public class Stage {
 				force += f;
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
+			if (A instanceof Bullet || B instanceof Bullet)
+				force *= 10;
 			A.hurt(force);
 			B.hurt(force);
-			if (A instanceof Player && B.sizeH < .6) {
+			if (A instanceof Player && B.sizeH < .6 && B.b.getLinearVelocity().length() < 4) {
 				((Player)A).take(B);
 			}
 		}
@@ -69,7 +71,10 @@ public class Stage {
 		w.step(frame, 8, 3);
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
 			Actor a = (Actor) b.getUserData();
-			if (a.wear <= 1) {
+			if (a.toStore) {
+				actors.remove(a);
+				w.destroyBody(b);
+			} else if (a.wear <= 1) {
 				a.destroy();
 				w.destroyBody(b);
 				actors.remove(a);

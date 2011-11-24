@@ -13,6 +13,7 @@ public class Botmode extends UI{
 		super(r);
 		pc = new Player();
 		pc.place(r.stage, new Vec2(1,1));
+		r.gooey.addGroup("botmode", 0, 0);
 	}
 	
 	@Override

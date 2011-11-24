@@ -10,7 +10,7 @@ import org.jbox2d.dynamics.Fixture;
 /*A player in the world. TODO:Teams, a lot more*/
 public class Player extends Actor {
 	public PlayerState state;
-	final int speed=150;
+	final int speed=60;
 	public Actor held;
 	public LinkedList<Actor> inventory;
 	final float HALF_PI = (float) (Math.PI/2f);
@@ -102,7 +102,7 @@ public class Player extends Actor {
 			release();
 		} else if (!inventory.isEmpty()) {
 			a = inventory.pollFirst();
-			a.place(s,getPointAhead()); //TODO: scale to size of object
+			a.place(s,getPointAhead(a.sizeH+.1f));
 		} else {
 			return;
 		}
@@ -135,7 +135,7 @@ public class Player extends Actor {
 
 		b.applyForce(move.mul(speed), b.getWorldCenter());
 		if (held != null)
-			held.b.setTransform(getPointAhead(), held.b.getAngle());
+			held.b.setTransform(getPointAhead(held.sizeH+.2f), held.b.getAngle());
 	}
 	
 	public void destroy() {

@@ -93,60 +93,6 @@ public class Runner extends PApplet {
 		super.exit();
 	}
 	
-	
-	void initControls() {
-		gooey.addListener(new ControlListener() {
-
-			@Override
-			public void controlEvent(ControlEvent e) {
-				if (e.isGroup()) {
-					String s = servers[(int)e.getGroup().getValue()];
-					Textfield t = (Textfield)gooey.getController("IP",
-							settings);
-					t.setValue(s);
-				}
-			}
-		});
-		
-		ControlGroup m = gooey.addGroup("menu", 0, 0);
-		gooey.begin(m);
-		gooey.addButton("resume").setPosition(30, 30)
-				.setSize(100, 30).setColor(Colors.goGreen);
-		gooey.addButton("quit").setPosition(30, 70)
-				.setSize(100, 30).setColor(Colors.quitRed);
-		gooey.addButton("connect").setPosition(670, 120)
-				.setSize(100, 30).setColor(Colors.connectOrange);
-		gooey.addButton("reset").setPosition(30, 110)
-				.setSize(100, 30);
-		
-		ListBox l = gooey.addListBox("", 670, 190, 100, 500);
-		l.setHeight(400);
-		l.setBarHeight(20);
-		l.setItemHeight(30);
-		l.moveTo(m);
-		l.addItems(servers);
-		
-		gooey.end(m);
-		gooey.addControllersFor("/settings", settings);
-		gooey.moveTo(m, settings);
-		
-		//Ah well, we can't have everything we want.
-		((Textfield)gooey.getController("/settings/IP"))
-			.setValue(settings.IP);
-		((Textfield)gooey.getController("/settings/PORT"))
-			.setValue(settings.PORT);
-		((Textfield)gooey.getController("/settings/USERNAME"))
-			.setValue(settings.USERNAME);
-		((Textfield)gooey.getController("/settings/WINDOW_WIDTH"))
-			.setValue(settings.WINDOW_WIDTH);
-		((Textfield)gooey.getController("/settings/WINDOW_HEIGHT"))
-			.setValue(settings.WINDOW_HEIGHT);
-		((Textfield)gooey.getController("/settings/SKIN_FOLDER"))
-			.setValue(settings.SKIN_FOLDER);
-		
-		gooey.addGroup("botmode", 0, 0);
-		gooey.addGroup("godmode", 0, 0);
-	}
 	//End Gooey methods
 	
 	public void initPhysics() {
@@ -165,9 +111,6 @@ public class Runner extends PApplet {
 					new Actor(1).place(stage,
 							new Vec2(random(0,width)/meterScale,
 									random(0,height)/meterScale));
-					
-				godMode = new Godmode(this);
-				botMode = new Botmode(this);
 	}
 	
 	//Initializes everything
@@ -188,26 +131,21 @@ public class Runner extends PApplet {
 		
 		if (menu == null) {
 			skin = new Skin(this, settings);
-			for (String s : skin.sprites.keySet())
-				println(s);
 			initPhysics();
 			
 			// Gooey Stuf
-			try {
-				robot = new Robot();
-			} catch (AWTException e) {
-				e.printStackTrace();
-			}
 			font = createFont("uni05_53.ttf",8,false);
 			textFont(font);
 			gooey = new ControlP5(this);
-			initControls();
-
+			menu = new Menu(this);
+			godMode = new Godmode(this);
+			botMode = new Botmode(this);
+			
 			for (ControllerInterface c : gooey.getControllerList()) {
 				if (c instanceof Textfield)
 					((Textfield) c).setAutoClear(false);
 			}
-			menu = new Menu(this);
+			
 			currentMode = menu;
 			menu.show();
 		}
@@ -260,8 +198,8 @@ public class Runner extends PApplet {
 	
 	//Moves pos to center, not top right
 	public void setCam(Vec2 pos, float ang) {
-		zeroX = (pos.x * meterScale) - (width / 2f);
-		zeroY = (pos.y * meterScale) - (height / 2f);
+		zeroX = .1f * ((pos.x * meterScale) - (width / 2f)) + .9f * zeroX;
+		zeroY = .1f * ((pos.y * meterScale) - (height / 2f)) + .9f * zeroY;
 		camAngle = ang;
 	}
 	

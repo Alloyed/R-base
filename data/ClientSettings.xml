@@ -4,7 +4,7 @@
 <IP TYPE="class java.lang.String">10.200.5.30</IP>
 <PORT TYPE="class java.lang.String">9001</PORT>
 <USERNAME TYPE="class java.lang.String">Trollbert</USERNAME>
-<ROTATE_FORCE TYPE="class java.lang.Boolean">false</ROTATE_FORCE>
+<ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
 <USE_OPENGL TYPE="class java.lang.Boolean">false</USE_OPENGL>
 <SKIN_FOLDER TYPE="class java.lang.String">tron</SKIN_FOLDER>
 </R-base>
