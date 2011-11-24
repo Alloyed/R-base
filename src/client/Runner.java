@@ -37,8 +37,7 @@ import processing.opengl.*;
 public class Runner extends PApplet {
 	private static final long serialVersionUID = 1L;
 	//TODO: store this in the settings file
-	final String[] servers = 
-		{ "localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30" };
+	final String[] servers = Client.getServers(); //{ "localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30" };
 	// Config options
 	Settings settings;
 	

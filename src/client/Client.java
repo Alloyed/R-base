@@ -1,6 +1,8 @@
 package client;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +13,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import physics.PlayerState;
 
@@ -80,19 +83,26 @@ public class Client {
 		return o;
 	}
 
-	public String[] getServers() throws MalformedURLException, IOException {
+	public static String[] getServers() {
 		ArrayList<String> s = new ArrayList<String>();
 		
-		BufferedReader rd = new BufferedReader(new InputStreamReader(new URL("http://shsprog.com/servers.php").openConnection().getInputStream()));
-		String line;
-		while((line = rd.readLine()) != null)
-			s.add(line);
-		rd.close();
+		Scanner sc;
+		try {
+			sc = new Scanner(new URL("http://idontknow/remote/serverlist.txt").openStream());
+			while(sc.hasNextLine())
+				s.add(sc.nextLine());
 		
-		String[] servs = new String[s.size()];
-		for(int i = 0; i < s.size(); i++)
-			servs[i] = s.get(i);
+			String[] servs = new String[s.size()];
+			for(int i = 0; i < s.size(); i++)
+				servs[i] = s.get(i);
 		
-		return servs;
+			return servs;
+		} catch (FileNotFoundException e) {
+			return null;
+		} catch (MalformedURLException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
 	}
 }

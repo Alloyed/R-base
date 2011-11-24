@@ -1,11 +1,14 @@
 package server;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Scanner;
 
 /*
  * All this thing does is wait for new clients.
@@ -25,22 +28,13 @@ public class Server {
 		n = new Network(port);
 		System.out.println("Server Successfully Started.");
 		n.run();
-
-		master = new URL("http://shsprog.com/servers.php");
-		ip = InetAddress.getLocalHost().getHostAddress();
-		c = master.openConnection();
 		
 		changeAvail(true);
 	}
 	
 	public boolean changeAvail(boolean avail) {
 		try {
-			c.setDoOutput(true);
-			OutputStreamWriter out = new OutputStreamWriter(c.getOutputStream(), "UTF-8");
-			String xml = ip+" "+(avail?"true":"false");
-			out.write(xml);
-			out.close();
-			
+			master = new URL("http://idontknow/wp-content/uploads/servers.php?ip="+ip+"&avail="+(avail?"true":"false"));
 			return true;
 		} catch(Exception e) {
 			return false;
