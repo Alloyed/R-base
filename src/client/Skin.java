@@ -3,6 +3,7 @@ package client;
 import java.io.File;
 import java.util.HashMap;
 
+
 public class Skin {
 	public HashMap<String, Sprite> sprites;
 	
@@ -13,6 +14,6 @@ public class Skin {
 		if(dir.exists())
 			for (File f : dir.listFiles())
 				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg"))
-					sprites.put(f.getName(), new Sprite(p, f.toString()));
+					sprites.put(f.getName().split("\\.")[0], new Sprite(p, f.toString()));
 	}
 }

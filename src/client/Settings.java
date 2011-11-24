@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.Enumeration;
 
 import controlP5.ControlElement;
+import physics.Console;
 
 import nanoxml.XMLElement;
 
@@ -63,11 +64,11 @@ public class Settings {
 					value = tmp;
 				getClass().getField(name).set(this, value);
 			}
-			System.out.println("Settings read.");
+			Console.out.println("Settings read.");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Settings could not be read, using defaults.");
+			Console.out.println("Settings could not be read, using defaults.");
 		}
 	}
 
@@ -92,10 +93,10 @@ public class Settings {
 			FileWriter w = new FileWriter(file);
 			top.write(w);
 			w.close();
-			System.out.println("Settings Saved");
+			Console.out.println("Settings Saved");
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			System.out.println("Settings not saved.");
+			Console.out.println("Settings not saved.");
 		}
 	}
 }

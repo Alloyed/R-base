@@ -19,17 +19,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.net.InetAddress;
 //Physix
+import physics.*;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.*;
 //gooey
 import controlP5.*;
 //graphix
-import physics.Actor;
-import physics.Prop;
-import physics.Player;
-import physics.PlayerState;
-import physics.Stage;
 import processing.core.*;
 import processing.opengl.*;
 
@@ -71,7 +67,7 @@ public class Runner extends PApplet {
 	}
 	
 	void connect() {
-		println(settings.IP + " " + settings.PORT);
+		Console.out.println(settings.IP + " " + settings.PORT);
 		try {
 			if (client != null) {
 				client.s.close();
@@ -128,9 +124,9 @@ public class Runner extends PApplet {
 		frameRate(Stage.fps);
 		scale = width < height ? width / 800f : height / 600f;
 		meterScale = scale*64f;
+		skin = new Skin(this, settings);
 		
 		if (menu == null) {
-			skin = new Skin(this, settings);
 			initPhysics();
 			
 			// Gooey Stuf
@@ -173,7 +169,7 @@ public class Runner extends PApplet {
 	void draw(Actor a) {
 		Sprite s = skin.sprites.get(a.getImage());
 		if (s == null)
-			println("DOESNT EXITST: " + a.getImage());
+			Console.out.println("DOESNT EXITST: " + a.getImage());
 		else
 			s.draw(a);
 	}

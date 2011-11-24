@@ -39,7 +39,6 @@ public class Actor {
 		this.sizeW = size.x;
 		this.sizeH = size.y;
 		modifiers = new String[5];
-		modifiers[4] = ".png";
 		wear = maxWear;
 		d = new BodyDef();
 		fd = new FixtureDef();
@@ -65,7 +64,7 @@ public class Actor {
 	//Places the Actor on the stage, in a given position
 	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
 		if (st == null) {
-			System.out.println("No stage, you brok some ting.");
+			Console.out.println("No stage, you brok some ting.");
 			return;
 		}
 		s = st;

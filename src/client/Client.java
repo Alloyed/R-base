@@ -8,6 +8,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import physics.Console;
 import physics.PlayerState;
 
 public class Client {
@@ -32,10 +33,10 @@ public class Client {
 	public void requestKey(InetAddress ip) throws IOException {
 		s.send(new DatagramPacket(new byte[] {70}, 1, i, port));
 		s.setSoTimeout(5000);
-		System.out.println(s.getSoTimeout());
+		Console.out.println("" + s.getSoTimeout());
 		s.receive(p);
 		key = p.getData();
-		System.out.println("Server response: "+getKey());
+		Console.out.println("Server response: " + getKey());
 	}
 	
 	public String getKey() {
