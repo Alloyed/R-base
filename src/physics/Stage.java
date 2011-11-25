@@ -44,8 +44,8 @@ public class Stage {
 		public void preSolve(Contact arg0, Manifold arg1) {
 		}
 	}
-	public static float fps = 60;
-	public static float frame = 1/60f;
+	public static float fps = 30;
+	public static float frame = 1/30f;
 	public World w;
 	public LinkedList<Actor> actors;
 	static int nextId = 0;

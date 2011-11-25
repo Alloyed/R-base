@@ -1,10 +1,10 @@
 <R-base>
-<WINDOW_WIDTH TYPE="class java.lang.String">800</WINDOW_WIDTH>
-<WINDOW_HEIGHT TYPE="class java.lang.String">500</WINDOW_HEIGHT>
+<WINDOW_WIDTH TYPE="class java.lang.String">1920</WINDOW_WIDTH>
+<WINDOW_HEIGHT TYPE="class java.lang.String">1080</WINDOW_HEIGHT>
 <IP TYPE="class java.lang.String">10.200.5.30</IP>
 <PORT TYPE="class java.lang.String">9001</PORT>
 <USERNAME TYPE="class java.lang.String">Trollbert</USERNAME>
 <ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
 <USE_OPENGL TYPE="class java.lang.Boolean">false</USE_OPENGL>
-<SKIN_FOLDER TYPE="class java.lang.String">tron</SKIN_FOLDER>
+<SKIN_FOLDER TYPE="class java.lang.String">vectors</SKIN_FOLDER>
 </R-base>

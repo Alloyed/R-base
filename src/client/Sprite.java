@@ -60,6 +60,7 @@ public class Sprite {
 				p.image((PImage)sprite,0,0);
 		}
 		p.popStyle();
+		p.popMatrix();
 		
 		p.fill(255);
 		if (a.isImportant) {
@@ -67,6 +68,5 @@ public class Sprite {
 											add(new Vec2(-a.sizeW/2,a.sizeH)));
 			p.text(a.label, spot.x, spot.y);
 		}
-		p.popMatrix();
 	}
 }

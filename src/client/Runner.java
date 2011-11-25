@@ -114,12 +114,11 @@ public class Runner extends PApplet {
 		if (settings == null)
 			settings = new Settings("ClientSettings.xml");
 		// Graphix stuf
-		String renderer = (settings.USE_OPENGL ? OPENGL : P2D); //Just in Case
+		String renderer = (settings.USE_OPENGL ? OPENGL : JAVA2D); //Just in Case
 		size(Integer.parseInt(settings.WINDOW_WIDTH), 
 				Integer.parseInt(settings.WINDOW_HEIGHT), renderer);
 		background(0);
 		smooth();
-		hint(ENABLE_OPENGL_4X_SMOOTH);
 		frameRate(Stage.fps);
 		scale = width < height ? width / 800f : height / 600f;
 		meterScale = scale*64f;
@@ -167,10 +166,18 @@ public class Runner extends PApplet {
 	
 	void draw(Actor a) {
 		Sprite s = skin.sprites.get(a.getImage());
-		if (s == null)
-			Console.out.println("DOESNT EXITST: " + a.getImage());
-		else
-			s.draw(a);
+		if (s == null) {
+			Console.out.print("WARNING: sprite " + a.getImage() + " doesn't exist. ");
+			s = skin.sprites.get(a.baseImage);
+			if (s == null) {
+				Console.out.println("Using default instead.");
+				s = skin.sprites.get("box");
+			} else {
+				Console.out.println("Using base instead.");
+			}
+			skin.sprites.put(a.getImage(),s);
+		} 
+		s.draw(a);
 	}
 	
 	//Camera stuf, Horribly hacky
@@ -208,7 +215,6 @@ public class Runner extends PApplet {
 	
 	
 	public void fps() {
-		textMode(SCREEN);
 		fill(255);
 		text("FPS: " + (int)frameRate  + 
 				", Actors: " + stage.actors.size() + 
