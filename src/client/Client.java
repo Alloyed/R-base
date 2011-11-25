@@ -1,12 +1,19 @@
 package client;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import physics.Console;
 import physics.PlayerState;
@@ -75,5 +82,28 @@ public class Client {
 				flexBuf.add(b);
 		
 		return o;
+	}
+
+	public static String[] getServers() {
+		ArrayList<String> s = new ArrayList<String>();
+		
+		Scanner sc;
+		try {
+			sc = new Scanner(new URL("http://idontknow/remote/serverlist.txt").openStream());
+			while(sc.hasNextLine())
+				s.add(sc.nextLine());
+		
+			String[] servs = new String[s.size()];
+			for(int i = 0; i < s.size(); i++)
+				servs[i] = s.get(i);
+		
+			return servs;
+		} catch (FileNotFoundException e) {
+			return null;
+		} catch (MalformedURLException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
 	}
 }
