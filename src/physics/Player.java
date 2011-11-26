@@ -24,7 +24,9 @@ public class Player extends Actor {
 		state = new PlayerState();
 		inventory = new LinkedList<Actor>();
 		for (int i=0; i<5; ++i) {
-			inventory.add(new Bullet(.3f));
+			Bullet b = new Bullet();
+			b.create(.3f);
+			inventory.add(b);
 		}
 	}
 	
@@ -139,7 +141,8 @@ public class Player extends Actor {
 	}
 	
 	public void destroy() {
-		Actor a = new Actor(sizeH);
+		Actor a = new Actor();
+		a.create(sizeH);
 		a.place(s,b.getWorldCenter());
 		a.b.setTransform(b.getWorldCenter(), b.getAngle());
 		a.b.applyLinearImpulse(b.getLinearVelocity(), a.b.getWorldCenter());

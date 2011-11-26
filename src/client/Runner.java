@@ -91,21 +91,7 @@ public class Runner extends PApplet {
 	//End Gooey methods
 	
 	public void initPhysics() {
-				stage = new Stage();
-				//boundaries. These numbers were pulled straight from my ass.
-				new Prop(new Vec2(16.5f,4))
-					.place(stage, new Vec2(6.25f, -4));
-				new Prop(new Vec2(4,16.5f))
-					.place(stage, new Vec2(-4, 4.6875f));
-				new Prop(new Vec2(4,16.5f))
-					.place(stage, new Vec2(16.5f, 4.6875f));
-				new Prop(new Vec2(16.5f,4))
-					.place(stage, new Vec2(6.25f,13.375f));
-				
-				for (int i=0;i<30;++i)
-					new Actor(1).place(stage,
-							new Vec2(random(0,width)/meterScale,
-									random(0,height)/meterScale));
+		stage = new Stage();
 	}
 	
 	//Initializes everything
@@ -150,10 +136,6 @@ public class Runner extends PApplet {
 	@Override
 	public void draw() {
 		stage.step();
-		if (botMode.pc.isDead()) {
-			menu.show();
-			initPhysics();
-		}
 		currentMode.draw();
 		if(client != null)
 			try {

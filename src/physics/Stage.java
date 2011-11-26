@@ -1,6 +1,7 @@
 package physics;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
@@ -44,6 +45,7 @@ public class Stage {
 		public void preSolve(Contact arg0, Manifold arg1) {
 		}
 	}
+	
 	public static float fps = 60;
 	public static float frame = 1/60f;
 	public World w;
@@ -54,6 +56,38 @@ public class Stage {
 		actors = new LinkedList<Actor>();
 		nextId = 0;
 		w.setContactListener(new HEYLISTEN());
+	}
+
+	public void startGame(Long seed) {
+		Random rand = new Random(seed); //We need the seed because DETERMINISM!
+		//boundaries. These numbers were pulled straight from my ass.
+		addActor(Prop.class, new Vec2(16.5f,4), new Vec2(6.25f, -4));
+		addActor(Prop.class, new Vec2(4,16.5f), new Vec2(-4, 4.6875f));
+		addActor(Prop.class, new Vec2(4,16.5f), new Vec2(16.5f, 4.6875f));
+		addActor(Prop.class, new Vec2(16.5f,4), new Vec2(6.25f,13.375f));
+		//Random boxes. Fun!
+		for (int i=0;i<30;++i)
+			addActor(Actor.class, new Vec2(1, 1), 
+					new Vec2(rand.nextFloat()*12,
+							rand.nextFloat()*12));
+	}
+	
+	public Actor addActor(Class<?> type, int id, Vec2 size, Vec2 pos) {
+		try {
+			Actor a = (Actor) type.newInstance();
+			a.create(size);
+			a.place(this, pos);
+			return a;
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Actor addActor(Class<?> type, Vec2 size, Vec2 pos) {
+		return addActor(type, getNewId(), size, pos);
 	}
 	
 	/*Run one step of the simulation, right now one thirtieth of a second.*/
@@ -86,5 +120,9 @@ public class Stage {
 
 	public static int getNewId() {
 		return nextId++;
+	}
+
+	public boolean won() {
+		return false;
 	}
 }

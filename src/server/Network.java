@@ -12,7 +12,7 @@ import java.util.Random;
 public class Network extends Thread {
 	DatagramSocket socket;
 	DatagramPacket p;
-	physics.PlayerState state = new physics.PlayerState();
+	Server server;
 	ArrayList<byte[]> keys;
 	Random keygen = new Random();
 	byte[] buf = new byte[256],
@@ -20,7 +20,8 @@ public class Network extends Thread {
 		endBytes = new byte[] {07},
 		nextKey = new byte[16];
 	
-	Network(int port) throws IOException {
+	Network(Server s, int port) throws IOException {
+		server = s;
 		socket = new DatagramSocket(port);
 		socket.setSoTimeout(0);
 		p = new DatagramPacket(buf, buf.length);
@@ -30,7 +31,7 @@ public class Network extends Thread {
 	public void run() {
 		while(true) {
 			try {
-				Server.giveEvent(getEvent());
+				server.giveEvent(getEvent());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -58,22 +59,22 @@ public class Network extends Thread {
 		return p;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public Object callback(String object, String method, Object[] args, boolean sendCall) throws Exception {
-		Class<?> c = Class.forName(object, true, null);
-		Class[] partypes = new Class[args.length];
+	/*NOTE: args cannot be primitives*/
+	public Object callback(Object object, String method, Object[] args, boolean sendCall) {
+		Class<?>[] partypes = new Class<?>[args.length];
 		for(int i = 0; i < args.length; i++)
 			partypes[i] = args[i].getClass();
-		Method m = c.getMethod(method, partypes);
-		Object o = m.invoke(c, args);
-		
-		if(sendCall) {
-			p.setData(m.getName().getBytes());
-			try {
-				socket.send(p);
-			} catch (IOException e) {
-				//TODO: Handle the problem
+		Object o = null;
+		try {
+			Method m =  object.getClass().getDeclaredMethod(method, partypes);
+			o = m.invoke(object, args);
+			if(sendCall) {
+				p.setData(m.getName().getBytes());
+					socket.send(p);
 			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		return o;
