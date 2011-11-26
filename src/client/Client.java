@@ -89,7 +89,7 @@ public class Client {
 		
 		Scanner sc;
 		try {
-			sc = new Scanner(new URL("http://idontknow/remote/serverlist.txt").openStream());
+			sc = new Scanner(new URL("http://shsprog.com/remote/serverlist.txt").openStream());
 			while(sc.hasNextLine())
 				s.add(sc.nextLine());
 		

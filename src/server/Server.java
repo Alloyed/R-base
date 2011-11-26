@@ -50,7 +50,7 @@ public class Server {
 	
 	public boolean changeAvail(boolean avail) {
 		try {
-			master = new URL("http://idontknow/wp-content/uploads/servers.php?ip="+ip+"&avail="+(avail?"true":"false"));
+			master = new URL("http://shsprog.com/wp-content/uploads/servers.php?ip="+ip+"&avail="+(avail?"true":"false"));
 			return true;
 		} catch(Exception e) {
 			return false;
