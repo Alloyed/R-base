@@ -10,8 +10,8 @@ import org.jbox2d.dynamics.FixtureDef;
  */
 public class Prop extends Actor {
 	
-	public Prop(Vec2 v) {
-		super(v);
+	public Prop() {
+		super();
 	}
 
 	public void makeBody(BodyDef d,FixtureDef fd) {

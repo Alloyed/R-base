@@ -35,17 +35,14 @@ public class Actor {
 	public boolean toStore = false;
 	
 	//Makes an actor: TODO: make addActor() methods in Stage
-	public Actor(Vec2 size) {
-		this.sizeW = size.x;
-		this.sizeH = size.y;
+	public Actor() {
+
 		modifiers = new String[5];
 		wear = maxWear;
 		d = new BodyDef();
 		fd = new FixtureDef();
 		d.type = BodyType.DYNAMIC;
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(sizeW / 2f, sizeH / 2f);
-		fd.shape = shape;
+
 		fd.density = 1.6f;
 		fd.friction = .3f;
 		
@@ -53,20 +50,20 @@ public class Actor {
 		id = Stage.getNewId();
 	}
 	
-	public Actor(float size) {
-		this(new Vec2(size, size));
+	public void create(Vec2 size) {
+		this.sizeW = size.x;
+		this.sizeH = size.y;
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(sizeW / 2f, sizeH / 2f);
+		fd.shape = shape;
 	}
 	
-	public Actor() {
-		this(new Vec2(1, 1));
+	public void create(float size) {
+		create(new Vec2(size,size));
 	}
 	
 	//Places the Actor on the stage, in a given position
 	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
-		if (st == null) {
-			Console.out.println("No stage, you brok some ting.");
-			return;
-		}
 		s = st;
 		d.position.set(pos);
 		d.angle = ang;
@@ -113,9 +110,10 @@ public class Actor {
 			return;
 		if (sizeH > .4) 
 		for (int i = 0; i < 4; ++i) {
-			new Actor(new Vec2(sizeW / 2,sizeH / 2))
-				.place(s, b.getWorldCenter(), b.getAngle(),
-							b.getLinearVelocity(), b.getAngularVelocity());
+			Actor a = new Actor();
+			a.create(new Vec2(sizeW / 2,sizeH / 2));
+			a.place(s, b.getWorldCenter(), b.getAngle(),
+					b.getLinearVelocity(), b.getAngularVelocity());
 		}
 	}
 	

@@ -6,8 +6,8 @@ import org.jbox2d.dynamics.FixtureDef;
 
 public class Bullet extends Actor {
 	
-	public Bullet(float size) {
-		super(size);
+	public Bullet() {
+		super();
 		maxWear = 1000;
 		wear = maxWear;
 		baseImage = "bullet";
