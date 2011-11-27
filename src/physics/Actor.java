@@ -27,7 +27,7 @@ public class Actor {
 	public boolean isHeld;
 	//Health, damage, etc.
 	float wear;
-	float maxWear = 130;
+	float maxWear = 200;
 	public float wearFrac;
 	//This is for lerping, clients only.
 	public static float alpha;
@@ -69,6 +69,7 @@ public class Actor {
 	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
 		s = st;
 		d.position.set(pos);
+		oldPos = new Vec2(pos);
 		d.angle = ang;
 		d.linearVelocity.set(vel);
 		d.angularVelocity = velAng;

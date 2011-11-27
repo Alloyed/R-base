@@ -92,6 +92,7 @@ public class Runner extends PApplet {
 	
 	public void initPhysics() {
 		stage = new Stage();
+		stage.startGame(32l);
 	}
 	
 	//Initializes everything
