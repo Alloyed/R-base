@@ -105,10 +105,10 @@ public class Runner extends PApplet {
 				Integer.parseInt(settings.WINDOW_HEIGHT), renderer);
 		background(0);
 		smooth();
-		frameRate(Stage.fps);
+		frameRate(60);
 		scale = width < height ? width / 800f : height / 600f;
 		meterScale = scale*64f;
-		skin = new Skin(this, settings);
+		skin = new Skin(this);
 		
 		if (menu == null) {
 			initPhysics();
@@ -129,12 +129,25 @@ public class Runner extends PApplet {
 			currentMode = menu;
 			menu.show();
 		}
+		oldtime = millis();
 	}
 
 	//Is looped over to draw things
+	long time, oldtime;
+	float accum;
 	@Override
 	public void draw() {
-		stage.step();
+		time = millis();
+		float frameTime =  time - oldtime;
+		oldtime = time;
+		accum += frameTime/1000f;
+		while (accum >= Stage.frame) {
+			for (Actor a: stage.actors)
+				a.oldPos = new Vec2(a.b.getWorldCenter());
+			stage.step();
+			accum -= Stage.frame;
+		}
+		Actor.alpha = accum / Stage.frame;
 		currentMode.draw();
 		if(client != null)
 			try {
@@ -200,7 +213,7 @@ public class Runner extends PApplet {
 		fill(255);
 		text("FPS: " + (int)frameRate  + 
 				", Actors: " + stage.actors.size() + 
-				",Bullets: " + botMode.pc.inventory.size(), 
+				", Bullets: " + botMode.pc.inventory.size(), 
 				width - 150, height);
 	}
 

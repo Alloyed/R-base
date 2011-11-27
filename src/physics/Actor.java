@@ -29,6 +29,9 @@ public class Actor {
 	float wear;
 	float maxWear = 130;
 	public float wearFrac;
+	//This is for lerping, clients only.
+	public static float alpha;
+	public Vec2 oldPos;
 	
 	BodyDef d;
 	FixtureDef fd;

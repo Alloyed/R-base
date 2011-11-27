@@ -7,9 +7,9 @@ import java.util.HashMap;
 public class Skin {
 	public HashMap<String, Sprite> sprites;
 	
-	public Skin(Runner p, Settings s) {
+	public Skin(Runner p) {
 		sprites = new HashMap<String, Sprite>();
-		File dir = new File("data/images/"+s.SKIN_FOLDER+"/");
+		File dir = new File("data/images/"+p.settings.SKIN_FOLDER+"/");
 		
 		if(dir.exists())
 			for (File f : dir.listFiles())

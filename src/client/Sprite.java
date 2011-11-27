@@ -39,14 +39,15 @@ public class Sprite {
 	 */
 	@SuppressWarnings("static-access")
 	public void draw(Actor a) {
-		float x = a.b.getWorldCenter().x, y = a.b.getWorldCenter().y;
+		//new*alpha + old * ( 1.0 - alpha );
+		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) .add( a.oldPos.mul(1-Actor.alpha) );
 		p.pushStyle();
 		p.pushMatrix(); {
 			p.noStroke();
 			p.imageMode(p.CENTER);
 			p.shapeMode(p.CENTER);
 			p.rectMode(p.CENTER);
-			p.camtranslate(x, y);
+			p.camtranslate(pos.x, pos.y);
 			p.camScale(a.sizeW * width, a.sizeH * height);
 			p.camrotate(a.b.getAngle());
 			
@@ -64,8 +65,7 @@ public class Sprite {
 		
 		p.fill(255);
 		if (a.isImportant) {
-			Vec2 spot = p.worldToScreen(a.b.getWorldCenter().
-											add(new Vec2(-a.sizeW/2,a.sizeH)));
+			Vec2 spot = p.worldToScreen(pos.add(new Vec2(-a.sizeW/2,a.sizeH)));
 			p.text(a.label, spot.x, spot.y);
 		}
 	}
