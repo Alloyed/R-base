@@ -2,16 +2,15 @@ package client;
 
 import org.jbox2d.common.Vec2;
 
-import physics.Actor;
-import physics.Player;
+import physics.*;
 import processing.core.PConstants;
 
 public class Botmode extends UI{
-	Player pc;
+	Robot pc;
 	
 	public Botmode(Runner r) {
 		super(r);
-		pc = (Player) r.stage.addActor(Player.class, new Vec2(1, 1), new Vec2(1,1));
+		pc = (Robot) r.stage.addActor(Robot.class, new Vec2(1, 1), new Vec2(1,1));
 		r.gooey.addGroup("botmode", 0, 0);
 	}
 	

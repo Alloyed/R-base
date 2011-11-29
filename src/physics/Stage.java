@@ -8,6 +8,7 @@ import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
@@ -36,8 +37,8 @@ public class Stage {
 				force *= 10;
 			A.hurt(force);
 			B.hurt(force);
-			if (A instanceof Player && B.sizeH < .6 && B.b.getLinearVelocity().length() < 4) {
-				((Player)A).take(B);
+			if (A instanceof Robot && B.sizeH < .6 && B.b.getLinearVelocity().length() < 4) {
+				((Robot)A).take(B);
 			}
 		}
 
@@ -97,8 +98,14 @@ public class Stage {
 		}
 		
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
-			float friction = b.getFixtureList().getFriction() *
-					(b.getMass() * 9.8f); //Am i even doing this right?
+			Fixture f = b.getFixtureList();
+			float friction;
+			if (f == null) {
+				friction = 9.8f*.5f;
+			} else {
+				friction = b.getFixtureList().getFriction() *
+						(b.getMass() * 9.8f); //Am i even doing this right?
+			}
 			b.setLinearDamping(friction);
 			b.setAngularDamping(friction);
 		}

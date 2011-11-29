@@ -8,13 +8,13 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
 
 /*A player in the world. TODO:Teams, a lot more*/
-public class Player extends Actor {
+public class Robot extends Actor {
 	public PlayerState state;
 	final int speed=60;
 	public Actor held;
 	public LinkedList<Actor> inventory;
 	final float HALF_PI = (float) (Math.PI/2f);
-	public Player() {
+	public Robot() {
 		super();
 		maxWear = 5000;
 		wear = 5000;

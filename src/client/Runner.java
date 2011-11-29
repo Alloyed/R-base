@@ -130,7 +130,7 @@ public class Runner extends PApplet {
 			currentMode = menu;
 			menu.show();
 		}
-		oldtime = millis();
+		oldtime = System.nanoTime()/1000000l;
 	}
 
 	//Is looped over to draw things
@@ -138,7 +138,7 @@ public class Runner extends PApplet {
 	float accum;
 	@Override
 	public void draw() {
-		time = millis();
+		time = System.nanoTime()/1000000l;
 		float frameTime =  time - oldtime;
 		oldtime = time;
 		accum += frameTime/1000f;
@@ -196,8 +196,8 @@ public class Runner extends PApplet {
 	
 	//Moves pos to center, not top right
 	public void setCam(Vec2 pos, float ang) {
-		zeroX = .1f * ((pos.x * meterScale) - (width / 2f)) + .9f * zeroX;
-		zeroY = .1f * ((pos.y * meterScale) - (height / 2f)) + .9f * zeroY;
+		zeroX = 1f * ((pos.x * meterScale) - (width / 2f)) + 0f * zeroX;
+		zeroY = 1f * ((pos.y * meterScale) - (height / 2f)) + 0f * zeroY;
 		camAngle = ang;
 	}
 	

@@ -54,6 +54,8 @@ public class Actor {
 	}
 	
 	public void create(Vec2 size) {
+		if (fd == null)
+			return;
 		this.sizeW = size.x;
 		this.sizeH = size.y;
 		PolygonShape shape = new PolygonShape();
@@ -74,7 +76,8 @@ public class Actor {
 		d.linearVelocity.set(vel);
 		d.angularVelocity = velAng;
 		b = s.w.createBody(d);
-		b.createFixture(fd);
+		if (fd != null)
+			b.createFixture(fd);
 		b.setUserData(this);
 		s.actors.add(this);
 	}
