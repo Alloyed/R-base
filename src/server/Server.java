@@ -33,7 +33,11 @@ public class Server {
 	public void game() {
 		main = new Stage();
 		long seed = System.currentTimeMillis();
-		n.callback(main, "startGame", new Object[] {seed}, true);
+		try {
+			n.callback(main, "startGame", new Object[] {seed}, true);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		Console.out.println("Game started.");
 		while (true) {
 			//Send state to clients here.
