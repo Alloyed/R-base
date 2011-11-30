@@ -2,6 +2,7 @@ package client;
 
 import controlP5.CColor;
 
+@SuppressWarnings("serial")
 public class Colors {
 	public static CColor goGreen = new CColor() {{
 		setBackground(-16726016);

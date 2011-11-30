@@ -10,8 +10,6 @@ package client;
  */
 
 //Util
-import java.awt.AWTException;
-import java.awt.Robot;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -20,9 +18,14 @@ import java.util.HashMap;
 import java.net.InetAddress;
 //Physix
 import physics.*;
+import physics.actors.*;
+
 import org.jbox2d.dynamics.*;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.*;
+
+import client.sprites.*;
+import client.ui.*;
 //gooey
 import controlP5.*;
 //graphix
@@ -30,31 +33,31 @@ import processing.core.*;
 import processing.opengl.*;
 
 @SuppressWarnings("unused")
-public class Runner extends PApplet {
+public class Main extends PApplet {
 	private static final long serialVersionUID = 1L;
-	//TODO: store this in the settings file
-	final String[] servers = Client.getServers(); //{ "localhost", "10.200.5.28", "10.200.5.29", "10.200.5.30" };
+
 	// Config options
-	Settings settings;
+	public Settings settings;
+	public final String[] servers = { "localhost", 
+										"10.200.5.28", 
+										"10.200.5.29", 
+										"10.200.5.30" };
 	
 	// Game state
-	Client client;
-	Stage stage;
+	public Client client;
+	public Stage stage;
 	
 	//Views
-	Menu menu;
-	Botmode botMode;
-	Godmode godMode;
-	UI currentMode;
+	public Menu menu;
+	public UI currentMode;
 	
 	//Gui stuff
-	float scale = 1;
-	float meterScale = 64; //1 m = meterScale pixels
-	ControlP5 gooey;
+	public Camera cam;
+	public ControlP5 gooey;
 	int mode = 0;
 	PFont font;
 	ControlFont cfont;
-	Skin skin;
+	public Skin skin;
 	
 	/* Gooey methods.*/
 	public void quit() {
@@ -62,7 +65,7 @@ public class Runner extends PApplet {
 	}
 	
 	public void resume() {
-		botMode.show();
+		menu.lastMode.show();
 	}
 	
 	void connect() {
@@ -107,8 +110,7 @@ public class Runner extends PApplet {
 		background(0);
 		smooth();
 		frameRate(60);
-		scale = width < height ? width / 800f : height / 600f;
-		meterScale = scale*64f;
+		cam = new Camera(this);
 		skin = new Skin(this);
 		
 		if (menu == null) {
@@ -119,15 +121,13 @@ public class Runner extends PApplet {
 			textFont(font);
 			gooey = new ControlP5(this);
 			menu = new Menu(this);
-			godMode = new Godmode(this);
-			botMode = new Botmode(this);
 			
 			for (ControllerInterface c : gooey.getControllerList()) {
 				if (c instanceof Textfield)
 					((Textfield) c).setAutoClear(false);
 			}
 			
-			currentMode = menu;
+			currentMode = new Botmode(this);
 			menu.show();
 		}
 		oldtime = System.nanoTime()/1000000l;
@@ -138,6 +138,7 @@ public class Runner extends PApplet {
 	float accum;
 	@Override
 	public void draw() {
+		//Physics
 		time = System.nanoTime()/1000000l;
 		float frameTime =  time - oldtime;
 		oldtime = time;
@@ -149,18 +150,13 @@ public class Runner extends PApplet {
 			accum -= Stage.frame;
 		}
 		Actor.alpha = accum / Stage.frame;
+		
 		currentMode.draw();
-		if(client != null)
-			try {
-				client.sendEvent(botMode.pc.state);
-			} catch (IOException e) {
-				
-			}
 		gooey.draw();
 		fps();
 	}
 	
-	void draw(Actor a) {
+	public void draw(Actor a) {
 		Sprite s = skin.sprites.get(a.getImage());
 		if (s == null) {
 			Console.out.print("WARNING: sprite " + a.getImage() + " doesn't exist. ");
@@ -176,45 +172,10 @@ public class Runner extends PApplet {
 		s.draw(a);
 	}
 	
-	//Camera stuf, Horribly hacky
-	Robot robot;
-	float zeroX, zeroY;
-	float camAngle;
-	 
-	public void camtranslate(float x, float y) {
-		translate((x * meterScale) - zeroX,(y * meterScale) - zeroY);
-	}
-	
-	public void camScale(float x, float y) {
-		scale(scale * x,scale * y); //wat
-	}
-	
-	//Note: does not work
-	public void camrotate(float theta) {
-		rotate(theta);
-	}
-	
-	//Moves pos to center, not top right
-	public void setCam(Vec2 pos, float ang) {
-		zeroX = 1f * ((pos.x * meterScale) - (width / 2f)) + 0f * zeroX;
-		zeroY = 1f * ((pos.y * meterScale) - (height / 2f)) + 0f * zeroY;
-		camAngle = ang;
-	}
-	
-	public Vec2 screenToWorld(Vec2 in) {
-		return new Vec2((in.x-zeroX)/meterScale,(in.y-zeroY)/meterScale);
-	}
-	
-	public Vec2 worldToScreen(Vec2 in) {
-		return new Vec2(in.x*meterScale-zeroX,in.y*meterScale-zeroY);
-	}
-	
-	
 	public void fps() {
 		fill(255);
 		text("FPS: " + (int)frameRate  + 
-				", Actors: " + stage.actors.size() + 
-				", Bullets: " + botMode.pc.inventory.size(), 
+				", Actors: " + stage.actors.size(),
 				width - 150, height);
 	}
 
@@ -243,6 +204,6 @@ public class Runner extends PApplet {
 	public static void main(String[] args) {
 		PApplet.main(new String[] { "--present", 
 									"--hide-stop",
-									"client.Runner" });
+									"client.Main" });
 	}
 }

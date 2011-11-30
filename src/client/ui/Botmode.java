@@ -1,36 +1,49 @@
-package client;
+package client.ui;
+
+import java.io.IOException;
 
 import org.jbox2d.common.Vec2;
 
-import physics.*;
+import client.Main;
+
+import physics.actors.Actor;
+import physics.actors.Robot;
 import processing.core.PConstants;
 
 public class Botmode extends UI{
-	Robot pc;
+	public Robot pc;
 	
-	public Botmode(Runner r) {
+	public Botmode(Main r) {
 		super(r);
+		group = "botmode";
 		pc = (Robot) r.stage.addActor(Robot.class, new Vec2(1, 1), new Vec2(1,1));
-		r.gooey.addGroup("botmode", 0, 0);
+		r.gooey.addGroup(group, 0, 0);
 	}
 	
 	@Override
 	public void draw() {
-		pc.state.aim = new Vec2((r.mouseX+r.zeroX)/r.meterScale, 
-				(r.mouseY+r.zeroY)/r.meterScale);
+		pc.state.aim = new Vec2((r.mouseX+r.cam.zeroX)/r.cam.meterScale, 
+				(r.mouseY+r.cam.zeroY)/r.cam.meterScale);
 		
 		r.background(20);
-		r.setCam(pc.b.getWorldCenter(), pc.b.getAngle());
+		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		for (Actor a:r.stage.actors) {
 			r.draw(a);
 		}
+		
+		if(r.client != null )
+			try {
+				r.client.sendEvent(pc.state);
+			} catch (IOException e) {
+				
+			}
 		
 		//crosshairs
 		r.pushMatrix();
 			r.noFill();
 			r.stroke(255);
 			r.strokeWeight(2);
-			r.camtranslate(pc.state.aim.x,pc.state.aim.y);
+			r.cam.translate(pc.state.aim.x,pc.state.aim.y);
 			r.rect(-2, -2, 4, 4);
 		r.popMatrix();
 		
@@ -77,16 +90,9 @@ public class Botmode extends UI{
 	
 	@Override
 	public void show() {
-		r.currentMode.hide();
 		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
 		pc.label = r.settings.USERNAME;
+		super.show();
 		r.noCursor();
-		r.gooey.getGroup("botmode").show();
-		r.currentMode = this;
-	}
-	
-	@Override
-	public void hide() {
-		r.gooey.getGroup("botmode").hide();
 	}
 }

@@ -1,8 +1,10 @@
-package physics;
+package physics.actors;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
+
+import physics.Stage;
 
 /*The main representation of an in-game object, right now*/
 public class Actor {
@@ -26,7 +28,7 @@ public class Actor {
 	//Has the actor been picked up by another?
 	public boolean isHeld;
 	//Health, damage, etc.
-	float wear;
+	public float wear;
 	float maxWear = 200;
 	public float wearFrac;
 	//This is for lerping, clients only.
@@ -99,7 +101,7 @@ public class Actor {
 	
 	//Actors are moving, but useless boxes by default.
 	//Change this to give them their own free will
-	void force() {
+	public void force() {
 		
 	}
 	

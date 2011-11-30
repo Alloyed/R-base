@@ -1,8 +1,9 @@
-package physics;
+package physics.actors;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
+
 
 public class Bullet extends Actor {
 	

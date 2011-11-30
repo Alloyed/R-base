@@ -1,12 +1,13 @@
-package client;
+package client.ui;
 
-import java.util.ArrayList;
+import client.Colors;
+import client.Main;
+import client.Settings;
 
 import controlP5.ControlEvent;
 import controlP5.ControlGroup;
 import controlP5.ControlListener;
 import controlP5.ControlP5;
-import controlP5.ControllerInterface;
 import controlP5.ListBox;
 import controlP5.Textfield;
 import processing.core.PConstants;
@@ -18,11 +19,10 @@ import processing.core.PImage;
 public class Menu extends UI {
 	
 	PImage logo;
-	ArrayList<ControllerInterface> mainMenu;
-	UI lastMode;
+	public UI lastMode;
 	class listener implements ControlListener {
-		Runner r;
-		public listener(Runner r) {this.r = r;}
+		Main r;
+		public listener(Main r) {this.r = r;}
 		@Override
 		public void controlEvent(ControlEvent e) {
 			if (e.isGroup()) {
@@ -33,14 +33,16 @@ public class Menu extends UI {
 			}
 		}
 	}
-	public Menu(Runner r) {
+	
+	public Menu(Main r) {
 		super(r);
+		group = "menu";
 		logo = r.loadImage("logo2.png");
 		r.imageMode(PConstants.CENTER);
 		ControlP5 gooey = r.gooey;
 		Settings settings = r.settings;
 		
-		ControlGroup m = gooey.addGroup("menu", 0, 0);
+		ControlGroup m = gooey.addGroup(group, 0, 0);
 		gooey.begin(m);
 		gooey.addButton("resume").setPosition(30, 30)
 				.setSize(100, 30).setColor(Colors.goGreen);
@@ -110,17 +112,8 @@ public class Menu extends UI {
 
 	@Override
 	public void show() {
-		r.currentMode.hide();
-		r.gooey.getGroup("menu").show();
-		r.cursor();
 		lastMode = r.currentMode;
-		r.currentMode = this;
+		super.show();
+		r.cursor();
 	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		r.gooey.getGroup("menu").hide();
-	}
-
 }

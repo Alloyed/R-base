@@ -1,23 +1,21 @@
-package client;
+package client.sprites;
 
 import org.jbox2d.common.Vec2;
 
-import physics.Actor;
-import physics.Console;
+import client.Main;
+
+import physics.actors.Actor;
 import processing.core.PImage;
 import processing.core.PShape;
 
-/* lets you do/draws vectors or images
- * TODO: Find some way to convert PShapes to box2d shapes
- */
-public class Sprite {
-	Runner p;
+/* draws vectors or images */
+public class ImageSprite implements Sprite {
+	Main p;
 	String file;
 	boolean isVector = false;
 	Object sprite;
 	final float width, height, length;
-	
-	public Sprite(Runner p, String file) {
+	public ImageSprite(Main p, String file) {
 		this.p = p;
 		this.file = file;
 		if (file.endsWith(".svg"))
@@ -43,8 +41,6 @@ public class Sprite {
 	@SuppressWarnings("static-access")
 	public void draw(Actor a) {
 		//new*alpha + old * ( 1.0 - alpha );
-		if (a.b == null)
-			Console.out.println("WHAT " + a.toString());
 		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) .add( a.oldPos.mul(1-Actor.alpha) );
 		p.pushStyle();
 		p.pushMatrix(); {
@@ -52,9 +48,9 @@ public class Sprite {
 			p.imageMode(p.CENTER);
 			p.shapeMode(p.CENTER);
 			p.rectMode(p.CENTER);
-			p.camtranslate(pos.x, pos.y);
-			p.camScale(a.sizeW * width, a.sizeH * height);
-			p.camrotate(a.b.getAngle());
+			p.cam.translate(pos.x, pos.y);
+			p.cam.scale(a.sizeW * width, a.sizeH * height);
+			p.cam.rotate(a.b.getAngle());
 			
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
@@ -70,7 +66,7 @@ public class Sprite {
 		
 		p.fill(255);
 		if (a.isImportant) {
-			Vec2 spot = p.worldToScreen(pos.add(new Vec2(-a.sizeW/2,a.sizeH)));
+			Vec2 spot = p.cam.worldToScreen(pos.add(new Vec2(-a.sizeW/2,a.sizeH)));
 			p.text(a.label, spot.x, spot.y);
 		}
 	}

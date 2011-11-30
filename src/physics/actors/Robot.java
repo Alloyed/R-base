@@ -1,4 +1,4 @@
-package physics;
+package physics.actors;
 
 import java.util.LinkedList;
 
@@ -6,6 +6,8 @@ import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
+
+import physics.PlayerState;
 
 /*A player in the world. TODO:Teams, a lot more*/
 public class Robot extends Actor {
@@ -112,7 +114,7 @@ public class Robot extends Actor {
 		a.b.applyLinearImpulse(getLocalPointAhead(100).mul(a.b.getMass()), b.getWorldCenter());
 	}
 	
-	void force() {
+	public void force() {
 		Vec2 dir = state.aim.sub(b.getWorldCenter());
 		float ang = (float)Math.atan2(dir.y, dir.x);
 		b.setTransform(b.getWorldCenter(), ang);

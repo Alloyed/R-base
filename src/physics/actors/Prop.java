@@ -1,9 +1,7 @@
-package physics;
+package physics.actors;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.dynamics.*;
+
 
 /* Use for permanent squares in the world
  * TODO: add a texture mode to Sprite so we can make rectangles

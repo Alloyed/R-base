@@ -12,6 +12,11 @@ import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
+import physics.actors.Actor;
+import physics.actors.Bullet;
+import physics.actors.Prop;
+import physics.actors.Robot;
+
 /*The representation of the in-game world. 
  * It's more useless right now than it should be.
  */

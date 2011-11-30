@@ -1,11 +1,14 @@
-package client;
+package client.ui;
+
+import client.Main;
 
 /*One Giant TODO*/
 public class Godmode extends UI {
-
-	public Godmode(Runner r) {
+	
+	public Godmode(Main r) {
 		super(r);
-		r.gooey.addGroup("godmode", 0, 0);
+		group = "godmode";
+		r.gooey.addGroup(group, 0, 0);
 	}
 
 	@Override
@@ -41,16 +44,7 @@ public class Godmode extends UI {
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		r.currentMode.hide();
-		r.gooey.getGroup("godhud").show();
+		super.show();
 		r.cursor();
-		r.currentMode = this;
 	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		r.gooey.getGroup("godhud").hide();
-	}
-	
 }
