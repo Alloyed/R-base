@@ -7,7 +7,7 @@ import java.net.DatagramSocket;
 import java.util.ArrayList;
 import java.util.Random;
 
-import physics.Actor;
+import physics.actors.Actor;
 
 /* TODO: handle events, Limit one connection per IP. */
 

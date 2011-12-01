@@ -2,7 +2,6 @@ package client;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -12,10 +11,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import physics.Actor;
 import physics.Console;
 import physics.PlayerState;
-import physics.Stage;
+import physics.actors.Actor;
 
 public class Client {
 	public DatagramSocket s;
