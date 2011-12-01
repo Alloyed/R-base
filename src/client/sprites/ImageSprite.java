@@ -40,7 +40,7 @@ public class ImageSprite implements Sprite {
 	 */
 	@SuppressWarnings("static-access")
 	public void draw(Actor a) {
-		//new*alpha + old * ( 1.0 - alpha );
+		//This does linear interpolation: new*alpha + old*( 1.0 - alpha );
 		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) .add( a.oldPos.mul(1-Actor.alpha) );
 		p.pushStyle();
 		p.pushMatrix(); {

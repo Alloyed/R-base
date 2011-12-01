@@ -8,7 +8,6 @@ import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
@@ -102,18 +101,6 @@ public class Stage {
 			a.force();
 		}
 		
-		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
-			Fixture f = b.getFixtureList();
-			float friction;
-			if (f == null) {
-				friction = 9.8f*.5f;
-			} else {
-				friction = b.getFixtureList().getFriction() *
-						(b.getMass() * 9.8f); //Am i even doing this right?
-			}
-			b.setLinearDamping(friction);
-			b.setAngularDamping(friction);
-		}
 		w.step(frame, 8, 3);
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
 			Actor a = (Actor) b.getUserData();

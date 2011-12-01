@@ -130,7 +130,7 @@ public class Main extends PApplet {
 			currentMode = new Botmode(this);
 			menu.show();
 		}
-		oldtime = System.nanoTime()/1000000l;
+		oldtime = System.nanoTime();
 	}
 
 	//Is looped over to draw things
@@ -139,10 +139,10 @@ public class Main extends PApplet {
 	@Override
 	public void draw() {
 		//Physics
-		time = System.nanoTime()/1000000l;
+		time = System.nanoTime();
 		float frameTime =  time - oldtime;
 		oldtime = time;
-		accum += frameTime/1000f;
+		accum += frameTime/1000000f/1000f;
 		while (accum >= Stage.frame) {
 			for (Actor a: stage.actors)
 				a.oldPos = new Vec2(a.b.getWorldCenter());

@@ -3,6 +3,7 @@ package physics.actors;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.joints.FrictionJointDef;
 
 import physics.Stage;
 
@@ -81,6 +82,8 @@ public class Actor {
 		if (fd != null)
 			b.createFixture(fd);
 		b.setUserData(this);
+		b.setLinearDamping(fd.friction*9.8f);
+		b.setAngularDamping(fd.friction*9.8f);
 		s.actors.add(this);
 	}
 	
@@ -118,11 +121,14 @@ public class Actor {
 		if (s == null)
 			return;
 		if (sizeH > .4) 
-		for (int i = 0; i < 4; ++i) {
-			Actor a = new Actor();
-			a.create(new Vec2(sizeW / 2,sizeH / 2));
-			a.place(s, b.getWorldCenter(), b.getAngle(),
-					b.getLinearVelocity(), b.getAngularVelocity());
+		for (int i = -1; i < 2; i += 2) {
+			for (int j = -1; j < 2; j += 2) {
+				Actor a = new Actor();
+				a.create(new Vec2(sizeW / 2,sizeH / 2));
+				Vec2 pos = new Vec2(sizeW * i / 4f,sizeH * j / 4f);
+				a.place(s, b.getWorldPoint(pos), b.getAngle(),
+						b.getLinearVelocity(), b.getAngularVelocity());
+			}
 		}
 	}
 	

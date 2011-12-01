@@ -22,9 +22,10 @@ public class Botmode extends UI{
 	
 	@Override
 	public void draw() {
+		Vec2 oldAim = pc.state.aim;
 		pc.state.aim = new Vec2((r.mouseX+r.cam.zeroX)/r.cam.meterScale, 
 				(r.mouseY+r.cam.zeroY)/r.cam.meterScale);
-		
+		Vec2 lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
 		r.background(20);
 		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		for (Actor a:r.stage.actors) {
@@ -43,7 +44,7 @@ public class Botmode extends UI{
 			r.noFill();
 			r.stroke(255);
 			r.strokeWeight(2);
-			r.cam.translate(pc.state.aim.x,pc.state.aim.y);
+			r.cam.translate(lerped.x,lerped.y);
 			r.rect(-2, -2, 4, 4);
 		r.popMatrix();
 		
