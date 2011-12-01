@@ -144,7 +144,7 @@ public class Main extends PApplet {
 		oldtime = time;
 		accum += frameTime/1000000f/1000f;
 		while (accum >= Stage.frame) {
-			for (Actor a: stage.actors)
+			for (Actor a: stage.activeActors)
 				a.oldPos = new Vec2(a.b.getWorldCenter());
 			stage.step();
 			accum -= Stage.frame;
@@ -175,7 +175,7 @@ public class Main extends PApplet {
 	public void fps() {
 		fill(255);
 		text("FPS: " + (int)frameRate  + 
-				", Actors: " + stage.actors.size(),
+				", Actors: " + stage.activeActors.size(),
 				width - 150, height);
 	}
 

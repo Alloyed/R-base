@@ -28,7 +28,7 @@ public class Botmode extends UI{
 		Vec2 lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
 		r.background(20);
 		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
-		for (Actor a:r.stage.actors) {
+		for (Actor a:r.stage.activeActors) {
 			r.draw(a);
 		}
 		

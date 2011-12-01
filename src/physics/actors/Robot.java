@@ -90,11 +90,11 @@ public class Robot extends Actor {
 	
 	/*Take some scrap*/
 	public void take(Actor a) {
-		if (a != null && s.actors.contains(a)) { //Is it a pickup-able thing?
+		if (a != null && s.activeActors.contains(a)) { //Is it a pickup-able thing?
 			inventory.add(a);
 			a.wear = a.maxWear;
 			a.store();
-			s.actors.remove(a);
+			s.activeActors.remove(a);
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package physics;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -54,11 +55,13 @@ public class Stage {
 	public static float fps = 60;
 	public static float frame = 1/60f;
 	public World w;
-	public LinkedList<Actor> actors;
+	public HashMap<Integer, Actor> actors; //Every actor, retrievable by id.
+	public LinkedList<Actor> activeActors; //Every actor in the world right now
 	static int nextId = 0;
 	public Stage() {
 		w = new World(new Vec2(0, 0), true);
-		actors = new LinkedList<Actor>();
+		actors = new HashMap<Integer, Actor>();
+		activeActors = new LinkedList<Actor>();
 		nextId = 0;
 		w.setContactListener(new HEYLISTEN());
 	}
@@ -95,9 +98,9 @@ public class Stage {
 		return addActor(type, getNewId(), size, pos);
 	}
 	
-	/*Run one step of the simulation, right now one thirtieth of a second.*/
+	/*Run one step of the simulation, simulating frame seconds of time.*/
 	public void step() {
-		for (Actor a: actors) {
+		for (Actor a: activeActors) {
 			a.force();
 		}
 		
@@ -105,12 +108,10 @@ public class Stage {
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
 			Actor a = (Actor) b.getUserData();
 			if (a.toStore) {
-				actors.remove(a);
-				w.destroyBody(b);
+				store(a);
 			} else if (a.wear <= 1) {
 				a.destroy();
-				w.destroyBody(b);
-				actors.remove(a);
+				delete(a);
 			}
 		}
 		
@@ -123,5 +124,18 @@ public class Stage {
 
 	public boolean won() {
 		return false;
+	}
+	
+	//Deletes the actor, no refs anywhere
+	public void delete(Actor a) {
+		w.destroyBody(a.b);
+		actors.remove(a.id);
+		activeActors.remove(a);
+	}
+	
+	//"Stores" the actor, for later use.
+	public void store(Actor a) {
+		activeActors.remove(a);
+		w.destroyBody(a.b);
 	}
 }

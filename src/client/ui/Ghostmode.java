@@ -22,7 +22,7 @@ public class Ghostmode extends UI {
 	public void draw() {
 		r.background(20);
 		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
-		for (Actor a:r.stage.actors) {
+		for (Actor a:r.stage.activeActors) {
 			r.draw(a);
 		}
 		
