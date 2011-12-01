@@ -33,7 +33,11 @@ public class Server {
 	public void game() {
 		main = new Stage();
 		long seed = System.currentTimeMillis();
-		n.callback(main, "startGame", new Object[] {seed}, true);
+		try {
+			n.callback(main, "startGame", new Object[] {seed}, true);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		Console.out.println("Game started.");
 		while (true) {
 			//Send state to clients here.
@@ -50,7 +54,7 @@ public class Server {
 	
 	public boolean changeAvail(boolean avail) {
 		try {
-			master = new URL("http://idontknow/wp-content/uploads/servers.php?ip="+ip+"&avail="+(avail?"true":"false"));
+			master = new URL("http://shsprog.com/wp-content/uploads/servers.php?ip="+ip+"&avail="+(avail?"true":"false"));
 			return true;
 		} catch(Exception e) {
 			return false;

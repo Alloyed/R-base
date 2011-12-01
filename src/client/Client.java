@@ -12,8 +12,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import physics.Actor;
 import physics.Console;
 import physics.PlayerState;
+import physics.Stage;
 
 public class Client {
 	public DatagramSocket s;
@@ -66,15 +68,18 @@ public class Client {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public Object callback(String object, String method, Object[] args, boolean addToPacket) throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Class<?> c = Class.forName(object, true, null);
+	public <E> Object callback(E obj, String method, Object[] args, boolean addToPacket) throws Exception {
 		Class[] partypes = new Class[args.length];
 		for(int i = 0; i < args.length; i++)
 			partypes[i] = args[i].getClass();
-		Method m = c.getMethod(method, partypes);
-		Object o = m.invoke(c, args);
-		
+		Method m = obj.getClass().getDeclaredMethod(method, partypes);
+		Object o = m.invoke(obj, args);
 		if(addToPacket)
+			if(obj.getClass().getSuperclass() == Actor.class) {
+				byte id = 0;
+				flexBuf.add(obj.getClass().getDeclaredField("id").getByte(id));
+			}
+		
 			for(byte b : m.getName().getBytes())
 				flexBuf.add(b);
 		
@@ -86,7 +91,7 @@ public class Client {
 		
 		Scanner sc;
 		try {
-			sc = new Scanner(new URL("http://idontknow/remote/serverlist.txt").openStream());
+			sc = new Scanner(new URL("http://shsprog.com/remote/serverlist.txt").openStream());
 			while(sc.hasNextLine())
 				s.add(sc.nextLine());
 		

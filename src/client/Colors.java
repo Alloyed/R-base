@@ -4,15 +4,19 @@ import controlP5.CColor;
 
 @SuppressWarnings("serial")
 public class Colors {
-	public static CColor goGreen = new CColor() {{
-		setBackground(-16726016);
+	
+	public static CColor goGreen = new CColor() {
+		private static final long serialVersionUID = 1L; {
+			setBackground(-16726016);
+	}};
+
+	public static CColor quitRed = new CColor() {
+		private static final long serialVersionUID = 1L; {
+			setBackground(-6291456);
 	}};
 	
-	public static CColor quitRed = new CColor() {{
-		setBackground(-6291456);
-	}};
-	
-	public static CColor connectOrange = new CColor() {{
-		setBackground(-3907056);
+	public static CColor connectOrange = new CColor() {
+		private static final long serialVersionUID = 1L; {
+			setBackground(-3907056);
 	}};
 }
