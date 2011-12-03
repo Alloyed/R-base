@@ -33,6 +33,7 @@ public class Actor {
 	//This is for lerping, clients only.
 	public static float alpha;
 	public Vec2 oldPos;
+	public float oldAng;
 	
 	BodyDef d;
 	FixtureDef fd;
@@ -73,6 +74,7 @@ public class Actor {
 		s = st;
 		d.position.set(pos);
 		oldPos = new Vec2(pos);
+		oldAng = ang;
 		d.angle = ang;
 		d.linearVelocity.set(vel);
 		d.angularVelocity = velAng;

@@ -5,13 +5,13 @@ import org.jbox2d.common.Vec2;
 import physics.actors.Actor;
 import physics.actors.Ghost;
 import processing.core.PConstants;
-import client.Main;
+import client.Client;
 
 /*this is Observer mode, the mode you should start as.*/
 public class Ghostmode extends UI {
 	public Ghost cursor;
 	
-	public Ghostmode(Main r) {
+	public Ghostmode(Client r) {
 		super(r);
 		group = "ghostmode";
 		cursor = (Ghost) r.stage.addActor(Ghost.class, new Vec2(1,1), new Vec2(1,1));

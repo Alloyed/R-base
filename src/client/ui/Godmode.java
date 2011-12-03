@@ -5,13 +5,13 @@ import org.jbox2d.common.Vec2;
 import physics.actors.Actor;
 import physics.actors.Ghost;
 import processing.core.PConstants;
-import client.Main;
+import client.Client;
 
 /*One Giant TODO*/
 public class Godmode extends UI {
 	public Ghost cursor;
 	
-	public Godmode(Main r) {
+	public Godmode(Client r) {
 		super(r);
 		group = "godmode";
 		r.gooey.addGroup(group, 0, 0);

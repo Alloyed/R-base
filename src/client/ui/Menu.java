@@ -1,7 +1,7 @@
 package client.ui;
 
 import client.Colors;
-import client.Main;
+import client.Client;
 import client.Settings;
 
 import controlP5.ControlEvent;
@@ -21,8 +21,8 @@ public class Menu extends UI {
 	PImage logo;
 	public UI lastMode;
 	class listener implements ControlListener {
-		Main r;
-		public listener(Main r) {this.r = r;}
+		Client r;
+		public listener(Client r) {this.r = r;}
 		@Override
 		public void controlEvent(ControlEvent e) {
 			if (e.isGroup()) {
@@ -34,7 +34,7 @@ public class Menu extends UI {
 		}
 	}
 	
-	public Menu(Main r) {
+	public Menu(Client r) {
 		super(r);
 		group = "menu";
 		logo = r.loadImage("logo2.png");

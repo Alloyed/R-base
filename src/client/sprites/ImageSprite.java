@@ -2,20 +2,21 @@ package client.sprites;
 
 import org.jbox2d.common.Vec2;
 
-import client.Main;
+import client.Client;
 
 import physics.actors.Actor;
+import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PShape;
 
 /* draws vectors or images */
 public class ImageSprite implements Sprite {
-	Main p;
+	Client p;
 	String file;
 	boolean isVector = false;
 	Object sprite;
 	final float width, height, length;
-	public ImageSprite(Main p, String file) {
+	public ImageSprite(Client p, String file) {
 		this.p = p;
 		this.file = file;
 		if (file.endsWith(".svg"))
@@ -35,23 +36,34 @@ public class ImageSprite implements Sprite {
 		}
 	}
 	
-	/* Draws the specified Actor a. 
-	 * See Actor for the variables you can use to customize this. 
-	 */
+
+	public void draw(PGraphics pg, float x, float y, float max) {
+			pg.pushMatrix();
+			pg.scale(.3f); //TODO: unhardcode this
+			if (isVector)
+				pg.shape((PShape)sprite,x,y);
+			else
+				pg.image((PImage)sprite,x,y);
+			pg.popMatrix();
+	}
+	
+
 	@SuppressWarnings("static-access")
 	public void draw(Actor a) {
 		//This does linear interpolation: new*alpha + old*( 1.0 - alpha );
-		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) .add( a.oldPos.mul(1-Actor.alpha) );
+		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) .add( a.oldPos.mul(1 - Actor.alpha) );
+		float angle = a.b.getAngle()*Actor.alpha + a.oldAng * (1 - Actor.alpha);
 		p.pushStyle();
 		p.pushMatrix(); {
 			p.noStroke();
 			p.imageMode(p.CENTER);
 			p.shapeMode(p.CENTER);
 			p.rectMode(p.CENTER);
+			p.ellipseMode(p.CENTER);
+			
 			p.cam.translate(pos.x, pos.y);
 			p.cam.scale(a.sizeW * width, a.sizeH * height);
-			p.cam.rotate(a.b.getAngle());
-			
+			p.cam.rotate(angle);
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else

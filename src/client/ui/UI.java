@@ -1,11 +1,11 @@
 package client.ui;
 
-import client.Main;
+import client.Client;
 
 public abstract class UI {
-	public Main r;
+	public Client r;
 	public String group;
-	public UI(Main r){
+	public UI(Client r){
 		this.r = r;
 	}
 	public abstract void draw();

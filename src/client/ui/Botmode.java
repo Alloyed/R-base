@@ -4,20 +4,35 @@ import java.io.IOException;
 
 import org.jbox2d.common.Vec2;
 
-import client.Main;
+import processing.core.*;
+import controlP5.*;
 
-import physics.actors.Actor;
-import physics.actors.Robot;
-import processing.core.PConstants;
+import client.Client;
+import client.sprites.Sprite;
+
+import physics.Console;
+import physics.actors.*;
 
 public class Botmode extends UI{
 	public Robot pc;
+	public PGraphics inv;
 	
-	public Botmode(Main r) {
+	public void inv() {
+		//TODO
+		Console.dbg.println("INVENTORIZED");
+	}
+	
+	public Botmode(Client r) {
 		super(r);
-		group = "botmode";
 		pc = (Robot) r.stage.addActor(Robot.class, new Vec2(1, 1), new Vec2(1,1));
-		r.gooey.addGroup(group, 0, 0);
+		
+		group = "botmode";
+		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
+		//this sets off a segfault, it's harmless though
+		inv = r.createGraphics(100, 30, PConstants.JAVA2D); 
+		Button b = r.gooey.addButton("inv",0,0,r.height-30,100,30);
+		b.setImage(inv); 
+		b.moveTo(m);
 	}
 	
 	@Override
@@ -32,9 +47,9 @@ public class Botmode extends UI{
 			r.draw(a);
 		}
 		
-		if(r.client != null )
+		if(r.net != null )
 			try {
-				r.client.sendEvent(pc.state);
+				r.net.sendEvent(pc.state);
 			} catch (IOException e) {
 				
 			}
@@ -48,6 +63,22 @@ public class Botmode extends UI{
 			r.rect(-2, -2, 4, 4);
 		r.popMatrix();
 		
+		//Button.
+		inv.beginDraw();
+			
+			inv.smooth();
+			inv.background(100);
+			Sprite s;
+			if (!pc.inventory.isEmpty()) {
+				Actor a = pc.inventory.get(0);
+				s = r.skin.get(a);
+			} else {
+				s = r.skin.sprites.get("none");
+			}
+			s.draw(inv,15,15,50);
+			inv.fill(255);
+			inv.text(""+pc.inventory.size(),70,20);
+		inv.endDraw();
 	}
 	
 	@Override
@@ -62,6 +93,8 @@ public class Botmode extends UI{
 			pc.state.rightPressed = true;
 		else if (r.key == PConstants.ESC)
 			r.menu.show();
+		else if (r.key == 'q')
+			inv();
 	}
 	
 	@Override
@@ -81,6 +114,12 @@ public class Botmode extends UI{
 	
 	@Override
 	public void mousePressed() {
+		/*
+		 * TODO: keep from firing when moused over the UI.
+		 * There is a function to do this in the ControlP5 docs.
+		 * It does not work with groups or tabs.
+		 * SDFSDFSDFASDFAJFGGASDJSDF
+		 */
 		pc.fire();
 	}
 	
@@ -95,5 +134,9 @@ public class Botmode extends UI{
 		pc.label = r.settings.USERNAME;
 		super.show();
 		r.noCursor();
+	}
+	
+	public void hide() {
+		super.hide();
 	}
 }
