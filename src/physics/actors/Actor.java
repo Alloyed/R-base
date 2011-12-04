@@ -1,8 +1,11 @@
 package physics.actors;
 
+import network.ActorState;
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
+
 import physics.Stage;
 
 /*The main representation of an in-game object, right now*/
@@ -11,6 +14,8 @@ public class Actor {
 	public Body b;
 	//The stage it belongs to
 	public Stage s;
+	//The serializable state of the object
+	public ActorState state;
 	//Unique ID, doesn't work right now
 	public int id; 
 	//dimensions of the box. 
@@ -40,8 +45,7 @@ public class Actor {
 	public boolean toStore = false;
 	
 	//Makes an actor: TODO: make addActor() methods in Stage
-	public Actor() {
-
+	public Actor(int newid) {
 		modifiers = new String[5];
 		wear = maxWear;
 		d = new BodyDef();
@@ -52,9 +56,14 @@ public class Actor {
 		fd.friction = .3f;
 		
 		makeBody(d, fd);
-		id = Stage.getNewId();
+		id = newid;
+		state = new ActorState(this);
 	}
 	
+	public Actor() {
+		this(Stage.getNewId());
+	}
+
 	public void create(Vec2 size) {
 		if (fd == null)
 			return;

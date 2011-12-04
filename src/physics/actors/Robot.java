@@ -2,34 +2,42 @@ package physics.actors;
 
 import java.util.LinkedList;
 
+import network.PlayerState;
+
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
 
-import physics.PlayerState;
+import physics.Stage;
 
 /*A player in the world. TODO:Teams, a lot more*/
 public class Robot extends Actor {
-	public PlayerState state;
 	final int speed=60;
+	public PlayerState state;
 	public Actor held;
 	public LinkedList<Actor> inventory;
 	final float HALF_PI = (float) (Math.PI/2f);
-	public Robot() {
-		super();
+	public Robot(int id) {
+		super(id);
 		maxWear = 5000;
 		wear = 5000;
 		isImportant = true;
 		label = "Robot";
 		baseImage = "player";
-		state = new PlayerState();
 		inventory = new LinkedList<Actor>();
 		for (int i=0; i<5; ++i) {
 			Bullet b = new Bullet();
 			b.create(.3f);
 			inventory.add(b);
 		}
+		
+		state = new PlayerState(this);
+		super.state = state;
+	}
+	
+	public Robot() {
+		this(Stage.getNewId());
 	}
 	
 	public Vec2 getLocalPointAhead(float dist) {

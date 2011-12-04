@@ -1,7 +1,5 @@
 package client.ui;
 
-import java.io.IOException;
-
 import org.jbox2d.common.Vec2;
 
 import processing.core.*;
@@ -46,13 +44,6 @@ public class Botmode extends UI{
 		for (Actor a:r.stage.activeActors) {
 			r.draw(a);
 		}
-		
-		if(r.net != null )
-			try {
-				r.net.sendEvent(pc.state);
-			} catch (IOException e) {
-				
-			}
 		
 		//crosshairs
 		r.pushMatrix();

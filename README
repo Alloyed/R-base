@@ -1,14 +1,13 @@
 Roboticals
 --Kyle's thoughts--
-TODO: 
+TODO(from easy to hard):
 	configurable keybindings,
-	HUD/non-menu UI,
 	built-in console/chat setup,
-	Clean switch from P2D to opengl,
-	physics
+	Clean switch from P2D to opengl/Slick2D
 
 Scales: Box2d works in meters/kilograms/seconds, 
-	in the window, 64 px = 1 m right now. a robot is 1 m long/wide. LOL NVM
+	in the window, 64 px = 1 m right now. a robot is 1 m long/wide.
+	All the physical constants are scattered around, have fun finding them
 	
 
 --Jon's Thoughts--
@@ -22,7 +21,7 @@ POSSIBLE PROBLEMS:
 
 
 --Eclipse-is-a-piece-of-shit notes--
-	if eclipse complains that it can't find controlP5.xml, go to: 
+	if eclipse complains that it can't find controlP5.xml or uni05_53.ttf, go to: 
 	run->run configurations->the run config for the client->arguments->working directory
 	and set it to: ${workspace_loc:R-base}
 	

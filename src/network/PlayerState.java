@@ -1,15 +1,18 @@
-package physics;
+package network;
 
 import org.jbox2d.common.Vec2;
 
-public class PlayerState implements State {
+import physics.actors.Actor;
+
+public class PlayerState extends ActorState {
 	public boolean upPressed, downPressed, leftPressed, rightPressed, ROTATE_FORCE;
 	public Vec2 aim;
 	public long lastTime = System.currentTimeMillis();
 	public long current = lastTime;
 	public static int byteSize = 28;
 
-	public PlayerState() {
+	public PlayerState(Actor a) {
+		super(a);
 		aim = new Vec2(0, 0);
 	}
 	
@@ -84,7 +87,7 @@ public class PlayerState implements State {
 		return null;
 	}
 
-	public PlayerState(byte[] data) {
+	public void set(byte[] data) {
 		upPressed = data[0] != 0;
 		downPressed = data[1] != 0;
 		leftPressed  = data[2] != 0;

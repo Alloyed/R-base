@@ -1,7 +1,10 @@
-package physics;
+package network;
 
 import java.util.ArrayList;
-
+/* NOTE: I have no idea what going on here. This is never used, so I don't how it would be.
+ * besides, the server really shouldn't be serializable, the stage should.
+ *   --kyle
+ */
 public class ServerState implements State {
 	public ArrayList<PlayerState> clients;
 	
@@ -32,7 +35,7 @@ public class ServerState implements State {
 			for(int k = i*PlayerState.byteSize; k < i*PlayerState.byteSize+PlayerState.byteSize; k++) {
 				data[i] = b[k];
 			}
-			return new PlayerState(data);
+			return null;//WAS: add a player?
 		} catch (Exception e) {
 			//Handle problem
 		}
@@ -41,6 +44,12 @@ public class ServerState implements State {
 	}
 
 	public void addParam(byte[] b) {
-		clients.add(new PlayerState(b));
+		clients.add(null); //WAS: add a player?
+	}
+
+	@Override
+	public void set(byte[] b) {
+		// TODO Auto-generated method stub
+		
 	}
 }

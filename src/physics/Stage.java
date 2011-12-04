@@ -58,12 +58,29 @@ public class Stage {
 	public HashMap<Integer, Actor> actors; //Every actor, retrievable by id.
 	public LinkedList<Actor> activeActors; //Every actor in the world right now
 	static int nextId = 0;
+	
 	public Stage() {
 		w = new World(new Vec2(0, 0), true);
 		actors = new HashMap<Integer, Actor>();
 		activeActors = new LinkedList<Actor>();
 		nextId = 0;
 		w.setContactListener(new HEYLISTEN());
+	}
+	//Makes a deep copy of a stage. 
+	//Doesn't really work on the level of Actors
+	public Stage(Stage stage) {
+		w = new World(new Vec2(0, 0), true);
+		actors = new HashMap<Integer, Actor>();
+		activeActors = new LinkedList<Actor>();
+		nextId = 0;
+		w.setContactListener(new HEYLISTEN());
+		for (Actor a: stage.actors.values()) {
+			Actor newa = addActor(a.getClass(), a.id, 
+						new Vec2(a.sizeW,a.sizeH),
+						(a.b == null ? new Vec2(0, 0) : a.b.getWorldCenter()));
+			if (!stage.activeActors.contains(a))
+				store(newa);
+		}
 	}
 
 	public void startGame(Long seed) {
@@ -83,6 +100,7 @@ public class Stage {
 	public Actor addActor(Class<?> type, int id, Vec2 size, Vec2 pos) {
 		try {
 			Actor a = (Actor) type.newInstance();
+			a.id = id;
 			a.create(size);
 			a.place(this, pos);
 			return a;

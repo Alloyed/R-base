@@ -78,6 +78,7 @@ public class Client extends PApplet {
 		Console.out.println("Connecting to " + settings.IP + ":" + settings.PORT);
 		net = new Network(settings.IP,
 				Integer.parseInt(settings.PORT),
+				stage,
 				new StatusListener() {
 					public void setStatus(boolean connected) {
 						//TODO: move all the game starting stuff here
@@ -145,23 +146,33 @@ public class Client extends PApplet {
 
 	//Is looped over to draw things
 	long time, oldtime;
-	float accum;
+	float physAccum = 0, netAccum = 0;
 	@Override
 	public void draw() {
-		//Physics
+		//Timing
 		time = System.nanoTime();
 		float frameTime =  time - oldtime;
 		oldtime = time;
-		accum += frameTime/1000000f/1000f;
-		while (accum >= Stage.frame) {
+		physAccum += frameTime/1000000f/1000f;
+		netAccum  += frameTime/1000000f/1000f;
+		//Networking
+		if (net != null) {
+			net.poll();
+			while (netAccum >= Network.frame) {
+				//TODO:Send state
+				netAccum -= Network.frame;
+			}
+		}
+		//Physix
+		while (physAccum >= Stage.frame) {
 			for (Actor a: stage.activeActors) {
 				a.oldPos = new Vec2(a.b.getWorldCenter());
 				a.oldAng = a.b.getAngle();
 			}
 			stage.step();
-			accum -= Stage.frame;
+			physAccum -= Stage.frame;
 		}
-		Actor.alpha = accum / Stage.frame;
+		Actor.alpha = physAccum / Stage.frame;
 		
 		currentMode.draw();
 		gooey.draw();

@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 public class Console {
 	public static PrintStream out = System.out;  //Main messages
-	public static PrintStream dbg = System.out;  //Debugging messages
+	public static PrintStream dbg = System.err;  //Debugging messages
 	public static PrintStream chat = System.out; //Chat window
 	
 	public static void setDest(PrintStream dest) {

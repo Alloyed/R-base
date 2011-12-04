@@ -1,10 +1,11 @@
 package physics.actors;
 
+import network.PlayerState;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 
-import physics.PlayerState;
 
 /*An observer/cursor. Could extend Robot, or Robot could extend this, but that would be more annoying*/
 public class Ghost extends Actor {
@@ -13,7 +14,7 @@ public class Ghost extends Actor {
 	public Ghost() {
 		super();
 		baseImage = "none";
-		state = new PlayerState();
+		state = new PlayerState(this);
 	}
 	
 	@Override
