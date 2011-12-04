@@ -7,14 +7,17 @@ import network.PlayerState;
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.FixtureDef;
 
 import physics.Stage;
 
 /*A player in the world. TODO:Teams, a lot more*/
-public class Robot extends Actor {
+public class Robot extends Actor {	
 	final int speed=60;
 	public PlayerState state;
+	public Actor treads;
 	public Actor held;
 	public LinkedList<Actor> inventory;
 	final float HALF_PI = (float) (Math.PI/2f);
@@ -24,7 +27,7 @@ public class Robot extends Actor {
 		wear = 5000;
 		isImportant = true;
 		label = "Robot";
-		baseImage = "player";
+		baseImage = "playerTop";
 		inventory = new LinkedList<Actor>();
 		for (int i=0; i<5; ++i) {
 			Bullet b = new Bullet();
@@ -38,6 +41,16 @@ public class Robot extends Actor {
 	
 	public Robot() {
 		this(Stage.getNewId());
+	}
+	
+	@Override
+	public void makeBody(BodyDef d, FixtureDef fd) {
+		fd.filter.groupIndex = -10;
+	}
+	
+	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
+		treads = st.addActor(Treads.class, new Vec2(1,1), pos);
+		super.place(st, pos, ang, vel, velAng);
 	}
 	
 	public Vec2 getLocalPointAhead(float dist) {
@@ -146,6 +159,9 @@ public class Robot extends Actor {
 		}
 
 		b.applyForce(move.mul(speed), b.getWorldCenter());
+		Vec2 vel = b.getLinearVelocity();
+		treads.b.setTransform(b.getWorldCenter(), (float)Math.atan2(vel.y, vel.x));
+		treads.b.applyForce(move.mul(speed), b.getWorldCenter());
 		if (held != null)
 			held.b.setTransform(getPointAhead(held.sizeH+.2f), held.b.getAngle());
 	}
