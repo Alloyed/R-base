@@ -14,8 +14,7 @@ public class Skin {
 	
 	public Skin(Client p) {
 		sprites = new HashMap<String, Sprite>();
-		File dir = new File("data/images/"+p.settings.SKIN_FOLDER+"/");
-		
+		File dir = new File(p.p.sketchPath + "/data/images/"+p.settings.SKIN_FOLDER+"/");
 		if(dir.exists())
 			for (File f : dir.listFiles())
 				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg"))

@@ -1,13 +1,14 @@
 package client;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
 
 import controlP5.ControlElement;
 import physics.Console;
+import processing.core.PApplet;
 
 import nanoxml.XMLElement;
 
@@ -32,17 +33,16 @@ public class Settings {
 	public boolean USE_OPENGL = false;
 	
 	@ControlElement (x=30,y=260, properties = {"label=skin", "width=60", "listen=true"})
-	public String SKIN_FOLDER = "skin";
+	public String SKIN_FOLDER = "vectors";
 	
-	private String file;
+	PApplet p;
 
 	/* Note: No absolute filenames. */
-	public Settings(String s) {
-
-		file = "data/" + s;
+	public Settings(PApplet p) {
+		this.p = p;
 		XMLElement x = new XMLElement();
 		try {
-			FileReader f = new FileReader(file);
+			Reader f = p.createReader("ClientSettings.xml");
 			x.parseFromReader(f);
 			@SuppressWarnings("unchecked")
 			Enumeration<XMLElement> e = x.enumerateChildren();
@@ -90,7 +90,7 @@ public class Settings {
 		}
 
 		try {
-			FileWriter w = new FileWriter(file);
+			Writer w = p.createWriter("ClientSettings.xml");
 			top.write(w);
 			w.close();
 			Console.out.println("Settings Saved");

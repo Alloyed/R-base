@@ -139,12 +139,13 @@ public class Stage {
 	public static int getNewId() {
 		return nextId++;
 	}
-
+	
+	//Anybody win game?
 	public boolean won() {
 		return false;
 	}
 	
-	//Deletes the actor, no refs anywhere
+	//Deletes the actor and it's internal refs
 	public void delete(Actor a) {
 		w.destroyBody(a.b);
 		actors.remove(a.id);

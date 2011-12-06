@@ -33,7 +33,7 @@ import processing.core.*;
 import processing.opengl.*;
 
 @SuppressWarnings("unused")
-public class Client extends PApplet {
+public class Client implements PConstants {
 	private static final long serialVersionUID = 1L;
 
 	// Config options
@@ -52,6 +52,7 @@ public class Client extends PApplet {
 	public UI currentMode;
 	
 	//Gui stuff
+	public PApplet p;
 	public Camera cam;
 	public ControlP5 gooey;
 	int mode = 0;
@@ -60,47 +61,22 @@ public class Client extends PApplet {
 	public Skin skin;
 	
 	/* Gooey methods. */
-	public void quit() {
-		exit();
+	public void quit() { p.exit(); }
+	
+	public void resume() { menu.lastMode.show(); }
+	
+	public void connect() {
+		menu.connect();
+
 	}
 	
-	public void resume() {
-		//TODO: Start button. starts local server and connects to it
-		menu.lastMode.show();
-	}
+	public void exit() { dispose(); }
 	
-	void connect() {
-		if (net != null) {
-			net.close();
-			net = null;
-			return;
-		}
-		Console.out.println("Connecting to " + settings.IP + ":" + settings.PORT);
-		net = new Network(settings.IP,
-				Integer.parseInt(settings.PORT),
-				stage,
-				new StatusListener() {
-					public void setStatus(boolean connected) {
-						//TODO: move all the game starting stuff here
-						gooey.getController("connect")
-							.setCaptionLabel( connected ? "disconnect" : "connect");
-					}
-				});
-		net.start();
-	}
+	public void dispose() { settings.save(); }
 	
-	public void reset() {
-		setup();
-	}
+	public void inv() { ((Botmode)currentMode).inv(); }
 	
-	public void exit() {
-		settings.save();
-		super.exit();
-	}
-	
-	public void inv() {
-		((Botmode)currentMode).inv();
-	}
+	public void health() { ((Botmode)currentMode).health(); }; 
 	
 	//End Gooey methods
 	
@@ -110,27 +86,26 @@ public class Client extends PApplet {
 	}
 	
 	//Initializes everything
-	@Override
-	public void setup() {
+	public Client(PApplet p) {
+		this.p = p;
+		p.registerDraw(this);
+		p.registerDispose(this);
 		if (settings == null)
-			settings = new Settings("ClientSettings.xml");
+			settings = new Settings(p);
 		// Graphix stuf
-		String renderer = (settings.USE_OPENGL ? OPENGL : JAVA2D); //Just in Case
-		size(Integer.parseInt(settings.WINDOW_WIDTH), 
-				Integer.parseInt(settings.WINDOW_HEIGHT), renderer);
-		background(0);
-		smooth();
-		frameRate(30);
-		cam = new Camera(this);
+		p.background(0);
+		p.smooth();
+		p.frameRate(30);
+		cam = new Camera(p);
 		skin = new Skin(this);
 		
 		if (menu == null) {
 			initPhysics();
 			
 			// Gooey Stuf
-			font = createFont("uni05_53.ttf",8,false);
-			textFont(font);
-			gooey = new ControlP5(this);
+			font = p.createFont("uni05_53.ttf",8,false);
+			p.textFont(font);
+			gooey = new ControlP5(p);
 			menu = new Menu(this);
 			
 			for (ControllerInterface c : gooey.getControllerList()) {
@@ -147,7 +122,6 @@ public class Client extends PApplet {
 	//Is looped over to draw things
 	long time, oldtime;
 	float physAccum = 0, netAccum = 0;
-	@Override
 	public void draw() {
 		//Timing
 		time = System.nanoTime();
@@ -185,21 +159,19 @@ public class Client extends PApplet {
 	}
 	
 	public void fps() {
-		fill(255);
-		text("FPS: " + (int)frameRate  + 
+		p.fill(255);
+		p.text("FPS: " + (int)p.frameRate  + 
 				", Actors: " + stage.activeActors.size(),
-				width - 150, height);
+				0, 10);
 	}
 
-	@Override
 	public void keyPressed() {
 		currentMode.keyPressed();
-		if (key == ESC) { //Keeps game from stopping at ESC
-			key = 0;
+		if (p.key == ESC) { //Keeps game from stopping at ESC
+			p.key = 0;
 		}
 	}
 
-	@Override
 	public void keyReleased() {
 		currentMode.keyReleased();
 	}
@@ -213,11 +185,5 @@ public class Client extends PApplet {
 		if (!gooey.getGroup(currentMode.group).isMouseOver()) {
 			;
 		}
-	}
-
-	public static void main(String[] args) {
-		PApplet.main(new String[] { "--present", 
-									"--hide-stop",
-									"client.Client" });
 	}
 }

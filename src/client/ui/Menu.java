@@ -2,7 +2,9 @@ package client.ui;
 
 import client.Colors;
 import client.Client;
+import client.Network;
 import client.Settings;
+import client.StatusListener;
 
 import controlP5.ControlEvent;
 import controlP5.ControlGroup;
@@ -10,6 +12,7 @@ import controlP5.ControlListener;
 import controlP5.ControlP5;
 import controlP5.ListBox;
 import controlP5.Textfield;
+import physics.Console;
 import processing.core.PConstants;
 import processing.core.PImage;
 
@@ -20,6 +23,30 @@ public class Menu extends UI {
 	
 	PImage logo;
 	public UI lastMode;
+	/*Gooey methods*/
+	public void connect() {
+		Network net = r.net;
+		if (net != null) {
+			net.close();
+			r.net = null;
+			return;
+		}
+		Console.out.println("Connecting to " + r.settings.IP + ":" + r.settings.PORT);
+		net = new Network(r.settings.IP,
+				Integer.parseInt(r.settings.PORT),
+				r.stage,
+				new StatusListener() {
+			public void setStatus(boolean connected) {
+				//TODO: move all the game starting stuff here
+				r.gooey.getController("connect")
+				.setCaptionLabel( connected ? "disconnect" : "connect");
+			}
+		});
+		net.start();
+		r.net = net;
+
+	}
+	
 	class listener implements ControlListener {
 		Client r;
 		public listener(Client r) {this.r = r;}
@@ -37,8 +64,8 @@ public class Menu extends UI {
 	public Menu(Client r) {
 		super(r);
 		group = "menu";
-		logo = r.loadImage("logo2.png");
-		r.imageMode(PConstants.CENTER);
+		logo = p.loadImage("logo2.png");
+		p.imageMode(PConstants.CENTER);
 		ControlP5 gooey = r.gooey;
 		Settings settings = r.settings;
 		
@@ -82,13 +109,13 @@ public class Menu extends UI {
 	
 	@Override
 	public void draw() {
-		r.background(r.color(25, 50, 50));
-		r.image(logo, r.width / 2f, r.height / 2f);
+		p.background(p.color(25, 50, 50));
+		p.image(logo, p.width / 2f, p.height / 2f);
 	}
 
 	@Override
 	public void keyPressed() {
-		if (r.key == PConstants.ESC)
+		if (p.key == PConstants.ESC)
 			lastMode.show();
 	}
 
@@ -114,6 +141,6 @@ public class Menu extends UI {
 	public void show() {
 		lastMode = r.currentMode;
 		super.show();
-		r.cursor();
+		p.cursor();
 	}
 }

@@ -20,7 +20,7 @@ public class Godmode extends UI {
 
 	@Override
 	public void draw() {
-		r.background(20);
+		p.background(20);
 		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
 		for (Actor a:r.stage.activeActors) {
 			r.draw(a);
@@ -29,34 +29,34 @@ public class Godmode extends UI {
 
 	@Override
 	public void keyPressed() {
-		if (r.key == 'w')
+		if (p.key == 'w')
 			cursor.state.upPressed = true;
-		else if (r.key == 'a')
+		else if (p.key == 'a')
 			cursor.state.leftPressed = true;
-		else if (r.key == 's')
+		else if (p.key == 's')
 			cursor.state.downPressed = true;
-		else if (r.key == 'd')
+		else if (p.key == 'd')
 			cursor.state.rightPressed = true;
-		else if (r.key == PConstants.ESC)
+		else if (p.key == PConstants.ESC)
 			r.menu.show();
 	}
 
 	@Override
 	public void keyReleased() {
-		if (r.key == 'w')
+		if (p.key == 'w')
 			cursor.state.upPressed = false;
-		else if (r.key == 'a')
+		else if (p.key == 'a')
 			cursor.state.leftPressed = false;
-		else if (r.key == 's')
+		else if (p.key == 's')
 			cursor.state.downPressed = false;
-		else if (r.key == 'd')
+		else if (p.key == 'd')
 			cursor.state.rightPressed = false;
 	}
 
 	@Override
 	public void mousePressed() {
-		Vec2 pos = new Vec2((r.mouseX+r.cam.zeroX)/r.cam.meterScale, 
-				(r.mouseY+r.cam.zeroY)/r.cam.meterScale);
+		Vec2 pos = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale, 
+				(p.mouseY+r.cam.zeroY)/r.cam.meterScale);
 		r.stage.addActor(Actor.class, new Vec2(1,1), pos);
 		
 	}
@@ -71,6 +71,6 @@ public class Godmode extends UI {
 	public void show() {
 		// TODO Auto-generated method stub
 		super.show();
-		r.cursor();
+		p.cursor();
 	}
 }

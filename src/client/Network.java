@@ -18,7 +18,7 @@ import network.PlayerState;
 import physics.Console;
 import physics.Stage;
 import physics.actors.Actor;
-
+@SuppressWarnings("unused")
 public class Network extends Thread {
 	public static final float frame = 1/20f;
 	public DatagramSocket s;
@@ -31,7 +31,7 @@ public class Network extends Thread {
 	private Stage stage; //known server state. May or may not be used
 	private List<DatagramPacket> packets; //Stack of recieved packets
 	
-	Network(String ip, int port, Stage stage, StatusListener l) {
+	public Network(String ip, int port, Stage stage, StatusListener l) {
 		status = l;
 		this.port = port;
 		this.stage = new Stage(stage); //TODO

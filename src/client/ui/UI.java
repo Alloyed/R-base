@@ -1,12 +1,15 @@
 package client.ui;
 
+import processing.core.PApplet;
 import client.Client;
 
 public abstract class UI {
 	public Client r;
+	public PApplet p;
 	public String group;
 	public UI(Client r){
 		this.r = r;
+		p = r.p;
 	}
 	public abstract void draw();
 	public abstract void keyPressed();

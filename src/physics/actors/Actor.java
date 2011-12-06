@@ -33,7 +33,7 @@ public class Actor {
 	public boolean isHeld;
 	//Health, damage, etc.
 	public float wear;
-	float maxWear = 200;
+	public float maxWear = 200;
 	public float wearFrac;
 	//This is for lerping, clients only.
 	public static float alpha;
@@ -44,7 +44,6 @@ public class Actor {
 	FixtureDef fd;
 	public boolean toStore = false;
 	
-	//Makes an actor: TODO: make addActor() methods in Stage
 	public Actor(int newid) {
 		modifiers = new String[5];
 		wear = maxWear;
@@ -78,7 +77,8 @@ public class Actor {
 		create(new Vec2(size,size));
 	}
 	
-	//Places the Actor on the stage, in a given position
+	//Places the Actor on the stage, in a given position, etc.
+	//TODO: make actors invincible for the first few frames of their life
 	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
 		s = st;
 		d.position.set(pos);

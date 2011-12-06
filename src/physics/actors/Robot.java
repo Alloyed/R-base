@@ -11,6 +11,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
+import physics.Console;
 import physics.Stage;
 
 /*A player in the world. TODO:Teams, a lot more*/
@@ -167,12 +168,18 @@ public class Robot extends Actor {
 	}
 	
 	public void destroy() {
-		Actor a = new Actor();
-		a.create(sizeH);
-		a.place(s,b.getWorldCenter());
-		a.b.setTransform(b.getWorldCenter(), b.getAngle());
-		a.b.applyLinearImpulse(b.getLinearVelocity(), a.b.getWorldCenter());
-		a.baseImage = "player"; 
+		Console.out.println(label + " was killed!");
+		s.delete(treads);
+		
+		Actor shell = new Actor();
+		shell.create(sizeH);
+		shell.place(s,b.getWorldCenter());
+		shell.b.setTransform(b.getWorldCenter(), b.getAngle());
+		shell.b.applyLinearImpulse(b.getLinearVelocity(), shell.b.getWorldCenter());
+		shell.baseImage = "playerTop";
+		for(Actor a : inventory) {
+			a.place(s, b.getWorldCenter(),b.getAngle(), b.getLinearVelocity(), b.getAngularVelocity());
+		}
 	}
 
 	public boolean isDead() {

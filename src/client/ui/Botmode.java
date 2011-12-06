@@ -13,11 +13,16 @@ import physics.actors.*;
 
 public class Botmode extends UI{
 	public Robot pc;
-	public PGraphics inv;
+	public PGraphics inv, health;
 	
 	public void inv() {
-		//TODO
+		//TODO: make boolet from scrap metal
 		Console.dbg.println("INVENTORIZED");
+	}
+	
+	public void health() {
+		//TODO: make health from scrap metal
+		Console.dbg.println("HEALTH AT "+ pc.wear + "/" + pc.maxWear);
 	}
 	
 	public Botmode(Client r) {
@@ -27,32 +32,40 @@ public class Botmode extends UI{
 		group = "botmode";
 		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
 		//this sets off a segfault, it's harmless though
-		inv = r.createGraphics(100, 30, PConstants.JAVA2D); 
-		Button b = r.gooey.addButton("inv",0,0,r.height-30,100,30);
+		inv = p.createGraphics(100, 30, PConstants.JAVA2D); 
+		Button b = r.gooey.addButton("inv",0,0,p.height-30,100,30);
 		b.setImage(inv); 
+		b.moveTo(m);
+		
+		health = p.createGraphics(100, 30, PConstants.JAVA2D); 
+		b = r.gooey.addButton("health",0,p.width-100,p.height-30,100,30);
+		b.setImage(health); 
 		b.moveTo(m);
 	}
 	
 	@Override
 	public void draw() {
+		if (pc.isDead()) { 
+			new Ghostmode(r, pc.oldPos).show();
+		}
 		Vec2 oldAim = pc.state.aim;
-		pc.state.aim = new Vec2((r.mouseX+r.cam.zeroX)/r.cam.meterScale, 
-				(r.mouseY+r.cam.zeroY)/r.cam.meterScale);
+		pc.state.aim = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale, 
+				(p.mouseY+r.cam.zeroY)/r.cam.meterScale);
 		Vec2 lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
-		r.background(20);
+		p.background(20);
 		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		for (Actor a:r.stage.activeActors) {
 			r.draw(a);
 		}
 		
 		//crosshairs
-		r.pushMatrix();
-			r.noFill();
-			r.stroke(255);
-			r.strokeWeight(2);
+		p.pushMatrix();
+			p.noFill();
+			p.stroke(255);
+			p.strokeWeight(2);
 			r.cam.translate(lerped.x,lerped.y);
-			r.rect(-2, -2, 4, 4);
-		r.popMatrix();
+			p.rect(-2, -2, 4, 4);
+		p.popMatrix();
 		
 		//Button.
 		inv.beginDraw();
@@ -70,35 +83,42 @@ public class Botmode extends UI{
 			inv.fill(255);
 			inv.text(""+pc.inventory.size(),70,20);
 		inv.endDraw();
+		//Button 2.0
+		health.beginDraw();	
+			health.smooth();
+			health.background(100);
+			health.fill(255);
+			health.text((int)pc.wear+"/"+(int)pc.maxWear,10,20);
+		health.endDraw();
 	}
 	
 	@Override
 	public void keyPressed() {
-		if (r.key == 'w')
+		if (p.key == 'w')
 			pc.state.upPressed = true;
-		else if (r.key == 'a')
+		else if (p.key == 'a')
 			pc.state.leftPressed = true;
-		else if (r.key == 's')
+		else if (p.key == 's')
 			pc.state.downPressed = true;
-		else if (r.key == 'd')
+		else if (p.key == 'd')
 			pc.state.rightPressed = true;
-		else if (r.key == PConstants.ESC)
+		else if (p.key == PConstants.ESC)
 			r.menu.show();
-		else if (r.key == 'q')
+		else if (p.key == 'q')
 			inv();
 	}
 	
 	@Override
 	public void keyReleased() {
-		if (r.key == 'e') 
+		if (p.key == 'e') 
 			pc.toggleHold();
-		if (r.key == 'w')
+		if (p.key == 'w')
 			pc.state.upPressed = false;
-		else if (r.key == 'a')
+		else if (p.key == 'a')
 			pc.state.leftPressed = false;
-		else if (r.key == 's')
+		else if (p.key == 's')
 			pc.state.downPressed = false;
-		else if (r.key == 'd')
+		else if (p.key == 'd')
 			pc.state.rightPressed = false;
 		
 	}
@@ -124,7 +144,7 @@ public class Botmode extends UI{
 		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
 		pc.label = r.settings.USERNAME;
 		super.show();
-		r.noCursor();
+		p.noCursor();
 	}
 	
 	public void hide() {

@@ -5,19 +5,22 @@ import org.jbox2d.common.Vec2;
 import client.Client;
 
 import physics.actors.Actor;
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PShape;
 
 /* draws vectors or images */
 public class ImageSprite implements Sprite {
-	Client p;
+	Client c;
+	PApplet p;
 	String file;
 	boolean isVector = false;
 	Object sprite;
 	final float width, height, length;
-	public ImageSprite(Client p, String file) {
-		this.p = p;
+	public ImageSprite(Client c, String file) {
+		this.c = c;
+		this.p = c.p;
 		this.file = file;
 		if (file.endsWith(".svg"))
 			isVector = true;
@@ -61,9 +64,9 @@ public class ImageSprite implements Sprite {
 			p.rectMode(p.CENTER);
 			p.ellipseMode(p.CENTER);
 			
-			p.cam.translate(pos.x, pos.y);
-			p.cam.scale(a.sizeW * width, a.sizeH * height);
-			p.cam.rotate(angle);
+			c.cam.translate(pos.x, pos.y);
+			c.cam.scale(a.sizeW * width, a.sizeH * height);
+			c.cam.rotate(angle);
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else
@@ -78,7 +81,7 @@ public class ImageSprite implements Sprite {
 		
 		p.fill(255);
 		if (a.isImportant) {
-			Vec2 spot = p.cam.worldToScreen(pos.add(new Vec2(-a.sizeW/2,a.sizeH)));
+			Vec2 spot = c.cam.worldToScreen(pos.add(new Vec2(-a.sizeW/2,a.sizeH)));
 			p.text(a.label, spot.x, spot.y);
 		}
 	}

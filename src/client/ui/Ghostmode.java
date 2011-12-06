@@ -11,16 +11,16 @@ import client.Client;
 public class Ghostmode extends UI {
 	public Ghost cursor;
 	
-	public Ghostmode(Client r) {
+	public Ghostmode(Client r, Vec2 pos) {
 		super(r);
 		group = "ghostmode";
-		cursor = (Ghost) r.stage.addActor(Ghost.class, new Vec2(1,1), new Vec2(1,1));
+		cursor = (Ghost) r.stage.addActor(Ghost.class, pos, new Vec2(1,1));
 		r.gooey.addGroup(group, 0, 0);
 	}
 
 	@Override
 	public void draw() {
-		r.background(20);
+		p.background(20);
 		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
 		for (Actor a:r.stage.activeActors) {
 			r.draw(a);
@@ -30,27 +30,27 @@ public class Ghostmode extends UI {
 
 	@Override
 	public void keyPressed() {
-		if (r.key == 'w')
+		if (p.key == 'w')
 			cursor.state.upPressed = true;
-		else if (r.key == 'a')
+		else if (p.key == 'a')
 			cursor.state.leftPressed = true;
-		else if (r.key == 's')
+		else if (p.key == 's')
 			cursor.state.downPressed = true;
-		else if (r.key == 'd')
+		else if (p.key == 'd')
 			cursor.state.rightPressed = true;
-		else if (r.key == PConstants.ESC)
+		else if (p.key == PConstants.ESC)
 			r.menu.show();
 	}
 
 	@Override
 	public void keyReleased() {
-		if (r.key == 'w')
+		if (p.key == 'w')
 			cursor.state.upPressed = false;
-		else if (r.key == 'a')
+		else if (p.key == 'a')
 			cursor.state.leftPressed = false;
-		else if (r.key == 's')
+		else if (p.key == 's')
 			cursor.state.downPressed = false;
-		else if (r.key == 'd')
+		else if (p.key == 'd')
 			cursor.state.rightPressed = false;
 	}
 
@@ -69,7 +69,7 @@ public class Ghostmode extends UI {
 	@Override
 	public void show() {
 		super.show();
-		r.cursor();
+		p.cursor();
 	}
 	
 }
