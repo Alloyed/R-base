@@ -6,17 +6,17 @@ import java.util.ArrayList;
  *   --kyle
  */
 public class ServerState implements State {
-	public ArrayList<PlayerState> clients;
+	public ArrayList<State> clients;
 	
 	public ServerState() {
-		clients = new ArrayList<PlayerState>();
+		clients = new ArrayList<State>();
 	}
 
 	@Override
 	public byte[] getBytes() {
 		ArrayList<Byte> buf = new ArrayList<Byte>();
 		
-		for(PlayerState p : clients)
+		for(State p : clients)
 			for(byte b : p.getBytes())
 				buf.add(b);
 		
