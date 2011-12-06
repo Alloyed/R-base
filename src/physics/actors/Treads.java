@@ -11,7 +11,7 @@ public class Treads extends Actor {
 		super(id);
 		baseImage = "playerBottom";
 		maxWear = 99999;
-		wear    = 99999;
+		wear    = maxWear;
 	}
 	
 	public Treads() {
@@ -20,6 +20,6 @@ public class Treads extends Actor {
 	
 	@Override
 	public void makeBody(BodyDef d, FixtureDef fd) {
-		fd.filter.groupIndex = -10;
+		this.fd = null;
 	}
 }

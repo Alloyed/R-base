@@ -4,6 +4,7 @@ import org.jbox2d.common.Vec2;
 
 import client.Client;
 
+import physics.Console;
 import physics.actors.Actor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -67,6 +68,8 @@ public class ImageSprite implements Sprite {
 			c.cam.translate(pos.x, pos.y);
 			c.cam.scale(a.sizeW * width, a.sizeH * height);
 			c.cam.rotate(angle);
+			if (a.getImage() == "playerBottom") {
+			}
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else

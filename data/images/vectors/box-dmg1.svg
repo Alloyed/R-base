@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.2 r9819"
-   sodipodi:docname="box-inkscape.svg">
+   sodipodi:docname="box.svg">
   <defs
      id="defs4">
     <pattern
@@ -149,34 +149,50 @@
     <rect
        style="fill:#ff7f2a;fill-rule:evenodd;stroke:none"
        id="rect3107"
-       width="28.894808"
-       height="28.149134"
-       x="462.6153"
-       y="872.91046"
-       transform="matrix(0.88927118,0.45738033,-0.45738033,0.88927118,0,0)" />
+       width="23.158878"
+       height="22.533913"
+       x="463.8349"
+       y="874.10559"
+       transform="matrix(0.88965814,0.45662719,-0.45813406,0.88888311,0,0)" />
     <rect
        style="fill:#2b1100;fill-rule:evenodd;stroke:none"
        id="rect3111"
-       width="30.945406"
-       height="32.809589"
-       x="-362.51379"
-       y="956.31128"
-       transform="matrix(0.9268857,-0.3753437,0.3753437,0.9268857,0,0)" />
+       width="27.790613"
+       height="23.994291"
+       x="-472.32861"
+       y="1005.0782"
+       transform="matrix(0.95701751,-0.29003014,0.47590211,0.87949825,0,0)" />
     <rect
        style="fill:#c8b7b7;fill-rule:evenodd;stroke:none"
        id="rect3109"
-       width="31.131824"
-       height="31.691078"
-       x="262.40344"
-       y="952.01343"
-       transform="matrix(0.9726982,0.23207372,-0.23207372,0.9726982,0,0)" />
+       width="28.89414"
+       height="28.049273"
+       x="274.49356"
+       y="954.84552"
+       transform="matrix(0.975354,0.22064583,-0.24402299,0.96976945,0,0)" />
     <rect
        style="fill:#483737;fill-rule:evenodd;stroke:none"
        id="rect3113"
        width="36.537949"
        height="28.149134"
-       x="-273.43423"
-       y="987.14807"
+       x="-275.85657"
+       y="990.35077"
        transform="matrix(0.96455526,-0.26388093,0.26388093,0.96455526,0,0)" />
+    <rect
+       style="fill:#ff7f2a;stroke:none;fill-opacity:1"
+       id="rect3883"
+       width="15.472703"
+       height="26.284954"
+       x="-1.3049268"
+       y="3.7869508"
+       transform="translate(0,988.36218)" />
+    <rect
+       style="fill:#2b1100;fill-rule:evenodd;stroke:none"
+       id="rect3111-1"
+       width="21.885395"
+       height="17.944284"
+       x="509.11609"
+       y="836.65161"
+       transform="matrix(0.83306732,0.55317162,-0.46038844,0.88771757,0,0)" />
   </g>
 </svg>

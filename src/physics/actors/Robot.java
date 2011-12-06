@@ -8,6 +8,7 @@ import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
@@ -25,7 +26,7 @@ public class Robot extends Actor {
 	public Robot(int id) {
 		super(id);
 		maxWear = 5000;
-		wear = 5000;
+		wear    = maxWear;
 		isImportant = true;
 		label = "Robot";
 		baseImage = "playerTop";
@@ -46,7 +47,6 @@ public class Robot extends Actor {
 	
 	@Override
 	public void makeBody(BodyDef d, FixtureDef fd) {
-		fd.filter.groupIndex = -10;
 	}
 	
 	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
@@ -84,7 +84,11 @@ public class Robot extends Actor {
 				Object data = f.getBody().getUserData();
 				if (data instanceof Actor) {
 					Actor a = (Actor)data;
-					if (!a.isHeld && a.id != id) {
+					Console.dbg.println("mass="+a.b.getMass());
+					if (!a.isHeld &&  
+							a.id != id && 
+							a.b.getType() == BodyType.DYNAMIC && 
+							a.b.getMass() < 5) {
 						a.isHeld = true;
 						held = a;
 						return true;

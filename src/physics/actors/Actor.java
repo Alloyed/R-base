@@ -64,10 +64,10 @@ public class Actor {
 	}
 
 	public void create(Vec2 size) {
-		if (fd == null)
-			return;
 		this.sizeW = size.x;
 		this.sizeH = size.y;
+		if (fd == null)
+			return;
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(sizeW / 2f, sizeH / 2f);
 		fd.shape = shape;

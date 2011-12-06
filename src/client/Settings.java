@@ -35,14 +35,14 @@ public class Settings {
 	@ControlElement (x=30,y=260, properties = {"label=skin", "width=60", "listen=true"})
 	public String SKIN_FOLDER = "vectors";
 	
-	PApplet p;
+	private PApplet p;
 
 	/* Note: No absolute filenames. */
 	public Settings(PApplet p) {
 		this.p = p;
 		XMLElement x = new XMLElement();
 		try {
-			Reader f = p.createReader("ClientSettings.xml");
+			Reader f = p.createReader("data/ClientSettings.xml");
 			x.parseFromReader(f);
 			@SuppressWarnings("unchecked")
 			Enumeration<XMLElement> e = x.enumerateChildren();
@@ -76,7 +76,7 @@ public class Settings {
 		XMLElement top = new XMLElement();
 		top.setName("R-base");
 		for (Field f : this.getClass().getDeclaredFields()) {
-			if (f.getName() != "file") { // 1 exception
+			if (!f.getName().equals("p")) { // 1 exception
 				XMLElement child = new XMLElement();
 				child.setName(f.getName());
 				try {
@@ -90,7 +90,7 @@ public class Settings {
 		}
 
 		try {
-			Writer w = p.createWriter("ClientSettings.xml");
+			Writer w = p.createWriter("data/ClientSettings.xml");
 			top.write(w);
 			w.close();
 			Console.out.println("Settings Saved");

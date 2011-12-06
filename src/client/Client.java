@@ -90,6 +90,9 @@ public class Client implements PConstants {
 		this.p = p;
 		p.registerDraw(this);
 		p.registerDispose(this);
+	}
+	
+	public void setup() {
 		if (settings == null)
 			settings = new Settings(p);
 		// Graphix stuf
