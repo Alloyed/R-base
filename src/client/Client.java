@@ -12,6 +12,7 @@ package client;
 //Util
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,8 @@ public class Client implements PConstants {
 	PFont font;
 	ControlFont cfont;
 	public Skin skin;
+
+	private Chat chat;
 	
 	/* Gooey methods. */
 	public void quit() { p.exit(); }
@@ -110,7 +113,8 @@ public class Client implements PConstants {
 			p.textFont(font);
 			gooey = new ControlP5(p);
 			menu = new Menu(this);
-			
+			chat = new Chat(this, 5);
+			Console.chat = new PrintStream(chat);
 			for (ControllerInterface c : gooey.getControllerList()) {
 				if (c instanceof Textfield)
 					((Textfield) c).setAutoClear(false);
@@ -120,6 +124,7 @@ public class Client implements PConstants {
 			menu.show();
 		}
 		oldtime = System.nanoTime();
+		Console.chat("",oldtime,"Welcome to R-base!");
 	}
 
 	//Is looped over to draw things
@@ -172,7 +177,9 @@ public class Client implements PConstants {
 	}
 
 	public void keyPressed() {
-		currentMode.keyPressed();
+		chat.keyPressed();
+		if (!chat.isChatting)
+			currentMode.keyPressed();
 		if (p.key == ESC) { //Keeps game from stopping at ESC
 			p.key = 0;
 		}
