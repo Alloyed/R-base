@@ -12,6 +12,8 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
+import client.Client;
+
 import physics.Console;
 import physics.Stage;
 
@@ -75,29 +77,27 @@ public class Robot extends Actor {
 	public void hold() {
 		AABB area = new AABB();
 		Vec2 center = getPointAhead();
-		area.lowerBound.set(center.sub(new Vec2(.1f,.1f)));
-		area.upperBound.set(center.sub(new Vec2(.1f,.1f)));
+		area.lowerBound.set(center.sub(new Vec2(.2f,.2f)));
+		area.upperBound.set(center.add(new Vec2(.2f,.2f)));
 		QueryCallback q = new QueryCallback() {
 			public boolean reportFixture(Fixture f) {
 				if (held != null)
-					return false;
+					return true;
 				Object data = f.getBody().getUserData();
 				if (data instanceof Actor) {
 					Actor a = (Actor)data;
-					Console.dbg.println("mass="+a.b.getMass());
 					if (!a.isHeld &&  
 							a.id != id && 
 							a.b.getType() == BodyType.DYNAMIC && 
 							a.b.getMass() < 5) {
 						a.isHeld = true;
 						held = a;
-						return true;
+						return false;
 					}
 				}
-				return false;
+				return true;
 			}
 		};
-		
 		s.w.queryAABB(q, area);
 	}
 	

@@ -154,6 +154,9 @@ public class Client implements PConstants {
 		currentMode.draw();
 		gooey.draw();
 		fps();
+		p.rectMode(CORNERS);
+		p.noFill();
+		p.stroke(p.color(0,255,0));
 	}
 	
 	public void draw(Actor a) {
