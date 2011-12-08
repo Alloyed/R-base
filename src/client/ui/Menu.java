@@ -4,14 +4,9 @@ import client.Client;
 import client.Network;
 import client.Settings;
 import client.StatusListener;
+import client.sprites.*;
 
-import controlP5.ControlEvent;
-import controlP5.ControlGroup;
-import controlP5.ControlListener;
-import controlP5.ControlP5;
-import controlP5.Controller;
-import controlP5.ListBox;
-import controlP5.Textfield;
+import controlP5.*;
 import physics.Console;
 import processing.core.PConstants;
 import processing.core.PImage;
@@ -71,8 +66,7 @@ public class Menu extends UI {
 	public Menu(Client r) {
 		super(r);
 		group = "menu";
-		logo = p.loadImage("logo2.png");
-		p.imageMode(PConstants.CENTER);
+		logo = (PImage) ((ImageSprite)r.skin.get("logo")).sprite;
 		ControlP5 gooey = r.gooey;
 		Settings settings = r.settings;
 		
@@ -113,7 +107,8 @@ public class Menu extends UI {
 	
 	@Override
 	public void draw() {
-		p.background(p.color(25, 50, 50));
+		p.background(r.skin.getColor("bg"));
+		p.imageMode(PConstants.CENTER);
 		p.image(logo, p.width / 2f, p.height / 2f);
 	}
 

@@ -20,7 +20,7 @@ public class Godmode extends UI {
 
 	@Override
 	public void draw() {
-		p.background(20);
+		p.background(r.skin.getColor("bg"));
 		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
 		for (Actor a:r.stage.activeActors) {
 			r.draw(a);

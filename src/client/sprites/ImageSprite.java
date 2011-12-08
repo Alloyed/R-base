@@ -4,7 +4,6 @@ import org.jbox2d.common.Vec2;
 
 import client.Client;
 
-import physics.Console;
 import physics.actors.Actor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -17,7 +16,7 @@ public class ImageSprite implements Sprite {
 	PApplet p;
 	String file;
 	boolean isVector = false;
-	Object sprite;
+	public Object sprite;
 	final float width, height, length;
 	public ImageSprite(Client c, String file) {
 		this.c = c;
