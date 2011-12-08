@@ -1,7 +1,9 @@
 package network;
 
 public class CallbackState implements State {
-
+	int id;
+	String method;
+	Object[] args; //Can be primitives, or Vec2s, or classtypes, or Actors 
 	@Override
 	public byte[] getBytes() {
 		// TODO Auto-generated method stub

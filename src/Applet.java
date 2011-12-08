@@ -9,7 +9,7 @@ public class Applet extends PApplet {
 	public void quit() { c.quit(); }
 	public void resume() { c.resume(); }
 	public void connect() { c.connect(); }
-	public void exit() { super.exit();}
+	public void exit() { super.exit(); }
 	public void inv() { c.inv(); }
 	public void reset() { c.setup(); }
 	

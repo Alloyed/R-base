@@ -11,7 +11,7 @@ import physics.actors.Actor;
 
 /* TODO: handle events, Limit one connection per IP. */
 
-public class Network extends Thread {
+public class Network extends network.Network {
 	DatagramSocket socket;
 	DatagramPacket p;
 	Server server;

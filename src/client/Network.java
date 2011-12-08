@@ -19,7 +19,7 @@ import physics.Console;
 import physics.Stage;
 import physics.actors.Actor;
 @SuppressWarnings("unused")
-public class Network extends Thread {
+public class Network extends network.Network {
 	public static final float frame = 1/20f;
 	public DatagramSocket s;
 	public DatagramPacket p;
