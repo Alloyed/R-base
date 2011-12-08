@@ -33,7 +33,7 @@ public class Settings {
 	public boolean USE_OPENGL = false;
 	
 	@ControlElement (x=30,y=260, properties = {"label=skin", "width=60", "listen=true"})
-	public String SKIN_FOLDER = "vectors";
+	public String SKIN_FOLDER = "skin";
 	
 	private PApplet p;
 
@@ -64,8 +64,8 @@ public class Settings {
 					value = tmp;
 				getClass().getField(name).set(this, value);
 			}
+			f.close();
 			Console.out.println("Settings read.");
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			Console.out.println("Settings could not be read, using defaults.");

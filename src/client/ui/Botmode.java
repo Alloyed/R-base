@@ -77,7 +77,7 @@ public class Botmode extends UI{
 				Actor a = pc.inventory.get(0);
 				s = r.skin.get(a);
 			} else {
-				s = r.skin.sprites.get("none");
+				s = r.skin.get("none");
 			}
 			s.draw(inv,15,15,50);
 			inv.fill(255);

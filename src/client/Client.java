@@ -112,6 +112,9 @@ public class Client implements PConstants {
 			font = p.createFont("uni05_53.ttf",8,false);
 			p.textFont(font);
 			gooey = new ControlP5(p);
+			gooey.setColorBackground(skin.getColor("menu"));
+			gooey.setColorForeground(skin.getColor("menu-over"));
+			gooey.setColorActive(skin.getColor("menu-pressed"));
 			menu = new Menu(this);
 			chat = new Chat(this, 5);
 			Console.chat = new PrintStream(chat);
@@ -124,7 +127,7 @@ public class Client implements PConstants {
 			menu.show();
 		}
 		oldtime = System.nanoTime();
-		Console.chat("",oldtime,"Welcome to R-base!");
+		Console.chat("System",oldtime,"Welcome to R-base!");
 	}
 
 	//Is looped over to draw things

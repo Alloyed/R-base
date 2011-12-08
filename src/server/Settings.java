@@ -42,6 +42,7 @@ public class Settings {
 					value = tmp;
 				getClass().getField(name).set(this, value);
 				System.out.println(getClass().getField(name).get(this));
+				f.close();
 			}
 			System.out.println("Settings read.");
 

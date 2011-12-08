@@ -1,0 +1,36 @@
+# This is the default colors.txt
+# The format is name:color, no whitespace allowed.
+# A single number between 0-255 is grayscale where each RGB value is that number.
+# numbers starting with a # are hex, RGB format, with an optional A byte at the end.
+# You can get the value of color defined earlier in the file by using $name
+# If you do not supply a color the game expects to exist, 
+#  it will spit out a warning and use black instead.
+# Note how the names follow the same attribute system as the images.
+# That might be meaningful later, if I get around to it.
+
+
+menu:#003652
+menu-over:#00698c
+menu-pressed:#08a2cf
+connect:#c46210
+connect-over:#c46210
+connect-pressed:#c46210
+resume:#00c800
+resume-over:#00c800
+resume-pressed:#00c800
+quit:#a00000
+quit-over:#a00000
+quit-pressed:#a00000
+
+bg:0
+
+team-orange:0
+bg-orange:0
+menu-orange:0
+menu-orange-active:0
+
+team-blue:0
+bg-blue:0
+menu-orange:0
+menu-orange-active:0
+

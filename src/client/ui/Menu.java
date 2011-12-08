@@ -1,6 +1,5 @@
 package client.ui;
 
-import client.Colors;
 import client.Client;
 import client.Network;
 import client.Settings;
@@ -10,6 +9,7 @@ import controlP5.ControlEvent;
 import controlP5.ControlGroup;
 import controlP5.ControlListener;
 import controlP5.ControlP5;
+import controlP5.Controller;
 import controlP5.ListBox;
 import controlP5.Textfield;
 import physics.Console;
@@ -61,6 +61,13 @@ public class Menu extends UI {
 		}
 	}
 	
+	public Controller btn(String s) {
+		return r.gooey.addButton(s)
+				.setColorBackground(r.skin.getColor(s))
+				.setColorForeground(r.skin.getColor(s+"-over"))
+				.setColorActive(r.skin.getColor(s+"-pressed"));
+	}
+	
 	public Menu(Client r) {
 		super(r);
 		group = "menu";
@@ -71,14 +78,11 @@ public class Menu extends UI {
 		
 		ControlGroup m = gooey.addGroup(group, 0, 0);
 		gooey.begin(m);
-		gooey.addButton("resume").setPosition(30, 30)
-				.setSize(100, 30).setColor(Colors.goGreen);
-		gooey.addButton("quit").setPosition(30, 70)
-				.setSize(100, 30).setColor(Colors.quitRed);
-		gooey.addButton("connect").setPosition(670, 120)
-				.setSize(100, 30).setColor(Colors.connectOrange);
-		gooey.addButton("reset").setPosition(30, 110)
-				.setSize(100, 30);
+		
+		btn("resume").setPosition(30, 30).setSize(100, 30);
+		btn("quit").setPosition(30, 70).setSize(100, 30);		
+		btn("connect").setPosition(670, 120).setSize(100, 30);		
+		gooey.addButton("reset").setPosition(30, 110).setSize(100, 30);
 		
 		gooey.addListener(new listener(r));
 		ListBox l = gooey.addListBox("", 670, 190, 100, 500);
