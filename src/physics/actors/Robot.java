@@ -12,8 +12,6 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
-import client.Client;
-
 import physics.Console;
 import physics.Stage;
 
