@@ -178,15 +178,19 @@ public class Client implements PConstants {
 
 	public void keyPressed() {
 		chat.keyPressed();
-		if (!chat.isChatting)
+		if (!chat.isChatting) {
 			currentMode.keyPressed();
+		}
+			
 		if (p.key == ESC) { //Keeps game from stopping at ESC
 			p.key = 0;
 		}
 	}
 
 	public void keyReleased() {
-		currentMode.keyReleased();
+		if (!chat.isChatting) {
+			currentMode.keyReleased();
+		}
 	}
 	
 	
