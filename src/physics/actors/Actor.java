@@ -1,5 +1,7 @@
 package physics.actors;
 
+import java.util.Collection;
+
 import network.ActorState;
 
 import org.jbox2d.collision.shapes.PolygonShape;
@@ -152,4 +154,5 @@ public class Actor {
 				s += m;
 		return s;
 	}
+	
 }

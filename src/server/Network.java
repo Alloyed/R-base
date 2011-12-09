@@ -58,9 +58,5 @@ public class Network extends newNet.Network {
 			return null;
 		return p;
 	}
-	
-<<<<<<< HEAD
-=======
 	public ArrayList<Byte> flexBuf = new ArrayList<Byte>();
->>>>>>> 3ee5652fbf17a1de401eb177d72a0a7c0f27ba80
 }
