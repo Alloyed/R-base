@@ -21,8 +21,7 @@ public class Menu extends UI {
 	public void connect() {
 		Network net = r.net;
 		net.close();
-		Console.out.println("Connecting to " + r.settings.IP + ":" + r.settings.PORT);
-		net.start();
+		net.connect(r.settings.IP, Integer.parseInt(r.settings.PORT));
 		r.net = net;
 
 	}

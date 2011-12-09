@@ -30,6 +30,7 @@ public class Network extends newNet.Network {
 	private StatusListener status; //Returns status of connection to client
 	private Stage stage; //known server state. May or may not be used
 	private List<DatagramPacket> packets; //Stack of recieved packets
+	private boolean start = false;
 	
 	public Network(Stage stage, StatusListener l) {
 		status = l;
@@ -42,11 +43,10 @@ public class Network extends newNet.Network {
 	
 	public void connect(String ip, int p) {
 		try {
+			Console.out.println("Connecting to " + ip + ":" + p);
 			i = InetAddress.getByName(ip);
 			port = p;
-			s = new DatagramSocket(); 
-			requestKey(i);
-			status.setStatus(true);
+			start = true;
 		} catch (Exception e) {
 			e.printStackTrace(Console.dbg);
 			status.setStatus(false);
@@ -58,9 +58,24 @@ public class Network extends newNet.Network {
 	public void run() {
 		try {
 			while (true) {
-				DatagramPacket pck = new DatagramPacket(new byte[256],256);
-				s.receive(pck);
-				packets.add(pck);
+				if (start){
+					start = false;
+					try {
+						Console.out.println("ON IT");
+						s = new DatagramSocket();
+						requestKey(i);
+						status.setStatus(true);
+					} catch (Exception e) {
+						e.printStackTrace(Console.dbg);
+						status.setStatus(false);
+					} 
+				} else if (s != null) {
+					DatagramPacket pck = new DatagramPacket(new byte[256],256);
+					s.receive(pck);
+					packets.add(pck);
+				} else {
+					//Wait until not null
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace(Console.dbg);
@@ -70,7 +85,10 @@ public class Network extends newNet.Network {
 	}
 	
 	public void close() {
-		s.close();
+		if(s != null) {
+			s.close();
+			s = null;
+		}
 		status.setStatus(false);
 	}
 	

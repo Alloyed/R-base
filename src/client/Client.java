@@ -130,6 +130,7 @@ public class Client implements PConstants {
 					.setCaptionLabel( connected ? "disconnect" : "connect");
 				}
 			});
+			net.start();
 			currentMode = new Botmode(this);
 			menu.show();
 		}
