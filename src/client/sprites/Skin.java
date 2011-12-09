@@ -3,7 +3,9 @@ package client.sprites;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import physics.Console;
 import physics.actors.Actor;
@@ -12,23 +14,23 @@ import processing.core.PApplet;
 import client.Client;
 
 
-public class Skin {
-	HashMap<String, Sprite>  sprites;
+public class Skin extends Thread {
+	Map<String, Sprite>  sprites;
 	HashMap<String, Integer> colors;
+	Client c;
 	PApplet p;
+	
 	public Skin(Client c) {
 		//Sprites
+		this.c = c;
 		this.p = c.p;
-		sprites = new HashMap<String, Sprite>();
+		sprites = Collections.synchronizedMap(new HashMap<String, Sprite>());
 		String path = c.p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
-		File dir = new File(path);
-		if(dir.exists())
-			for (File f : dir.listFiles())
-				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg"))
-					sprites.put(f.getName().split("\\.")[0], new ImageSprite(c, f.toString()));
+		
 		//Special cases
 		sprites.put("none", new EmptySprite());
-					
+		sprites.put("logo", new ImageSprite(c, path+"logo.png"));
+		sprites.put("box", new ImageSprite(c, path+"box.svg"));
 		//colors
 		colors = new HashMap<String, Integer>();
 		InputStream colorFile = c.p.createInput(path+"colors.txt");
@@ -56,6 +58,21 @@ public class Skin {
 		try {colorFile.close();} catch (IOException e) {e.printStackTrace();}
 	}
 	
+	public void run() {
+		String path = p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
+		File dir = new File(path);
+		c.font = p.createFont("uni05_53.ttf",8,false);
+		p.textFont(c.font);
+		if(dir.exists())
+			for (File f : dir.listFiles())
+				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg")) {
+					String s = f.getName().split("\\.")[0];
+					sprites.remove(s);
+					sprites.put(s, new ImageSprite(c, f.toString()));
+				}
+		Console.dbg.println("Skins loaded.");
+	}
+	
 	public Sprite get(String str) {
 		Sprite s = sprites.get(str);
 		if (s == null) {
@@ -64,6 +81,10 @@ public class Skin {
 			if (s == null) {
 				Console.dbg.println("Using default instead.");
 				s = sprites.get("box");
+				if (s == null) {
+					Console.dbg.println("Lol nvm, using empty sprite.");
+					s = sprites.get("none");
+				}
 			} else {
 				Console.dbg.println("Using base instead.");
 			}

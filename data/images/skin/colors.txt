@@ -9,9 +9,9 @@
 # That might be meaningful later, if I get around to it.
 
 
-menu:#003652
-menu-over:#00698c
-menu-pressed:#08a2cf
+menu:#363636
+menu-over:#696969
+menu-pressed:#a2a2a2
 connect:#c46210
 connect-over:#c46210
 connect-pressed:#c46210
@@ -26,11 +26,13 @@ bg:0
 
 team-orange:0
 bg-orange:0
-menu-orange:0
-menu-orange-active:0
+menu-orange:#003652
+menu-orange-over:#00698c
+menu-orange-pressed:#08a2cf
 
 team-blue:0
 bg-blue:0
-menu-orange:0
-menu-orange-active:0
+menu-blue:#003652
+menu-blue-over:#00698c
+menu-blue-pressed:#08a2cf
 

@@ -56,7 +56,7 @@ public class Client implements PConstants {
 	public Camera cam;
 	public ControlP5 gooey;
 	int mode = 0;
-	PFont font;
+	public PFont font;
 	ControlFont cfont;
 	public Skin skin;
 
@@ -104,12 +104,11 @@ public class Client implements PConstants {
 		cam = new Camera(p);
 		skin = new Skin(this);
 		
+		Console.out.println("DONE");
 		if (menu == null) {
 			initPhysics();
 			
 			// Gooey Stuf
-			font = p.createFont("uni05_53.ttf",8,false);
-			p.textFont(font);
 			gooey = new ControlP5(p);
 			gooey.setColorBackground(skin.getColor("menu"));
 			gooey.setColorForeground(skin.getColor("menu-over"));
@@ -136,12 +135,16 @@ public class Client implements PConstants {
 		}
 		oldtime = System.nanoTime();
 		Console.chat("System",oldtime,"Welcome to R-base!");
+		skin.start();
 	}
 
 	//Is looped over to draw things
 	long time, oldtime;
 	float physAccum = 0, netAccum = 0;
 	public void draw() {
+		if (font != null) {
+			p.textFont(font);
+		}
 		//Timing
 		time = System.nanoTime();
 		float frameTime =  time - oldtime;
