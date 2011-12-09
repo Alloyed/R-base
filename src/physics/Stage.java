@@ -1,8 +1,12 @@
 package physics;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
+
+import network.CallbackState;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
@@ -54,9 +58,11 @@ public class Stage {
 	
 	public static float fps = 60;
 	public static float frame = 1/60f;
+	public long frameNum;
 	public World w;
 	public HashMap<Integer, Actor> actors; //Every actor, retrievable by id.
 	public LinkedList<Actor> activeActors; //Every actor in the world right now
+	public ArrayList<CallbackState> callbacks;
 	static int nextId = 0;
 	
 	public Stage() {
