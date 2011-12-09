@@ -30,8 +30,6 @@ public class Settings {
 			properties={"height=20","width=20"})
 	public boolean ROTATE_FORCE = true;
 	
-	public boolean USE_OPENGL = false;
-	
 	@ControlElement (x=30,y=260, properties = {"label=skin", "width=60", "listen=true"})
 	public String SKIN_FOLDER = "skin";
 	

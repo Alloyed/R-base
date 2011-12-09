@@ -31,7 +31,6 @@ import client.ui.*;
 import controlP5.*;
 //graphix
 import processing.core.*;
-import processing.opengl.*;
 
 @SuppressWarnings("unused")
 public class Client implements PConstants {
