@@ -3,7 +3,6 @@ package client.ui;
 import client.Client;
 import client.Network;
 import client.Settings;
-import client.StatusListener;
 import client.sprites.*;
 
 import controlP5.*;
@@ -21,22 +20,8 @@ public class Menu extends UI {
 	/*Gooey methods*/
 	public void connect() {
 		Network net = r.net;
-		if (net != null) {
-			net.close();
-			r.net = null;
-			return;
-		}
+		net.close();
 		Console.out.println("Connecting to " + r.settings.IP + ":" + r.settings.PORT);
-		net = new Network(r.settings.IP,
-				Integer.parseInt(r.settings.PORT),
-				r.stage,
-				new StatusListener() {
-			public void setStatus(boolean connected) {
-				//TODO: move all the game starting stuff here
-				r.gooey.getController("connect")
-				.setCaptionLabel( connected ? "disconnect" : "connect");
-			}
-		});
 		net.start();
 		r.net = net;
 

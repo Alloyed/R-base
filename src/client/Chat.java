@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
 
+import physics.actors.Actor;
+import physics.Console;
 import processing.core.PApplet;
 import processing.core.PConstants;
 
@@ -18,9 +20,11 @@ public class Chat extends OutputStream {
 	boolean isChatting;
 	String out, in;
 	Random r;
+	Client c;
 	PApplet p;
 	
 	public Chat(Client c, int size) {
+		this.c = c;
 		p = c.p;
 		labels = new Textlabel[size];
 		r = new Random();
@@ -37,20 +41,22 @@ public class Chat extends OutputStream {
 		char key = p.key;
 		if (isChatting) {
 			if (key == PConstants.ENTER || key == PConstants.RETURN) {
-				physics.Console.chat("me", 2, in.substring(1));
+				String name = ((Actor)c.stage.get(0)).label;
+				c.net.call(c.stage, "chat", 
+						new Object[] {name, System.currentTimeMillis(), in});
 				in = "";
 				input.setStringValue(in);
 				isChatting = false;
 			} else if (key == PConstants.BACKSPACE || key == PConstants.DELETE) {
 				in = in.substring(0, in.length()-1);
-				input.setStringValue(in+"_");
+				input.setStringValue("> "+in+"_");
 			} else if (key > 31 && key != PConstants.CODED) {
 				in += key;
-				input.setStringValue(in+"_");
+				input.setStringValue("> "+in+"_");
 			}
 		} else if (key == 't') { 
-			in += '>';
-			input.setStringValue(in+"_");
+			in = "";
+			input.setStringValue("> "+in+"_");
 			isChatting = true;
 		}	
 	}
@@ -65,7 +71,16 @@ public class Chat extends OutputStream {
 				oldL.setColor(newL.getColor());
 			}
 			labels[0].setStringValue(out);
-			labels[0].setColorValueLabel(r.nextInt(0xffffff)); //Fabulous!
+			int color = 0xffffff;
+			if (out.contains(">")) {
+				Console.dbg.println("VLAD THE IMPLIER");
+				color = 0x00ff00;
+			} else if (out.contains("[")) {
+				//Orange team only
+			} else if (out.contains("{")) {
+				//Blue team only
+			}
+			labels[0].setColorValueLabel(color);
 			out = "";
 		} else {
 			out += c;

@@ -14,6 +14,6 @@ public class Console {
 	}
 	
 	public static void chat(String origin, long time, String message) {
-		chat.println("<"+origin+">"+message);
+		chat.println(origin+" : "+message);
 	}
 }

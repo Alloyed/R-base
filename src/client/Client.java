@@ -123,6 +123,15 @@ public class Client implements PConstants {
 					((Textfield) c).setAutoClear(false);
 			}
 			
+			net = new Network(
+					stage,
+					new StatusListener() {
+				public void setStatus(boolean connected) {
+					//TODO: move all the game starting stuff here
+					gooey.getController("connect")
+					.setCaptionLabel( connected ? "disconnect" : "connect");
+				}
+			});
 			currentMode = new Botmode(this);
 			menu.show();
 		}

@@ -14,7 +14,7 @@ public class Ghostmode extends UI {
 	public Ghostmode(Client r, Vec2 pos) {
 		super(r);
 		group = "ghostmode";
-		cursor = (Ghost) r.stage.addActor(Ghost.class, pos, new Vec2(1,1));
+		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, pos, new Vec2(1,1));
 		r.gooey.addGroup(group, 0, 0);
 	}
 

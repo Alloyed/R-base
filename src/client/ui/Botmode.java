@@ -27,7 +27,7 @@ public class Botmode extends UI{
 	
 	public Botmode(Client r) {
 		super(r);
-		pc = (Robot) r.stage.addActor(Robot.class, new Vec2(1, 1), new Vec2(1,1));
+		pc = (Robot) r.stage.addActor(Robot.class, 0, new Vec2(1, 1), new Vec2(1,1));
 		
 		group = "botmode";
 		ControllerGroup m = r.gooey.addGroup(group, 0, 0);

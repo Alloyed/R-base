@@ -19,7 +19,7 @@ import physics.Console;
 import physics.Stage;
 import physics.actors.Actor;
 @SuppressWarnings("unused")
-public class Network extends Thread {
+public class Network extends newNet.Network {
 	public static final float frame = 1/20f;
 	public DatagramSocket s;
 	public DatagramPacket p;
@@ -31,28 +31,32 @@ public class Network extends Thread {
 	private Stage stage; //known server state. May or may not be used
 	private List<DatagramPacket> packets; //Stack of recieved packets
 	
-	public Network(String ip, int port, Stage stage, StatusListener l) {
+	public Network(Stage stage, StatusListener l) {
 		status = l;
-		this.port = port;
 		this.stage = new Stage(stage); //TODO
-		try {
-			i = InetAddress.getByName(ip);
-			s = new DatagramSocket(); 
-		} catch (Exception e) {
-			e.printStackTrace(Console.dbg);
-			status.setStatus(false);
-			return;
-		}
 		packets = Collections.synchronizedList(new ArrayList<DatagramPacket>());
 		key = new byte[16];
 		p = new DatagramPacket(key, key.length);
 		flexBuf = new ArrayList<Byte>();
 	}
 	
-	public void run() {
+	public void connect(String ip, int p) {
 		try {
+			i = InetAddress.getByName(ip);
+			port = p;
+			s = new DatagramSocket(); 
 			requestKey(i);
 			status.setStatus(true);
+		} catch (Exception e) {
+			e.printStackTrace(Console.dbg);
+			status.setStatus(false);
+			return;
+		}
+
+	}
+	
+	public void run() {
+		try {
 			while (true) {
 				DatagramPacket pck = new DatagramPacket(new byte[256],256);
 				s.receive(pck);
@@ -95,39 +99,6 @@ public class Network extends Thread {
 			s += ""+k;
 		}
 		return s;
-	}
-	
-	public void sendEvent(PlayerState p) throws IOException {
-		for(byte b : key)
-			flexBuf.add(b);
-		for(byte b : p.getBytes())
-			flexBuf.add(b);
-				
-		byte[] buf = new byte[flexBuf.size()];
-		for(int i = 0; i < flexBuf.size(); i++)
-			buf[i] = flexBuf.get(i);
-		this.p.setData(buf);
-		s.send(this.p);
-		flexBuf.clear();
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public <E> Object callback(E obj, String method, Object[] args, boolean addToPacket) throws Exception {
-		Class[] partypes = new Class[args.length];
-		for(int i = 0; i < args.length; i++)
-			partypes[i] = args[i].getClass();
-		Method m = obj.getClass().getDeclaredMethod(method, partypes);
-		Object o = m.invoke(obj, args);
-		if(addToPacket)
-			if(obj.getClass().getSuperclass() == Actor.class) {
-				byte id = 0;
-				flexBuf.add(obj.getClass().getDeclaredField("id").getByte(id));
-			}
-		
-			for(byte b : m.getName().getBytes())
-				flexBuf.add(b);
-		
-		return o;
 	}
 
 	public static String[] getServers() {

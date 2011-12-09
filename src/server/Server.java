@@ -34,7 +34,7 @@ public class Server {
 		main = new Stage();
 		long seed = System.currentTimeMillis();
 		try {
-			n.callback(main, "startGame", new Object[] {seed}, true);
+			n.call(main, "startGame", new Object[] {seed});
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

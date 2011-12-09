@@ -15,7 +15,7 @@ public class Godmode extends UI {
 		super(r);
 		group = "godmode";
 		r.gooey.addGroup(group, 0, 0);
-		cursor = (Ghost) r.stage.addActor(Ghost.class, new Vec2(1,1), new Vec2(1,1));
+		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, new Vec2(1,1), new Vec2(1,1));
 	}
 
 	@Override

@@ -63,16 +63,17 @@ public class Stage {
 		w = new World(new Vec2(0, 0), true);
 		actors = new HashMap<Integer, Actor>();
 		activeActors = new LinkedList<Actor>();
-		nextId = 0;
+		nextId = 1;
 		w.setContactListener(new HEYLISTEN());
 	}
+	
 	//Makes a deep copy of a stage. 
 	//Doesn't really work on the level of Actors
 	public Stage(Stage stage) {
 		w = new World(new Vec2(0, 0), true);
 		actors = new HashMap<Integer, Actor>();
 		activeActors = new LinkedList<Actor>();
-		nextId = 0;
+		nextId = 1;
 		w.setContactListener(new HEYLISTEN());
 		for (Actor a: stage.actors.values()) {
 			Actor newa = addActor(a.getClass(), a.id, 
@@ -135,9 +136,18 @@ public class Stage {
 		
 		w.clearForces();
 	}
-
+	
+	//Returns the next free ID
 	public static int getNewId() {
 		return nextId++;
+	}
+	
+	//Returns the object corresponding with that id
+	public Object get(int id) {
+		if (id == -1)
+			return this;
+		Actor a = actors.get(id);
+		return a;
 	}
 	
 	//Anybody win game?
@@ -156,5 +166,10 @@ public class Stage {
 	public void store(Actor a) {
 		activeActors.remove(a);
 		w.destroyBody(a.b);
+	}
+	
+	//Derf
+	public void chat(String origin, Long time, String message) {
+		Console.chat(origin, time, message);
 	}
 }
