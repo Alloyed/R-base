@@ -22,7 +22,7 @@ quit:#a00000
 quit-over:#a00000
 quit-pressed:#a00000
 
-bg:0
+bg:#333333
 
 team-orange:0
 bg-orange:0
@@ -31,7 +31,7 @@ menu-orange-over:#00698c
 menu-orange-pressed:#08a2cf
 
 team-blue:0
-bg-blue:0
+bg-blue:#002230
 menu-blue:#003652
 menu-blue-over:#00698c
 menu-blue-pressed:#08a2cf

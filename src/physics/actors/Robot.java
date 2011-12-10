@@ -2,7 +2,6 @@ package physics.actors;
 
 import java.util.LinkedList;
 
-import network.PlayerState;
 
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
@@ -25,7 +24,7 @@ public class Robot extends Actor {
 	final float HALF_PI = (float) (Math.PI/2f);
 	public Robot(int id) {
 		super(id);
-		maxWear = 5000;
+		maxWear = 100;
 		wear    = maxWear;
 		isImportant = true;
 		label = "Robot";
@@ -37,8 +36,7 @@ public class Robot extends Actor {
 			inventory.add(b);
 		}
 		
-		state = new PlayerState(this);
-		super.state = state;
+		state = new PlayerState();
 	}
 	
 	public Robot() {

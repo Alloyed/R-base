@@ -47,7 +47,7 @@ public class Chat extends OutputStream {
 				in = "";
 				input.setStringValue(in);
 				isChatting = false;
-			} else if (key == PConstants.BACKSPACE || key == PConstants.DELETE) {
+			} else if (in.length() > 0 && key == PConstants.BACKSPACE || key == PConstants.DELETE) {
 				in = in.substring(0, in.length()-1);
 				input.setStringValue("> "+in+"_");
 			} else if (key > 31 && key != PConstants.CODED) {

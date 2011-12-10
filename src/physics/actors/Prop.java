@@ -17,6 +17,6 @@ public class Prop extends Actor {
 	public void makeBody(BodyDef d,FixtureDef fd) {
 		d.type = BodyType.STATIC;
 		fd.friction = .5f;
-		fd.restitution = .6f; //Wee!
+		fd.restitution = 3f; //Wee!
 	}
 }

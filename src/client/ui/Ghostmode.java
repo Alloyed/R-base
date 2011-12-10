@@ -2,6 +2,7 @@ package client.ui;
 
 import org.jbox2d.common.Vec2;
 
+import physics.Team;
 import physics.actors.Actor;
 import physics.actors.Ghost;
 import processing.core.PConstants;
@@ -14,7 +15,7 @@ public class Ghostmode extends UI {
 	public Ghostmode(Client r, Vec2 pos) {
 		super(r);
 		group = "ghostmode";
-		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, pos, new Vec2(1,1));
+		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), pos, new Vec2(1,1));
 		r.gooey.addGroup(group, 0, 0);
 	}
 

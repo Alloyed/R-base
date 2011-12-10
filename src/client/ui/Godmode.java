@@ -2,6 +2,7 @@ package client.ui;
 
 import org.jbox2d.common.Vec2;
 
+import physics.Team;
 import physics.actors.Actor;
 import physics.actors.Ghost;
 import processing.core.PConstants;
@@ -15,7 +16,7 @@ public class Godmode extends UI {
 		super(r);
 		group = "godmode";
 		r.gooey.addGroup(group, 0, 0);
-		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, new Vec2(1,1), new Vec2(1,1));
+		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), new Vec2(1,1), new Vec2(1,1));
 	}
 
 	@Override

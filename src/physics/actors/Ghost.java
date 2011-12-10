@@ -1,6 +1,5 @@
 package physics.actors;
 
-import network.PlayerState;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
@@ -14,7 +13,7 @@ public class Ghost extends Actor {
 	public Ghost() {
 		super();
 		baseImage = "none";
-		state = new PlayerState(this);
+		state = new PlayerState();
 	}
 	
 	@Override

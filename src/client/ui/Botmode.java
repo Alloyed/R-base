@@ -9,6 +9,7 @@ import client.Client;
 import client.sprites.Sprite;
 
 import physics.Console;
+import physics.Team;
 import physics.actors.*;
 
 public class Botmode extends UI{
@@ -27,7 +28,7 @@ public class Botmode extends UI{
 	
 	public Botmode(Client r) {
 		super(r);
-		pc = (Robot) r.stage.addActor(Robot.class, 0, new Vec2(1, 1), new Vec2(1,1));
+		pc = (Robot) r.stage.addActor(Robot.class, 0, Team.get(r.settings.team), new Vec2(1, 1), new Vec2(1,1));
 		
 		group = "botmode";
 		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
@@ -52,7 +53,7 @@ public class Botmode extends UI{
 		pc.state.aim = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale, 
 				(p.mouseY+r.cam.zeroY)/r.cam.meterScale);
 		Vec2 lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
-		p.background(r.skin.getColor("bg"));
+		p.background(r.menu.bg);
 		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		for (Actor a:r.stage.activeActors) {
 			r.draw(a);
@@ -60,11 +61,13 @@ public class Botmode extends UI{
 		
 		//crosshairs
 		p.pushMatrix();
+			p.noSmooth();
 			p.noFill();
 			p.stroke(255);
 			p.strokeWeight(2);
 			r.cam.translate(lerped.x,lerped.y);
-			p.rect(-2, -2, 4, 4);
+			p.rect(-2, -2, 2, 2);
+			p.smooth();
 		p.popMatrix();
 		
 		//Button.

@@ -13,11 +13,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import network.PlayerState;
 
 import physics.Console;
 import physics.Stage;
 import physics.actors.Actor;
+import physics.actors.PlayerState;
+/*Main client network class. Is horribly broken as of the start of newNet.*/
 @SuppressWarnings("unused")
 public class Network extends newNet.Network {
 	public static final float frame = 1/20f;

@@ -6,7 +6,7 @@ import client.Settings;
 import client.sprites.*;
 
 import controlP5.*;
-import physics.Console;
+import physics.Team;
 import processing.core.PConstants;
 import processing.core.PImage;
 
@@ -17,6 +17,9 @@ public class Menu extends UI {
 	
 	PImage logo;
 	public UI lastMode;
+	String team = "";
+	int bg;
+	
 	/*Gooey methods*/
 	public void connect() {
 		Network net = r.net;
@@ -87,11 +90,12 @@ public class Menu extends UI {
 			.setValue(settings.WINDOW_HEIGHT);
 		((Textfield)gooey.getController("/settings/SKIN_FOLDER"))
 			.setValue(settings.SKIN_FOLDER);
+		setTeam(Team.get(settings.team));
 	}
 	
 	@Override
 	public void draw() {
-		p.background(r.skin.getColor("bg"));
+		p.background(bg);
 		p.imageMode(PConstants.CENTER);
 		p.image(logo, p.width / 2f, p.height / 2f);
 	}
@@ -126,4 +130,15 @@ public class Menu extends UI {
 		super.show();
 		p.cursor();
 	}
+	
+	public void setTeam(Team t) {
+		team = Team.get(t);
+		ControlP5 gooey = r.gooey;
+		Skin skin = r.skin;
+		bg = skin.getColor("bg"+team);
+		gooey.setColorBackground(skin.getColor("menu" + team));
+		gooey.setColorForeground(skin.getColor("menu" + team + "-over"));
+		gooey.setColorActive(    skin.getColor("menu" + team + "-pressed"));
+	}
+	
 }

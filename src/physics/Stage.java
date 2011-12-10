@@ -1,11 +1,8 @@
 package physics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
-
-import network.CallbackState;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
@@ -16,7 +13,6 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
 import physics.actors.Actor;
-import physics.actors.Bullet;
 import physics.actors.Prop;
 import physics.actors.Robot;
 
@@ -41,12 +37,12 @@ public class Stage {
 				force += f;
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
-			if (A instanceof Bullet || B instanceof Bullet)
-				force *= 10;
-			A.hurt(force);
-			B.hurt(force);
 			if (A instanceof Robot && B.sizeH < .6 && B.b.getLinearVelocity().length() < 4) {
 				((Robot)A).take(B);
+			} else { 
+				//Note: These equations are bullshit that happens to be fun
+				A.hurt(force * B.b.getLinearVelocity().length() * B.b.getMass());
+				B.hurt(force * A.b.getLinearVelocity().length() * A.b.getMass());
 			}
 		}
 
@@ -61,7 +57,6 @@ public class Stage {
 	public World w;
 	public HashMap<Integer, Actor> actors; //Every actor, retrievable by id.
 	public LinkedList<Actor> activeActors; //Every actor in the world right now
-	public ArrayList<CallbackState> callbacks;
 	static int nextId = 0;
 	
 	public Stage() {
@@ -81,7 +76,7 @@ public class Stage {
 		nextId = 1;
 		w.setContactListener(new HEYLISTEN());
 		for (Actor a: stage.actors.values()) {
-			Actor newa = addActor(a.getClass(), a.id, 
+			Actor newa = addActor(a.getClass(), a.id, a.team,
 						new Vec2(a.sizeW,a.sizeH),
 						(a.b == null ? new Vec2(0, 0) : a.b.getWorldCenter()));
 			if (!stage.activeActors.contains(a))
@@ -103,9 +98,10 @@ public class Stage {
 							rand.nextFloat()*12));
 	}
 	
-	public Actor addActor(Class<?> type, int id, Vec2 size, Vec2 pos) {
+	public Actor addActor(Class<?> type, int id, Team t, Vec2 size, Vec2 pos) {
 		try {
 			Actor a = (Actor) type.newInstance();
+			a.setTeam(t);
 			a.id = id;
 			a.create(size);
 			a.place(this, pos);
@@ -119,7 +115,7 @@ public class Stage {
 	}
 	
 	public Actor addActor(Class<?> type, Vec2 size, Vec2 pos) {
-		return addActor(type, getNewId(), size, pos);
+		return addActor(type, getNewId(), Team.NUETRAL, size, pos);
 	}
 	
 	/*Run one step of the simulation, simulating frame seconds of time.*/

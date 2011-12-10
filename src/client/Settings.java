@@ -32,6 +32,8 @@ public class Settings {
 	
 	@ControlElement (x=30,y=260, properties = {"label=skin", "width=60", "listen=true"})
 	public String SKIN_FOLDER = "skin";
+	@ControlElement (x=30,y=310, properties = {"label=Team?", "min=-1", "max=1", "width=60", "listen=true"})
+	public int team = 0;
 	
 	private PApplet p;
 

@@ -1,14 +1,11 @@
 package physics.actors;
 
-import java.util.Collection;
-
-import network.ActorState;
-
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 
 import physics.Stage;
+import physics.Team;
 
 /*The main representation of an in-game object, right now*/
 public class Actor {
@@ -16,10 +13,10 @@ public class Actor {
 	public Body b;
 	//The stage it belongs to
 	public Stage s;
-	//The serializable state of the object
-	public ActorState state;
 	//Unique ID, doesn't work right now
 	public int id; 
+	//The team the Actor belongs to
+	public Team team;
 	//dimensions of the box. 
 	//I can't find an easy way to get this out of a fixture
 	public float sizeW, sizeH; 
@@ -58,7 +55,6 @@ public class Actor {
 		
 		makeBody(d, fd);
 		id = newid;
-		state = new ActorState(this);
 	}
 	
 	public Actor() {
@@ -126,7 +122,7 @@ public class Actor {
 	public void hurt(float force) {
 		wear -= force;
 		wearFrac = wear / maxWear;
-		modifiers[0] = wearFrac < .25f ? "-dmg3" :
+		modifiers[4] = wearFrac < .25f ? "-dmg3" :
 						wearFrac < .5f ? "-dmg2" :
 						wearFrac < .75f ? "-dmg1" : "";
 	}
@@ -153,6 +149,11 @@ public class Actor {
 			if (m != null)
 				s += m;
 		return s;
+	}
+	
+	public void setTeam(Team t) {
+		team = t;
+		modifiers[3] = Team.get(t);
 	}
 	
 }

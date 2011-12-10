@@ -14,8 +14,8 @@ public class Camera {
 		 
 	public Camera(PApplet p) {
 		this.p = p;
-		scale = p.width < p.height ? p.width / 800f : p.height / 600f;
-		meterScale = scale*64f;
+		scale = p.width < p.height ? p.width / 1680f : p.height / 1050f;
+		meterScale *= scale;
 	}
 	
 	public void translate(float x, float y) {

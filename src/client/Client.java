@@ -110,12 +110,11 @@ public class Client implements PConstants {
 			
 			// Gooey Stuf
 			gooey = new ControlP5(p);
-			gooey.setColorBackground(skin.getColor("menu"));
-			gooey.setColorForeground(skin.getColor("menu-over"));
-			gooey.setColorActive(skin.getColor("menu-pressed"));
-			menu = new Menu(this);
 			chat = new Chat(this, 5);
 			Console.chat = new PrintStream(chat);
+			menu = new Menu(this);
+			currentMode = new Botmode(this);
+			menu.show();
 			for (ControllerInterface c : gooey.getControllerList()) {
 				if (c instanceof Textfield)
 					((Textfield) c).setAutoClear(false);
@@ -131,12 +130,12 @@ public class Client implements PConstants {
 				}
 			});
 			net.start();
-			currentMode = new Botmode(this);
-			menu.show();
 		}
+		
 		oldtime = System.nanoTime();
 		Console.chat("System",oldtime,"Welcome to R-base!");
 		skin.start();
+
 	}
 
 	//Is looped over to draw things
