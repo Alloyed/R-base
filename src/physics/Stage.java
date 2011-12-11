@@ -13,6 +13,7 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
 import physics.actors.Actor;
+import physics.actors.Floor;
 import physics.actors.Prop;
 import physics.actors.Robot;
 
@@ -37,7 +38,7 @@ public class Stage {
 				force += f;
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
-			if (A instanceof Robot && B.sizeH < .6 && B.b.getLinearVelocity().length() < 4) {
+			if (A instanceof Robot && B.size.length() < 1 && B.b.getLinearVelocity().length() < 4) {
 				((Robot)A).take(B);
 			} else { 
 				//Note: These equations are bullshit that happens to be fun
@@ -77,7 +78,7 @@ public class Stage {
 		w.setContactListener(new HEYLISTEN());
 		for (Actor a: stage.actors.values()) {
 			Actor newa = addActor(a.getClass(), a.id, a.team,
-						new Vec2(a.sizeW,a.sizeH),
+						a.size,
 						(a.b == null ? new Vec2(0, 0) : a.b.getWorldCenter()));
 			if (!stage.activeActors.contains(a))
 				store(newa);
@@ -86,16 +87,62 @@ public class Stage {
 
 	public void startGame(Long seed) {
 		Random rand = new Random(seed); //We need the seed because DETERMINISM!
-		//boundaries. These numbers were pulled straight from my ass.
-		addActor(Prop.class, new Vec2(16.5f,4), new Vec2(6.25f, -4));
-		addActor(Prop.class, new Vec2(4,16.5f), new Vec2(-4, 4.6875f));
-		addActor(Prop.class, new Vec2(4,16.5f), new Vec2(16.5f, 4.6875f));
-		addActor(Prop.class, new Vec2(16.5f,4), new Vec2(6.25f,13.375f));
+		//Two different loops because we have no layers
+		for (int i = 0; i < 4; ++i) {
+			for (int j = 0; j < 4; j++) {
+				genFloor(i, j);
+			}
+		}
+		
+		for (int i = 0; i < 4; ++i) {
+			for (int j = 0; j < 4; j++) {
+				genRoom(rand, i, j, 3, 3);
+			}
+		}
+		
+	}
+	
+	public void genFloor(int x, int y) {
+		float size = 20f;
+		float x0 = x*size, y0 = y*size;
+		addActor(Floor.class, new Vec2(size,size), new Vec2(x0 + (size/2), y0 + (size/2)));
+	}
+	
+	public void genRoom(Random rand, int x, int y, int maxx, int maxy) {
+		float size = 20f;
+		float w = 1, hw = .5f;
+		
+		float x0 = x*size, y0 = y*size;
+		//Right wall
+		if (x == 0) {
+			addActor(Prop.class, new Vec2(w,size), new Vec2(x0-hw, y0+(size/2)));
+		}
+		
+		//Top wall
+		if (y == 0) {
+			addActor(Prop.class, new Vec2(size,w), new Vec2(x0+(size/2), y0-hw));
+		}
+
+		//Left wall
+		if (x == maxx) {
+			addActor(Prop.class, new Vec2(w,size), new Vec2(x0+size+hw, y0+(size/2)));
+		} else {
+			addActor(Prop.class, new Vec2(w, size/3), new Vec2(x0+size+hw, y0+(size/6)));
+			addActor(Prop.class, new Vec2(w, size/3), new Vec2(x0+size+hw, y0+size-(size/6)));
+		}
+		
+		//Bottom wall
+		if (y == maxy) {
+			addActor(Prop.class, new Vec2(size, w), new Vec2(x0+(size/2),y0+size+hw));
+		} else {
+			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+(size/6), y0+size+hw));
+			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+size-(size/6), y0+size+hw));
+		}
 		//Random boxes. Fun!
-		for (int i=0;i<30;++i)
+		for (int i=0;i<4;++i)
 			addActor(Actor.class, new Vec2(1, 1), 
-					new Vec2(rand.nextFloat()*12,
-							rand.nextFloat()*12));
+					new Vec2(x0+(rand.nextFloat()*size),
+							y0+(rand.nextFloat()*size)));
 	}
 	
 	public Actor addActor(Class<?> type, int id, Team t, Vec2 size, Vec2 pos) {

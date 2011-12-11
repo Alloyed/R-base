@@ -12,11 +12,15 @@ public class Prop extends Actor {
 		super();
 		maxWear = 999999999;
 		wear    = 999999999;
+		label = "prop";
+		baseImage = "prop";
 	}
-
-	public void makeBody(BodyDef d,FixtureDef fd) {
+	
+	@Override
+	public void makeBody() {
+		super.makeBody();
 		d.type = BodyType.STATIC;
 		fd.friction = .5f;
-		fd.restitution = 3f; //Wee!
+		fd.restitution = 1.1f; //Wee!
 	}
 }

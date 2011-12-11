@@ -28,29 +28,33 @@ public class Botmode extends UI{
 	
 	public Botmode(Client r) {
 		super(r);
-		pc = (Robot) r.stage.addActor(Robot.class, 0, Team.get(r.settings.team), new Vec2(1, 1), new Vec2(1,1));
 		
 		group = "botmode";
 		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
 		//this sets off a segfault, it's harmless though
 		inv = p.createGraphics(100, 30, PConstants.JAVA2D); 
 		Button b = r.gooey.addButton("inv",0,0,p.height-30,100,30);
-		b.setImage(inv); 
+		b.setImage(inv);
 		b.moveTo(m);
 		
-		health = p.createGraphics(100, 30, PConstants.JAVA2D); 
+		health = p.createGraphics(100, 30, PConstants.JAVA2D);
 		b = r.gooey.addButton("health",0,p.width-100,p.height-30,100,30);
-		b.setImage(health); 
+		b.setImage(health);
 		b.moveTo(m);
+	}
+	
+	public void start() {
+		pc = (Robot) r.stage.addActor(Robot.class, 0, Team.get(r.settings.team), new Vec2(1, 1), new Vec2(1,1));
 	}
 	
 	@Override
 	public void draw() {
 		if (pc.isDead()) { 
-			new Ghostmode(r, pc.oldPos).show();
+			r.ghostmode.start(pc.oldPos);
+			r.ghostmode.show();
 		}
 		Vec2 oldAim = pc.state.aim;
-		pc.state.aim = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale, 
+		pc.state.aim = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale,
 				(p.mouseY+r.cam.zeroY)/r.cam.meterScale);
 		Vec2 lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
 		p.background(r.menu.bg);
@@ -87,7 +91,7 @@ public class Botmode extends UI{
 			inv.text(""+pc.inventory.size(),70,20);
 		inv.endDraw();
 		//Button 2.0
-		health.beginDraw();	
+		health.beginDraw();
 			health.smooth();
 			health.background(100);
 			health.fill(255);
@@ -123,7 +127,6 @@ public class Botmode extends UI{
 			pc.state.downPressed = false;
 		else if (p.key == 'd')
 			pc.state.rightPressed = false;
-		
 	}
 	
 	@Override

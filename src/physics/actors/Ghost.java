@@ -2,8 +2,6 @@ package physics.actors;
 
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.FixtureDef;
 
 
 /*An observer/cursor. Could extend Robot, or Robot could extend this, but that would be more annoying*/
@@ -17,7 +15,7 @@ public class Ghost extends Actor {
 	}
 	
 	@Override
-	public void makeBody(BodyDef d, FixtureDef fd) {
+	public void makeBody() {
 		this.fd = null;
 	}
 	

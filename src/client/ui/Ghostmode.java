@@ -12,13 +12,16 @@ import client.Client;
 public class Ghostmode extends UI {
 	public Ghost cursor;
 	
-	public Ghostmode(Client r, Vec2 pos) {
+	public Ghostmode(Client r) {
 		super(r);
 		group = "ghostmode";
-		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), pos, new Vec2(1,1));
 		r.gooey.addGroup(group, 0, 0);
 	}
-
+	
+	public void start(Vec2 pos) {
+		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), new Vec2(1,1), pos);
+	}
+	
 	@Override
 	public void draw() {
 		p.background(r.skin.getColor("bg"));

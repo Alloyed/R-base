@@ -1,14 +1,11 @@
 package client.ui;
 
-import client.Client;
-import client.Network;
-import client.Settings;
+import client.*;
 import client.sprites.*;
 
 import controlP5.*;
 import physics.Team;
-import processing.core.PConstants;
-import processing.core.PImage;
+import processing.core.*;
 
 /* I've tried to move all those callback methods into here. 
  * It didn't work. 
@@ -22,11 +19,7 @@ public class Menu extends UI {
 	
 	/*Gooey methods*/
 	public void connect() {
-		Network net = r.net;
-		net.close();
-		net.connect(r.settings.IP, Integer.parseInt(r.settings.PORT));
-		r.net = net;
-
+		r.net.connect(r.settings.IP, r.settings.PORT);
 	}
 	
 	class listener implements ControlListener {

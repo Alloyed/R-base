@@ -2,7 +2,10 @@ package physics.actors;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
 
 import physics.Stage;
 import physics.Team;
@@ -19,7 +22,7 @@ public class Actor {
 	public Team team;
 	//dimensions of the box. 
 	//I can't find an easy way to get this out of a fixture
-	public float sizeW, sizeH; 
+	public Vec2 size; 
 	//Important things, right now, get their labels drawn.
 	public boolean isImportant = false;
 	//What gets drawn next to the box to identify it, 
@@ -46,14 +49,6 @@ public class Actor {
 	public Actor(int newid) {
 		modifiers = new String[5];
 		wear = maxWear;
-		d = new BodyDef();
-		fd = new FixtureDef();
-		d.type = BodyType.DYNAMIC;
-
-		fd.density = 1.6f;
-		fd.friction = .3f;
-		
-		makeBody(d, fd);
 		id = newid;
 	}
 	
@@ -62,13 +57,14 @@ public class Actor {
 	}
 
 	public void create(Vec2 size) {
-		this.sizeW = size.x;
-		this.sizeH = size.y;
-		if (fd == null)
-			return;
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(sizeW / 2f, sizeH / 2f);
-		fd.shape = shape;
+		this.size = size;
+		d = new BodyDef();
+		fd = new FixtureDef();
+		d.type = BodyType.DYNAMIC;
+		fd.density = 1.6f;
+		fd.friction = .3f;
+		
+		makeBody();
 	}
 	
 	public void create(float size) {
@@ -79,7 +75,7 @@ public class Actor {
 	//TODO: make actors invincible for the first few frames of their life
 	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
 		s = st;
-		d.position.set(pos);
+		d.position = new Vec2(pos);
 		oldPos = new Vec2(pos);
 		oldAng = ang;
 		d.angle = ang;
@@ -109,8 +105,10 @@ public class Actor {
 	}
 	
 	//Override this to do what you want to the defs before they are used
-	public void makeBody(BodyDef d, FixtureDef fd) {
-	
+	public void makeBody() {
+		PolygonShape p = new PolygonShape();
+		p.setAsBox(size.x/2, size.y/2);
+		fd.shape = p;
 	}
 	
 	//Actors are moving, but useless boxes by default.
@@ -120,6 +118,8 @@ public class Actor {
 	}
 	
 	public void hurt(float force) {
+		if (force < 10)
+			return;
 		wear -= force;
 		wearFrac = wear / maxWear;
 		modifiers[4] = wearFrac < .25f ? "-dmg3" :
@@ -131,12 +131,12 @@ public class Actor {
 	public void destroy() {
 		if (s == null)
 			return;
-		if (sizeH > .4) 
+		if (size.length() > .4)
 		for (int i = -1; i < 2; i += 2) {
 			for (int j = -1; j < 2; j += 2) {
 				Actor a = new Actor();
-				a.create(new Vec2(sizeW / 2,sizeH / 2));
-				Vec2 pos = new Vec2(sizeW * i / 4f,sizeH * j / 4f);
+				a.create(new Vec2(size.x / 2,size.y / 2));
+				Vec2 pos = new Vec2(size.x * i / 4f,size.y * j / 4f);
 				a.place(s, b.getWorldPoint(pos), b.getAngle(),
 						b.getLinearVelocity(), b.getAngularVelocity());
 			}
@@ -154,6 +154,5 @@ public class Actor {
 	public void setTeam(Team t) {
 		team = t;
 		modifiers[3] = Team.get(t);
-	}
-	
+	}	
 }

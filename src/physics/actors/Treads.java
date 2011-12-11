@@ -1,8 +1,5 @@
 package physics.actors;
 
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.FixtureDef;
-
 import physics.Stage;
 
 /*the Robot's treads.*/
@@ -19,7 +16,7 @@ public class Treads extends Actor {
 	}
 	
 	@Override
-	public void makeBody(BodyDef d, FixtureDef fd) {
-		this.fd = null;
+	public void makeBody() {
+		fd = null;
 	}
 }

@@ -1,8 +1,6 @@
 package physics.actors;
 
 import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.FixtureDef;
 
 
 public class Bullet extends Actor {
@@ -14,9 +12,10 @@ public class Bullet extends Actor {
 		baseImage = "bullet";
 	}
 	
-	public void makeBody(BodyDef d, FixtureDef fd) {
+	@Override
+	public void makeBody() {
 		CircleShape s = new CircleShape();
-		s.m_radius = sizeH / 2f;
+		s.m_radius = size.length() / 2f;
 		fd.shape = s;
 		fd.friction = .3f;
 		fd.density = 60;

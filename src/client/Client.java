@@ -49,6 +49,8 @@ public class Client implements PConstants {
 	
 	//Views
 	public Menu menu;
+	public Botmode botmode;
+	public Ghostmode ghostmode;
 	public UI currentMode;
 	
 	//Gui stuff
@@ -113,29 +115,22 @@ public class Client implements PConstants {
 			chat = new Chat(this, 5);
 			Console.chat = new PrintStream(chat);
 			menu = new Menu(this);
-			currentMode = new Botmode(this);
-			menu.show();
+			botmode = new Botmode(this);
+			ghostmode = new Ghostmode(this);
 			for (ControllerInterface c : gooey.getControllerList()) {
 				if (c instanceof Textfield)
 					((Textfield) c).setAutoClear(false);
 			}
 			
-			net = new Network(
-					stage,
-					new StatusListener() {
-				public void setStatus(boolean connected) {
-					//TODO: move all the game starting stuff here
-					gooey.getController("connect")
-					.setCaptionLabel( connected ? "disconnect" : "connect");
-				}
-			});
-			net.start();
+			net = new Network(this);
 		}
 		
 		oldtime = System.nanoTime();
 		Console.chat("System",oldtime,"Welcome to R-base!");
 		skin.start();
-
+		botmode.start();
+		currentMode = botmode;
+		menu.show();
 	}
 
 	//Is looped over to draw things
@@ -154,9 +149,9 @@ public class Client implements PConstants {
 		//Networking
 		if (net != null) {
 			net.poll();
-			while (netAccum >= Network.frame) {
-				//TODO:Send state
-				netAccum -= Network.frame;
+			while (netAccum >= Connection.frame) {
+				net.send();
+				netAccum -= Connection.frame;
 			}
 		}
 		//Physix

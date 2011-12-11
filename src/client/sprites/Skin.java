@@ -24,13 +24,8 @@ public class Skin extends Thread {
 		//Sprites
 		this.c = c;
 		this.p = c.p;
-		sprites = Collections.synchronizedMap(new HashMap<String, Sprite>());
 		String path = c.p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
 		
-		//Special cases
-		sprites.put("none", new EmptySprite());
-		sprites.put("logo", new ImageSprite(c, path+"logo.png"));
-		sprites.put("box", new ImageSprite(c, path+"box.svg"));
 		//colors
 		colors = new HashMap<String, Integer>();
 		InputStream colorFile = c.p.createInput(path+"colors.txt");
@@ -56,6 +51,17 @@ public class Skin extends Thread {
 				}
 		}
 		try {colorFile.close();} catch (IOException e) {e.printStackTrace();}
+		
+		//Sprites
+		sprites = Collections.synchronizedMap(new HashMap<String, Sprite>());
+		//Special cases, rest are handled by thread
+		sprites.put("none", new EmptySprite());
+		sprites.put("logo", new ImageSprite(c, path+"logo.png"));
+		sprites.put("box", new ImageSprite(c, path+"box.svg"));
+		sprites.put("prop", new RectSprite(c,0));
+		sprites.put("floor", new RectSprite(c,getColor("bg")));
+		sprites.put("floor-blue", new RectSprite(c,getColor("bg-blue")));
+		sprites.put("floor-orange", new RectSprite(c,getColor("bg-orange")));
 	}
 	
 	public void run() {

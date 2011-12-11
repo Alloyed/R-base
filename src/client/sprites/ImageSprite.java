@@ -65,7 +65,7 @@ public class ImageSprite implements Sprite {
 			p.ellipseMode(p.CENTER);
 			
 			c.cam.translate(pos.x, pos.y);
-			c.cam.scale(a.sizeW * width, a.sizeH * height);
+			c.cam.scale(a.size.x * width, a.size.y * height);
 			c.cam.rotate(angle);
 			if (a.getImage() == "playerBottom") {
 			}
@@ -83,7 +83,7 @@ public class ImageSprite implements Sprite {
 		
 		p.fill(255);
 		if (a.isImportant) {
-			Vec2 spot = c.cam.worldToScreen(pos.add(new Vec2(-a.sizeW/2,a.sizeH)));
+			Vec2 spot = c.cam.worldToScreen(pos.add(new Vec2(-a.size.x/2,a.size.y)));
 			p.text(a.label, spot.x, spot.y);
 		}
 	}

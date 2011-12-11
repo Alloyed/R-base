@@ -2,25 +2,23 @@ package physics.actors;
 
 import java.util.LinkedList;
 
-
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
-import org.jbox2d.dynamics.FixtureDef;
 
 import physics.Console;
 import physics.Stage;
 
 /*A player in the world. TODO:Teams, a lot more*/
-public class Robot extends Actor {	
+public class Robot extends Actor {
 	final int speed=60;
 	public PlayerState state;
 	public Actor treads;
 	public Actor held;
 	public LinkedList<Actor> inventory;
+	
 	final float HALF_PI = (float) (Math.PI/2f);
 	public Robot(int id) {
 		super(id);
@@ -44,7 +42,8 @@ public class Robot extends Actor {
 	}
 	
 	@Override
-	public void makeBody(BodyDef d, FixtureDef fd) {
+	public void makeBody() {
+		super.makeBody();
 	}
 	
 	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
@@ -82,9 +81,9 @@ public class Robot extends Actor {
 				Object data = f.getBody().getUserData();
 				if (data instanceof Actor) {
 					Actor a = (Actor)data;
-					if (!a.isHeld &&  
-							a.id != id && 
-							a.b.getType() == BodyType.DYNAMIC && 
+					if (!a.isHeld &&
+							a.id != id &&
+							a.b.getType() == BodyType.DYNAMIC &&
 							a.b.getMass() < 5) {
 						a.isHeld = true;
 						held = a;
@@ -128,7 +127,7 @@ public class Robot extends Actor {
 			release();
 		} else if (!inventory.isEmpty()) {
 			a = inventory.pollFirst();
-			a.place(s,getPointAhead(a.sizeH+.1f));
+			a.place(s,getPointAhead(a.size.length()+.1f));
 		} else {
 			return;
 		}
@@ -164,7 +163,7 @@ public class Robot extends Actor {
 		treads.b.setTransform(b.getWorldCenter(), (float)Math.atan2(vel.y, vel.x));
 		treads.b.applyForce(move.mul(speed), b.getWorldCenter());
 		if (held != null)
-			held.b.setTransform(getPointAhead(held.sizeH+.2f), held.b.getAngle());
+			held.b.setTransform(getPointAhead(held.size.length()), held.b.getAngle());
 	}
 	
 	public void destroy() {
@@ -172,7 +171,7 @@ public class Robot extends Actor {
 		s.delete(treads);
 		
 		Actor shell = new Actor();
-		shell.create(sizeH);
+		shell.create(size);
 		shell.place(s,b.getWorldCenter());
 		shell.b.setTransform(b.getWorldCenter(), b.getAngle());
 		shell.b.applyLinearImpulse(b.getLinearVelocity(), shell.b.getWorldCenter());

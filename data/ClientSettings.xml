@@ -1,10 +1,10 @@
 <R-base>
-<WINDOW_WIDTH TYPE="class java.lang.String">1680</WINDOW_WIDTH>
-<WINDOW_HEIGHT TYPE="class java.lang.String">1050</WINDOW_HEIGHT>
+<WINDOW_WIDTH TYPE="class java.lang.String">800</WINDOW_WIDTH>
+<WINDOW_HEIGHT TYPE="class java.lang.String">600</WINDOW_HEIGHT>
 <IP TYPE="class java.lang.String">localhost</IP>
 <PORT TYPE="class java.lang.String">9001</PORT>
-<USERNAME TYPE="class java.lang.String">HURF DURF WHY IS MY NAME SO LONG THERE SHOULD PROBABLY BE A LIMIT TO THIS BUT WHO REALLY CARES HONESTLY NOW?</USERNAME>
+<USERNAME TYPE="class java.lang.String">derp</USERNAME>
 <ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
 <SKIN_FOLDER TYPE="class java.lang.String">skin</SKIN_FOLDER>
-<team TYPE="class java.lang.Integer">0</team>
+<team TYPE="class java.lang.Integer">1</team>
 </R-base>

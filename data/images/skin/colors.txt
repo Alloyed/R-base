@@ -22,7 +22,7 @@ quit:#a00000
 quit-over:#a00000
 quit-pressed:#a00000
 
-bg:#333333
+bg:#111111
 
 team-orange:0
 bg-orange:0
