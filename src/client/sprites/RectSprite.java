@@ -5,30 +5,28 @@ import org.jbox2d.common.Vec2;
 import client.Client;
 
 import physics.actors.Actor;
-import processing.core.PApplet;
-import processing.core.PGraphics;
 
 public class RectSprite implements Sprite {
 	Client c;
-	PApplet p;
+//	PApplet p;
 	int color;
 	final float width = 1, height = 1, length;
 
 	public RectSprite(Client c, int color) {
 		this.c = c;
-		p = c.p;
+//		p = c.p;
 		this.color = color;
 		length = (float) Math.sqrt(2);
 	}
 
-	public void draw(PGraphics pg, float x, float y, float max) {
-		pg.pushMatrix();
-		pg.scale(.3f); // TODO: unhardcode this
-		pg.noStroke();
-		pg.fill(color);
-		pg.rect(0, 0, 64, 64);
-		pg.popMatrix();
-	}
+//	public void draw(PGraphics pg, float x, float y, float max) {
+//		pg.pushMatrix();
+//		pg.scale(.3f); // TODO: unhardcode this
+//		pg.noStroke();
+//		pg.fill(color);
+//		pg.rect(0, 0, 64, 64);
+//		pg.popMatrix();
+//	}
 
 	@SuppressWarnings("static-access")
 	public void draw(Actor a) {
@@ -37,7 +35,7 @@ public class RectSprite implements Sprite {
 				.add(a.oldPos.mul(1 - Actor.alpha));
 		float angle = a.b.getAngle() * Actor.alpha + a.oldAng
 				* (1 - Actor.alpha);
-		p.pushStyle();
+/*		p.pushStyle();
 		p.pushMatrix();
 		{
 			p.noStroke();
@@ -66,5 +64,6 @@ public class RectSprite implements Sprite {
 					a.size.y)));
 			p.text(a.label, spot.x, spot.y);
 		}
-	}
+	*/}
+	
 }

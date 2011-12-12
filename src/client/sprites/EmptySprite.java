@@ -1,7 +1,7 @@
 package client.sprites;
 
 import physics.actors.Actor;
-import processing.core.PGraphics;
+//import processing.core.PGraphics;
 
 /*Does nothing.*/
 public class EmptySprite implements Sprite {
@@ -10,7 +10,7 @@ public class EmptySprite implements Sprite {
 		;
 	}
 
-	public void draw(PGraphics pg, float x, float y, float max) {
-		;
-	}
+//	public void draw(PGraphics pg, float x, float y, float max) {
+//		;
+//	}
 }

@@ -2,8 +2,6 @@ package client.ui;
 
 import org.jbox2d.common.Vec2;
 
-import processing.core.*;
-import controlP5.*;
 
 import client.Client;
 import client.sprites.Sprite;
@@ -14,7 +12,7 @@ import physics.actors.*;
 
 public class Botmode extends UI{
 	public Robot pc;
-	public PGraphics inv, health;
+//	public PGraphics inv, health;
 	
 	public void inv() {
 		//TODO: make boolet from scrap metal
@@ -30,17 +28,17 @@ public class Botmode extends UI{
 		super(r);
 		
 		group = "botmode";
-		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
+//		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
 		//this sets off a segfault, it's harmless though
-		inv = p.createGraphics(100, 30, PConstants.JAVA2D); 
-		Button b = r.gooey.addButton("inv",0,0,p.height-30,100,30);
-		b.setImage(inv);
-		b.moveTo(m);
+//		inv = p.createGraphics(100, 30, PConstants.JAVA2D); 
+//		Button b = r.gooey.addButton("inv",0,0,p.height-30,100,30);
+//		b.setImage(inv);
+//		b.moveTo(m);
 		
-		health = p.createGraphics(100, 30, PConstants.JAVA2D);
-		b = r.gooey.addButton("health",0,p.width-100,p.height-30,100,30);
-		b.setImage(health);
-		b.moveTo(m);
+//		health = p.createGraphics(100, 30, PConstants.JAVA2D);
+//		b = r.gooey.addButton("health",0,p.width-100,p.height-30,100,30);
+//		b.setImage(health);
+//		b.moveTo(m);
 	}
 	
 	public void start() {
@@ -51,6 +49,7 @@ public class Botmode extends UI{
 	
 	@Override
 	public void draw() {
+		/*
 		if (pc.isDead()) { 
 			r.ghostmode.start(pc.oldPos);
 			r.ghostmode.show();
@@ -99,10 +98,12 @@ public class Botmode extends UI{
 			health.fill(255);
 			health.text((int)pc.wear+"/"+(int)pc.maxWear,10,20);
 		health.endDraw();
+		*/
 	}
 	
 	@Override
 	public void keyPressed() {
+		/*
 		if (p.key == 'w')
 			pc.state.upPressed = true;
 		else if (p.key == 'a')
@@ -115,10 +116,12 @@ public class Botmode extends UI{
 			r.menu.show();
 		else if (p.key == 'q')
 			inv();
+			*/
 	}
 	
 	@Override
 	public void keyReleased() {
+		/*
 		if (p.key == 'e') 
 			pc.toggleHold();
 		if (p.key == 'w')
@@ -129,6 +132,7 @@ public class Botmode extends UI{
 			pc.state.downPressed = false;
 		else if (p.key == 'd')
 			pc.state.rightPressed = false;
+			*/
 	}
 	
 	@Override
@@ -152,7 +156,7 @@ public class Botmode extends UI{
 		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
 		pc.label = r.settings.USERNAME;
 		super.show();
-		p.noCursor();
+		//p.noCursor();
 	}
 	
 	public void hide() {

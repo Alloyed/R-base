@@ -9,7 +9,7 @@ import java.util.Map;
 
 import physics.Console;
 import physics.actors.Actor;
-import processing.core.PApplet;
+//import processing.core.PApplet;
 
 import client.Client;
 
@@ -18,13 +18,13 @@ public class Skin extends Thread {
 	Map<String, Sprite>  sprites;
 	HashMap<String, Integer> colors;
 	Client c;
-	PApplet p;
+//	PApplet p;
 	
 	public Skin(Client c) {
 		//Sprites
 		this.c = c;
-		this.p = c.p;
-		String path = c.p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
+/*		this.p = c.p;
+//		String path = c.p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
 		
 		//colors
 		colors = new HashMap<String, Integer>();
@@ -62,10 +62,11 @@ public class Skin extends Thread {
 		sprites.put("floor", new RectSprite(c,getColor("bg")));
 		sprites.put("floor-blue", new RectSprite(c,getColor("bg-blue")));
 		sprites.put("floor-orange", new RectSprite(c,getColor("bg-orange")));
+	*/
 	}
 	
 	public void run() {
-		String path = p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
+		/*String path = p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
 		File dir = new File(path);
 		c.font = p.createFont("uni05_53.ttf",8,false);
 		p.textFont(c.font);
@@ -77,6 +78,7 @@ public class Skin extends Thread {
 					sprites.put(s, new ImageSprite(c, f.toString()));
 				}
 		Console.dbg.println("Skins loaded.");
+		*/
 	}
 	
 	public Sprite get(String str) {
@@ -107,7 +109,7 @@ public class Skin extends Thread {
 		Integer i = colors.get(s);
 		if ( i == null ) {
 			Console.dbg.println("WARNING: color " + s + " doesn't exist. Using black instead.");
-			i = p.color(0);
+		//	i = p.color(0);
 			colors.put(s, i);
 		}
 		return i;

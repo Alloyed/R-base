@@ -2,7 +2,7 @@ package client;
 
 import org.jbox2d.common.Vec2;
 
-import processing.core.PApplet;
+//import processing.core.PApplet;
 
 public class Camera {
 	public float scale = 1;
@@ -10,31 +10,31 @@ public class Camera {
 	public float zeroX;
 	public float zeroY;
 	float camAngle;
-	PApplet p;
+//	PApplet p;
 		 
-	public Camera(PApplet p) {
-		this.p = p;
-		scale = p.width < p.height ? p.width / 1680f : p.height / 1050f;
-		meterScale *= scale;
-	}
+//	public Camera(PApplet p) {
+//		this.p = p;
+//		scale = p.width < p.height ? p.width / 1680f : p.height / 1050f;
+//		meterScale *= scale;
+//	}
 	
 	public void translate(float x, float y) {
-		p.translate((x * meterScale) - zeroX,(y * meterScale) - zeroY);
+//		p.translate((x * meterScale) - zeroX,(y * meterScale) - zeroY);
 	}
 	
 	public void scale(float x, float y) {
-		p.scale(scale * x,scale * y); //wat
+//		p.scale(scale * x,scale * y); //wat
 	}
 	
 	//Note: does not work
 	public void rotate(float theta) {
-		p.rotate(theta);
+//		p.rotate(theta);
 	}
 		
 	//Moves pos to center
 	public void set(Vec2 pos, float ang) {
-		zeroX = 1f * ((pos.x * meterScale) - (p.width / 2f)) + 0f * zeroX;
-		zeroY = 1f * ((pos.y * meterScale) - (p.height / 2f)) + 0f * zeroY;
+//		zeroX = 1f * ((pos.x * meterScale) - (p.width / 2f)) + 0f * zeroX;
+//		zeroY = 1f * ((pos.y * meterScale) - (p.height / 2f)) + 0f * zeroY;
 		camAngle = ang;
 	}
 	

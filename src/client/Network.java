@@ -27,8 +27,8 @@ public class Network {
 			connection = new Connection(ip, Integer.parseInt(port), new StatusListener() {
 				public void setStatus(boolean connected) {
 					//TODO: move all the game starting stuff here
-					c.gooey.getController("connect")
-					.setCaptionLabel( connected ? "disconnect" : "connect");
+//					c.gooey.getController("connect")
+//					.setCaptionLabel( connected ? "disconnect" : "connect");
 				}
 			});
 			connection.start();
