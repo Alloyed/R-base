@@ -1,5 +1,13 @@
 package client.ui;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+
 import client.*;
 import client.sprites.*;
 
@@ -8,16 +16,14 @@ import physics.Team;
 /* I've tried to move all those callback methods into here. 
  * It didn't work. 
  */
-public class Menu extends UI {
-	
-	//PImage logo;
-	public UI lastMode;
+public class Menu extends BasicGameState {
+	Image logo;
 	String team = "";
-	int bg;
+	Color bg;
 	
 	/*Gooey methods*/
 	public void connect() {
-		r.net.connect(r.settings.IP, r.settings.PORT);
+//		r.net.connect(r.settings.IP, r.settings.PORT);
 	}
 	/*
 	class listener implements ControlListener {
@@ -42,11 +48,10 @@ public class Menu extends UI {
 	}
 	*/
 	public Menu(Client r) {
-		super(r);
-		group = "menu";
+//		group = "menu";
 		//logo = (PImage) ((ImageSprite)r.skin.get("logo")).sprite;
 		//ControlP5 gooey = r.gooey;
-		Settings settings = r.settings;
+		//Settings settings = r.settings;
 		
 		//ControlGroup m = gooey.addGroup(group, 0, 0);
 		//gooey.begin(m);
@@ -84,52 +89,50 @@ public class Menu extends UI {
 	*/
 	}
 	
-	@Override
-	public void draw() {
-//		p.background(bg);
-//		p.imageMode(PConstants.CENTER);
-//		p.image(logo, p.width / 2f, p.height / 2f);
-	}
+//	@Override
+//	public void draw() {
 
-	@Override
-	public void keyPressed() {
+//	}
+
+//	@Override
+//	public void keyPressed() {
 //		if (p.key == PConstants.ESC)
-			lastMode.show();
-	}
+//			lastMode.show();
+//	}
 
-	@Override
-	public void keyReleased() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void show() {
-		lastMode = r.currentMode;
-		super.show();
-	//	p.cursor();
-	}
 	
 	public void setTeam(Team t) {
-		team = Team.get(t);
+//		team = Team.get(t);
 //		ControlP5 gooey = r.gooey;
-		Skin skin = r.skin;
-		bg = skin.getColor("bg"+team);
+//		Skin skin = r.skin;
+		//bg = skin.getColor("bg"+team);
 		//gooey.setColorBackground(skin.getColor("menu" + team));
 		//gooey.setColorForeground(skin.getColor("menu" + team + "-over"));
 		//gooey.setColorActive(    skin.getColor("menu" + team + "-pressed"));
+	}
+	
+	@Override
+	public void init(GameContainer gc, StateBasedGame sg)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
+			throws SlickException {
+		g.setBackground(bg);
+		g.drawImage(logo, gc.getWidth() / 2f, gc.getHeight() / 2f);		
+	}
+	@Override
+	public void update(GameContainer gc, StateBasedGame sg, int dt)
+			throws SlickException {
+
+		
+	}
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

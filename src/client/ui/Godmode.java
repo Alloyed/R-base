@@ -1,6 +1,11 @@
 package client.ui;
 
 import org.jbox2d.common.Vec2;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 import physics.Team;
 import physics.actors.Actor;
@@ -8,26 +13,17 @@ import physics.actors.Ghost;
 import client.Client;
 
 /*One Giant TODO*/
-public class Godmode extends UI {
+public class Godmode  extends BasicGameState {
 	public Ghost cursor;
+	public Loop r;
 	
-	public Godmode(Client r) {
-		super(r);
-		group = "godmode";
+	public Godmode(Loop l) {
+		super();
+		r = l;
 		//r.gooey.addGroup(group, 0, 0);
 		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), new Vec2(1,1), new Vec2(1,1));
 	}
 
-	@Override
-	public void draw() {
-//		p.background(r.skin.getColor("bg"));
-		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
-		for (Actor a:r.stage.activeActors) {
-			r.draw(a);
-		}
-	}
-
-	@Override
 	public void keyPressed() {
 	/*	if (p.key == 'w')
 			cursor.state.upPressed = true;
@@ -41,7 +37,6 @@ public class Godmode extends UI {
 			r.menu.show();
 	*/}
 
-	@Override
 	public void keyReleased() {
 	/*	if (p.key == 'w')
 			cursor.state.upPressed = false;
@@ -53,7 +48,6 @@ public class Godmode extends UI {
 		*/	cursor.state.rightPressed = false;
 	}
 
-	@Override
 	public void mousePressed() {
 		//Vec2 pos = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale, 
 		//		(p.mouseY+r.cam.zeroY)/r.cam.meterScale);
@@ -61,16 +55,40 @@ public class Godmode extends UI {
 		
 	}
 
-	@Override
 	public void mouseReleased() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void show() {
+	public void init(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
 		// TODO Auto-generated method stub
-		super.show();
-	//	p.cursor();
+		
 	}
+
+	@Override
+	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
+			throws SlickException {
+		g.setBackground(r.skin.getColor("bg"));
+		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
+		for (Actor a:r.stage.activeActors) {
+			r.draw(g, a);
+		}
+		
+	}
+
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

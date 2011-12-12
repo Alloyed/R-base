@@ -6,33 +6,38 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.util.ResourceLoader;
 
 import physics.Console;
 import physics.actors.Actor;
 //import processing.core.PApplet;
 
 import client.Client;
+import client.ui.Loop;
 
 
 public class Skin extends Thread {
 	Map<String, Sprite>  sprites;
-	HashMap<String, Integer> colors;
-	Client c;
-//	PApplet p;
+	HashMap<String, Color> colors;
+	Loop c;
 	
-	public Skin(Client c) {
+	public Skin(Loop c) {
 		//Sprites
 		this.c = c;
-/*		this.p = c.p;
-//		String path = c.p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
-		
+		String path = "data/images/"+c.settings.SKIN_FOLDER+"/";
 		//colors
-		colors = new HashMap<String, Integer>();
-		InputStream colorFile = c.p.createInput(path+"colors.txt");
-		for (String s : PApplet.loadStrings(colorFile)) {
+		colors = new HashMap<String, Color>();
+		InputStream colorFile = ResourceLoader
+				.getResourceAsStream("data/images/"+c.settings.SKIN_FOLDER+"/colors.txt");
+		Scanner sc = new Scanner(colorFile);
+		while (sc.hasNext()) {
+				String s = sc.nextLine();
 				String[] split = s.split(":");
 				if (s.length() > 0 && s.charAt(0) != '#' && split.length == 2) {
-					Integer i = 0;
+					Color i = null;
 					if (split[1].charAt(0) == '#') { //Hex
 						String hex = split[1].substring(1);
 						int a = 255;
@@ -41,11 +46,12 @@ public class Skin extends Thread {
 						int r = Integer.parseInt(hex.substring(0, 2), 16);
 						int g = Integer.parseInt(hex.substring(2, 4), 16);
 						int b = Integer.parseInt(hex.substring(4, 6), 16);
-						i = p.color(a << 24 | r << 16 | g << 8 | b);				
+						i = new Color(r, g, b, a);			
 					} else if (split[1].charAt(0) == '$') { //var
 						i = getColor(split[1].substring(1));
 					} else { //int
-						i = p.color(Integer.parseInt(split[1]));
+						int j = Integer.parseInt(split[1]);
+						i = new Color(j, j, j);
 					}
 					colors.put(split[0], i);
 				}
@@ -62,14 +68,27 @@ public class Skin extends Thread {
 		sprites.put("floor", new RectSprite(c,getColor("bg")));
 		sprites.put("floor-blue", new RectSprite(c,getColor("bg-blue")));
 		sprites.put("floor-orange", new RectSprite(c,getColor("bg-orange")));
-	*/
+		//String path = "data/images/"+c.settings.SKIN_FOLDER+"/";
+		File dir = new File(path);
+		//c.font = p.createFont("uni05_53.ttf",8,false);
+		//p.textFont(c.font);
+		if(dir.exists())
+			for (File f : dir.listFiles())
+				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg")) {
+					String s = f.getName().split("\\.")[0];
+					sprites.remove(s);
+					sprites.put(s, new ImageSprite(c, f.toString()));
+				}
+		Console.dbg.println("Skins loaded.");
+		 
 	}
 	
 	public void run() {
-		/*String path = p.sketchPath + "/data/images/"+c.settings.SKIN_FOLDER+"/";
+		/*
+		String path = "data/images/"+c.settings.SKIN_FOLDER+"/";
 		File dir = new File(path);
-		c.font = p.createFont("uni05_53.ttf",8,false);
-		p.textFont(c.font);
+		//c.font = p.createFont("uni05_53.ttf",8,false);
+		//p.textFont(c.font);
 		if(dir.exists())
 			for (File f : dir.listFiles())
 				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg")) {
@@ -105,12 +124,11 @@ public class Skin extends Thread {
 		return get(a.getImage());
 	}
 	
-	public int getColor(String s) {
-		Integer i = colors.get(s);
+	public Color getColor(String s) {
+		Color i = colors.get(s);
 		if ( i == null ) {
 			Console.dbg.println("WARNING: color " + s + " doesn't exist. Using black instead.");
-		//	i = p.color(0);
-			colors.put(s, i);
+			colors.put(s, Color.black);
 		}
 		return i;
 	}

@@ -3,6 +3,8 @@ package client;
 import java.net.DatagramPacket;
 import java.util.LinkedList;
 
+import client.ui.Loop;
+
 import physics.Stage;
 import physics.actors.Actor;
 
@@ -13,11 +15,11 @@ import newNet.*;
  * Use this to interact between the networking thread and the main one.
  */
 public class Network {
-	Client c;
+	Loop c;
 	Connection connection;
 	LinkedList<RPC> calls;
 	
-	public Network(Client c) {
+	public Network(Loop c) {
 		this.c = c;
 		calls = new LinkedList<RPC>();
 	}

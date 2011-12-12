@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
 
+import client.ui.Loop;
+
 import physics.actors.Actor;
 import physics.Console;
 //import processing.core.PApplet;
@@ -20,10 +22,10 @@ public class Chat extends OutputStream {
 	boolean isChatting;
 	String out, in;
 	Random r;
-	Client c;
+	Loop c;
 //	PApplet p;
 	
-	public Chat(Client c, int size) {
+	public Chat(Loop c, int size) {
 		this.c = c;
 //		p = c.p;
 //		labels = new Textlabel[size];

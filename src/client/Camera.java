@@ -1,6 +1,10 @@
 package client;
 
 import org.jbox2d.common.Vec2;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+
+import physics.Console;
 
 //import processing.core.PApplet;
 
@@ -10,31 +14,35 @@ public class Camera {
 	public float zeroX;
 	public float zeroY;
 	float camAngle;
-//	PApplet p;
-		 
-//	public Camera(PApplet p) {
-//		this.p = p;
-//		scale = p.width < p.height ? p.width / 1680f : p.height / 1050f;
-//		meterScale *= scale;
-//	}
-	
-	public void translate(float x, float y) {
-//		p.translate((x * meterScale) - zeroX,(y * meterScale) - zeroY);
+	GameContainer p;
+	float x, y;
+	public Camera(GameContainer p) {
+		this.p = p;
+		scale = p.getWidth() < p.getHeight() ? p.getWidth() / 1680f : p.getHeight() / 1050f;
+		//meterScale *= scale;
+		Console.dbg.println(p.getHeight() +"  "+meterScale);
 	}
 	
-	public void scale(float x, float y) {
-//		p.scale(scale * x,scale * y); //wat
+	public void translate(Graphics g, float x, float y) {
+		this.x = (x * meterScale) - zeroX;
+		this.y = (y * meterScale) - zeroY;
+		g.translate(this.x,this.y);
+//		g.translate(400, 300);
+	}
+	
+	public void scale(Graphics g, float x, float y) {
+		g.scale(scale * x,scale * y); //wat
 	}
 	
 	//Note: does not work
-	public void rotate(float theta) {
-//		p.rotate(theta);
+	public void rotate(Graphics g, float theta) {
+		g.rotate(this.x, this.y, theta);
 	}
 		
 	//Moves pos to center
 	public void set(Vec2 pos, float ang) {
-//		zeroX = 1f * ((pos.x * meterScale) - (p.width / 2f)) + 0f * zeroX;
-//		zeroY = 1f * ((pos.y * meterScale) - (p.height / 2f)) + 0f * zeroY;
+		zeroX = 1f * ((pos.x * meterScale) - (p.getWidth() / 2f)) + 0f * zeroX;
+		zeroY = 1f * ((pos.y * meterScale) - (p.getHeight() / 2f)) + 0f * zeroY;
 		camAngle = ang;
 	}
 	

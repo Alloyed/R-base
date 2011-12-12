@@ -1,6 +1,13 @@
 package client.ui;
 
 import org.jbox2d.common.Vec2;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 
 import client.Client;
@@ -10,9 +17,11 @@ import physics.Console;
 import physics.Team;
 import physics.actors.*;
 
-public class Botmode extends UI{
+public class Botmode  extends BasicGameState {
 	public Robot pc;
+	Loop r;
 //	public PGraphics inv, health;
+	private Vec2 lerped;
 	
 	public void inv() {
 		//TODO: make boolet from scrap metal
@@ -24,10 +33,10 @@ public class Botmode extends UI{
 		Console.dbg.println("HEALTH AT "+ pc.wear + "/" + pc.maxWear);
 	}
 	
-	public Botmode(Client r) {
-		super(r);
-		
-		group = "botmode";
+	public Botmode(Loop l) {
+		super();
+		r = l;
+		start();
 //		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
 		//this sets off a segfault, it's harmless though
 //		inv = p.createGraphics(100, 30, PConstants.JAVA2D); 
@@ -45,36 +54,96 @@ public class Botmode extends UI{
 		pc = (Robot) r.stage.addActor(Robot.class, 0, 
 				r.settings.team == 0 ? Team.ORANGE : Team.BLUE, 
 				new Vec2(1, 1), new Vec2(1,1));
+		lerped = new Vec2(0,0);
+	}
+	
+	public void draw() {
+		/*
+		
+		*/
+	}
+	
+	public void keyPressed() {
+		/*
+		if (p.key == 'w')
+			pc.state.upPressed = true;
+		else if (p.key == 'a')
+			pc.state.leftPressed = true;
+		else if (p.key == 's')
+			pc.state.downPressed = true;
+		else if (p.key == 'd')
+			pc.state.rightPressed = true;
+		else if (p.key == PConstants.ESC)
+			r.menu.show();
+		else if (p.key == 'q')
+			inv();
+			*/
+	}
+	
+	public void keyReleased() {
+		/*
+		if (p.key == 'e') 
+			pc.toggleHold();
+		if (p.key == 'w')
+			pc.state.upPressed = false;
+		else if (p.key == 'a')
+			pc.state.leftPressed = false;
+		else if (p.key == 's')
+			pc.state.downPressed = false;
+		else if (p.key == 'd')
+			pc.state.rightPressed = false;
+			*/
+	}
+	
+	public void mousePressed() {
+		/*
+		 * TODO: keep from firing when moused over the UI.
+		 * There is a function to do this in the ControlP5 docs.
+		 * It does not work with groups or tabs.
+		 * SDFSDFSDFASDFAJFGGASDJSDF
+		 */
+		pc.fire();
+	}
+	
+	public void mouseReleased() {
+		
+	}
+	
+	public void show() {
+		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
+		pc.label = r.settings.USERNAME;
+		//p.noCursor();
 	}
 	
 	@Override
-	public void draw() {
+	public void init(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
+	}
+
+	@Override
+	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
+			throws SlickException {
 		/*
 		if (pc.isDead()) { 
 			r.ghostmode.start(pc.oldPos);
 			r.ghostmode.show();
 		}
-		Vec2 oldAim = pc.state.aim;
-		pc.state.aim = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale,
-				(p.mouseY+r.cam.zeroY)/r.cam.meterScale);
-		Vec2 lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
-		p.background(r.menu.bg);
+		*/
+
+		g.setBackground(r.skin.getColor("bg"));
 		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		for (Actor a:r.stage.activeActors) {
-			r.draw(a);
+			r.draw(g, a);
 		}
 		
-		//crosshairs
-		p.pushMatrix();
-			p.noSmooth();
-			p.noFill();
-			p.stroke(255);
-			p.strokeWeight(2);
-			r.cam.translate(lerped.x,lerped.y);
-			p.rect(-2, -2, 2, 2);
-			p.smooth();
-		p.popMatrix();
 		
+		//crosshairs
+		g.pushTransform();
+			g.setColor(Color.white);
+			r.cam.translate(g, lerped.x,lerped.y);
+			g.drawRect(-2, -2, 4, 4);
+		g.popTransform();
+		/*
 		//Button.
 		inv.beginDraw();
 			
@@ -100,66 +169,31 @@ public class Botmode extends UI{
 		health.endDraw();
 		*/
 	}
-	
+
 	@Override
-	public void keyPressed() {
-		/*
-		if (p.key == 'w')
-			pc.state.upPressed = true;
-		else if (p.key == 'a')
-			pc.state.leftPressed = true;
-		else if (p.key == 's')
-			pc.state.downPressed = true;
-		else if (p.key == 'd')
-			pc.state.rightPressed = true;
-		else if (p.key == PConstants.ESC)
-			r.menu.show();
-		else if (p.key == 'q')
-			inv();
-			*/
+	public void update(GameContainer gc, StateBasedGame sg, int dt)
+			throws SlickException {
+		r.update(dt);
+		Input input = gc.getInput();
+		int mouseX = input.getAbsoluteMouseX();
+		int mouseY = input.getAbsoluteMouseY();
+		Vec2 oldAim = pc.state.aim;
+		pc.state.aim = new Vec2((mouseX+r.cam.zeroX)/r.cam.meterScale,
+				(mouseY+r.cam.zeroY)/r.cam.meterScale);
+		lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
+		keys(input);
 	}
 	
-	@Override
-	public void keyReleased() {
-		/*
-		if (p.key == 'e') 
-			pc.toggleHold();
-		if (p.key == 'w')
-			pc.state.upPressed = false;
-		else if (p.key == 'a')
-			pc.state.leftPressed = false;
-		else if (p.key == 's')
-			pc.state.downPressed = false;
-		else if (p.key == 'd')
-			pc.state.rightPressed = false;
-			*/
+	public void keys(Input in) {
+		pc.state.upPressed = in.isKeyDown(Input.KEY_W);
+		pc.state.leftPressed = in.isKeyDown(Input.KEY_A);
+		pc.state.rightPressed = in.isKeyDown(Input.KEY_D);
+		pc.state.downPressed = in.isKeyDown(Input.KEY_S);
 	}
-	
+
 	@Override
-	public void mousePressed() {
-		/*
-		 * TODO: keep from firing when moused over the UI.
-		 * There is a function to do this in the ControlP5 docs.
-		 * It does not work with groups or tabs.
-		 * SDFSDFSDFASDFAJFGGASDJSDF
-		 */
-		pc.fire();
-	}
-	
-	@Override
-	public void mouseReleased() {
-		
-	}
-	
-	@Override
-	public void show() {
-		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
-		pc.label = r.settings.USERNAME;
-		super.show();
-		//p.noCursor();
-	}
-	
-	public void hide() {
-		super.hide();
+	public int getID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

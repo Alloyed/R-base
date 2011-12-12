@@ -1,10 +1,15 @@
 package client;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
+
+import org.newdawn.slick.util.ResourceLoader;
 
 import physics.Console;
 
@@ -38,35 +43,36 @@ public class Settings {
 	/* Note: No absolute filenames. */
 	public Settings() {
 		XMLElement x = new XMLElement();
-//		try {
-//			Reader f = p.createReader("data/ClientSettings.xml");
-//			x.parseFromReader(f);
-//			@SuppressWarnings("unchecked")
-//			Enumeration<XMLElement> e = x.enumerateChildren();
-//			while (e.hasMoreElements()) {
-//				XMLElement x2 = e.nextElement();
-//				String name = x2.getName();
-//				String type = x2.getStringAttribute("type");
-//				String tmp = x2.getContent();
-//				Object value;
-//				if (type.equals("class java.lang.Boolean"))
-//					value = Boolean.parseBoolean(tmp);
-//				else if (type.equals("class java.lang.Integer"))
-//					value = Integer.parseInt(tmp);
-//				else if (type.equals("class java.lang.Float"))
-//					value = Float.parseFloat(tmp);
-//				else if (type.equals("class java.lang.Double"))
-//					value = Double.parseDouble(tmp);
-//				else
-//					value = tmp;
-//				getClass().getField(name).set(this, value);
-//			}
-//			f.close();
-//			Console.out.println("Settings read.");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			Console.out.println("Settings could not be read, using defaults.");
-//		}
+		try {
+			Reader f = new InputStreamReader(
+					ResourceLoader.getResourceAsStream("data/ClientSettings.xml"));
+			x.parseFromReader(f);
+			@SuppressWarnings("unchecked")
+			Enumeration<XMLElement> e = x.enumerateChildren();
+			while (e.hasMoreElements()) {
+				XMLElement x2 = e.nextElement();
+				String name = x2.getName();
+				String type = x2.getStringAttribute("type");
+				String tmp = x2.getContent();
+				Object value;
+				if (type.equals("class java.lang.Boolean"))
+					value = Boolean.parseBoolean(tmp);
+				else if (type.equals("class java.lang.Integer"))
+					value = Integer.parseInt(tmp);
+				else if (type.equals("class java.lang.Float"))
+					value = Float.parseFloat(tmp);
+				else if (type.equals("class java.lang.Double"))
+					value = Double.parseDouble(tmp);
+				else
+					value = tmp;
+				getClass().getField(name).set(this, value);
+			}
+			f.close();
+			Console.out.println("Settings read.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			Console.out.println("Settings could not be read, using defaults.");
+		}
 	}
 
 	public void save() {
@@ -86,14 +92,14 @@ public class Settings {
 			}
 		}
 
-//		try {
-//			Writer w = p.createWriter("data/ClientSettings.xml");
-//			top.write(w);
-//			w.close();
-//			Console.out.println("Settings Saved");
-//		} catch (IOException e1) {
-//			e1.printStackTrace();
-//			Console.out.println("Settings not saved.");
-//		}
+		try {
+			Writer w = new FileWriter(new File(ResourceLoader.getResource("data/ClientSettings.xml").toURI()));
+			top.write(w);
+			w.close();
+			Console.out.println("Settings saved.");
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			Console.out.println("Settings not saved.");
+		}
 	}
 }

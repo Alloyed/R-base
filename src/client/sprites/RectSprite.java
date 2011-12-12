@@ -1,69 +1,64 @@
 package client.sprites;
 
 import org.jbox2d.common.Vec2;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Shape;
 
 import client.Client;
+import client.ui.Loop;
 
 import physics.actors.Actor;
 
 public class RectSprite implements Sprite {
-	Client c;
-//	PApplet p;
-	int color;
+	Loop c;
+	Color color;
 	final float width = 1, height = 1, length;
 
-	public RectSprite(Client c, int color) {
-		this.c = c;
+	public RectSprite(Loop l, Color color) {
+		this.c = l;
 //		p = c.p;
 		this.color = color;
 		length = (float) Math.sqrt(2);
 	}
 
-//	public void draw(PGraphics pg, float x, float y, float max) {
-//		pg.pushMatrix();
-//		pg.scale(.3f); // TODO: unhardcode this
+	public void draw(Graphics pg, float x, float y, float max) {
+		pg.pushTransform();
+		pg.scale(.3f, .3f); // TODO: unhardcode this
 //		pg.noStroke();
 //		pg.fill(color);
-//		pg.rect(0, 0, 64, 64);
-//		pg.popMatrix();
-//	}
+		pg.setColor(color);
+		pg.fillRect(x, y, 64, 64);
+		pg.popTransform();
+	}
 
-	@SuppressWarnings("static-access")
-	public void draw(Actor a) {
+	public void draw(Graphics g, Actor a) {
+		
 		// This does linear interpolation: new*alpha + old*( 1.0 - alpha );
 		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha)
 				.add(a.oldPos.mul(1 - Actor.alpha));
 		float angle = a.b.getAngle() * Actor.alpha + a.oldAng
 				* (1 - Actor.alpha);
-/*		p.pushStyle();
-		p.pushMatrix();
+		g.pushTransform();
 		{
-			p.noStroke();
-			p.fill(color);
-			p.imageMode(p.CENTER);
-			p.shapeMode(p.CENTER);
-			p.rectMode(p.CENTER);
-			p.ellipseMode(p.CENTER);
-
-			c.cam.translate(pos.x, pos.y);
-			c.cam.scale(a.size.x * width, a.size.y * height);
-			c.cam.rotate(angle);
-
-			p.rect(0, 0, 64, 64);
-			if (a.isHeld) {
-				p.fill(150, 120, 70, 100);
-				p.ellipse(0, 0, length, length);
-			}
+			c.cam.translate(g, pos.x, pos.y);
+			c.cam.scale(g, a.size.x * width, a.size.y * height);
+			c.cam.rotate(g, angle);
+			g.setColor(color);
+			g.fillRect(-32, -32, 64, 64);
+//			if (a.isHeld) {
+//				p.fill(150, 120, 70, 100);
+//				p.ellipse(0, 0, length, length);
+//			}
 		}
-		p.popStyle();
-		p.popMatrix();
+		g.popTransform();
 
-		p.fill(255);
-		if (a.isImportant) {
-			Vec2 spot = c.cam.worldToScreen(pos.add(new Vec2(-a.size.x / 2,
-					a.size.y)));
-			p.text(a.label, spot.x, spot.y);
-		}
-	*/}
+//		p.fill(255);
+//		if (a.isImportant) {
+//			Vec2 spot = c.cam.worldToScreen(pos.add(new Vec2(-a.size.x / 2,
+//					a.size.y)));
+//			p.text(a.label, spot.x, spot.y);
+//		}
+	}
 	
 }
