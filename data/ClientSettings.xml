@@ -3,8 +3,8 @@
 <WINDOW_HEIGHT TYPE="class java.lang.String">600</WINDOW_HEIGHT>
 <IP TYPE="class java.lang.String">localhost</IP>
 <PORT TYPE="class java.lang.String">9001</PORT>
-<USERNAME TYPE="class java.lang.String">derp</USERNAME>
+<USERNAME TYPE="class java.lang.String">tttttsdsdsd</USERNAME>
 <ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
 <SKIN_FOLDER TYPE="class java.lang.String">skin</SKIN_FOLDER>
-<team TYPE="class java.lang.Integer">1</team>
+<team TYPE="class java.lang.Integer">0</team>
 </R-base>

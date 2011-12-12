@@ -22,17 +22,18 @@ quit:#a00000
 quit-over:#a00000
 quit-pressed:#a00000
 
-bg:#111111
+bg:#313131
+wall:#555555
 
 team-orange:0
-bg-orange:0
-menu-orange:#003652
-menu-orange-over:#00698c
-menu-orange-pressed:#08a2cf
+bg-orange:#75523b
+menu-orange:#6d3d03
+menu-orange-over:#e68917
+menu-orange-pressed:#f9ba6d
 
 team-blue:0
-bg-blue:#002230
-menu-blue:#003652
-menu-blue-over:#00698c
-menu-blue-pressed:#08a2cf
+bg-blue:#405257
+menu-blue:#032d45
+menu-blue-over:#166492
+menu-blue-pressed:#6bb7e4
 

@@ -90,7 +90,7 @@ public class Stage {
 		//Two different loops because we have no layers
 		for (int i = 0; i < 4; ++i) {
 			for (int j = 0; j < 4; j++) {
-				genFloor(i, j);
+				genFloor(rand, i, j);
 			}
 		}
 		
@@ -102,10 +102,12 @@ public class Stage {
 		
 	}
 	
-	public void genFloor(int x, int y) {
+	public void genFloor(Random rand, int x, int y) {
 		float size = 20f;
 		float x0 = x*size, y0 = y*size;
-		addActor(Floor.class, new Vec2(size,size), new Vec2(x0 + (size/2), y0 + (size/2)));
+		addActor(Floor.class, 
+				new Vec2(size,size), new Vec2(x0 + (size/2), y0 + (size/2)))
+					.setTeam(Team.get(rand.nextInt(3)-1));
 	}
 	
 	public void genRoom(Random rand, int x, int y, int maxx, int maxy) {
@@ -115,28 +117,28 @@ public class Stage {
 		float x0 = x*size, y0 = y*size;
 		//Right wall
 		if (x == 0) {
-			addActor(Prop.class, new Vec2(w,size), new Vec2(x0-hw, y0+(size/2)));
+			addActor(Prop.class, new Vec2(w,size), new Vec2(x0, y0+(size/2)));
 		}
 		
 		//Top wall
 		if (y == 0) {
-			addActor(Prop.class, new Vec2(size,w), new Vec2(x0+(size/2), y0-hw));
+			addActor(Prop.class, new Vec2(size,w), new Vec2(x0+(size/2), y0));
 		}
 
 		//Left wall
 		if (x == maxx) {
-			addActor(Prop.class, new Vec2(w,size), new Vec2(x0+size+hw, y0+(size/2)));
+			addActor(Prop.class, new Vec2(w,size), new Vec2(x0+size, y0+(size/2)));
 		} else {
-			addActor(Prop.class, new Vec2(w, size/3), new Vec2(x0+size+hw, y0+(size/6)));
-			addActor(Prop.class, new Vec2(w, size/3), new Vec2(x0+size+hw, y0+size-(size/6)));
+			addActor(Prop.class, new Vec2(w, size/3), new Vec2(x0+size, y0+(size/6)));
+			addActor(Prop.class, new Vec2(w, size/3), new Vec2(x0+size, y0+size-(size/6)));
 		}
 		
 		//Bottom wall
 		if (y == maxy) {
-			addActor(Prop.class, new Vec2(size, w), new Vec2(x0+(size/2),y0+size+hw));
+			addActor(Prop.class, new Vec2(size, w), new Vec2(x0+(size/2),y0+size));
 		} else {
-			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+(size/6), y0+size+hw));
-			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+size-(size/6), y0+size+hw));
+			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+(size/6), y0+size));
+			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+size-(size/6), y0+size));
 		}
 		//Random boxes. Fun!
 		for (int i=0;i<4;++i)

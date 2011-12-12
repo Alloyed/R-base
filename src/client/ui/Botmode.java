@@ -44,7 +44,9 @@ public class Botmode extends UI{
 	}
 	
 	public void start() {
-		pc = (Robot) r.stage.addActor(Robot.class, 0, Team.get(r.settings.team), new Vec2(1, 1), new Vec2(1,1));
+		pc = (Robot) r.stage.addActor(Robot.class, 0, 
+				r.settings.team == 0 ? Team.ORANGE : Team.BLUE, 
+				new Vec2(1, 1), new Vec2(1,1));
 	}
 	
 	@Override

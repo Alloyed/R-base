@@ -106,7 +106,6 @@ public class Client implements PConstants {
 		cam = new Camera(p);
 		skin = new Skin(this);
 		
-		Console.out.println("DONE");
 		if (menu == null) {
 			initPhysics();
 			
@@ -130,6 +129,7 @@ public class Client implements PConstants {
 		skin.start();
 		botmode.start();
 		currentMode = botmode;
+		menu.setTeam(settings.team == 0 ? Team.ORANGE : Team.BLUE);
 		menu.show();
 	}
 
@@ -186,7 +186,9 @@ public class Client implements PConstants {
 	}
 
 	public void keyPressed() {
-		chat.keyPressed();
+		if (currentMode != menu || chat.isChatting) {
+			chat.keyPressed();
+		}
 		if (!chat.isChatting) {
 			currentMode.keyPressed();
 		}

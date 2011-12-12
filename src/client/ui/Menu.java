@@ -83,7 +83,6 @@ public class Menu extends UI {
 			.setValue(settings.WINDOW_HEIGHT);
 		((Textfield)gooey.getController("/settings/SKIN_FOLDER"))
 			.setValue(settings.SKIN_FOLDER);
-		setTeam(Team.get(settings.team));
 	}
 	
 	@Override
