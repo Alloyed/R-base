@@ -24,31 +24,35 @@ public class Stage {
 	class HEYLISTEN implements ContactListener {
 
 		@Override
-		public void beginContact(Contact arg0) {
+		public void beginContact(Contact c) {
+			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
+			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
+			A.beginContact(c, B);
+			B.beginContact(c, A);
 		}
 
 		@Override
-		public void endContact(Contact arg0) {
+		public void endContact(Contact c) {
+			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
+			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
+			A.endContact(c, B);
+			B.endContact(c, A);
 		}
 
 		@Override
 		public void postSolve(Contact c, ContactImpulse imp) {
-			float force = 0;
-			for (float f : imp.normalImpulses)
-				force += f;
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
-			if (A instanceof Robot && B.size.length() < 1 && B.b.getLinearVelocity().length() < 4) {
-				((Robot)A).take(B);
-			} else { 
-				//Note: These equations are bullshit that happens to be fun
-				A.hurt(force * B.b.getLinearVelocity().length() * B.b.getMass());
-				B.hurt(force * A.b.getLinearVelocity().length() * A.b.getMass());
-			}
+			A.postSolve(c, imp, B);
+			B.postSolve(c, imp, A);
 		}
 
 		@Override
-		public void preSolve(Contact arg0, Manifold arg1) {
+		public void preSolve(Contact c, Manifold m) {
+			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
+			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
+			A.preSolve(c, m, B);
+			B.preSolve(c, m, A);
 		}
 	}
 	
@@ -88,15 +92,15 @@ public class Stage {
 	public void startGame(Long seed) {
 		Random rand = new Random(seed); //We need the seed because DETERMINISM!
 		//Two different loops because we have no layers
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 4; j++) {
+		for (int i = 0; i < 5; ++i) {
+			for (int j = 0; j < 5; j++) {
 				genFloor(rand, i, j);
 			}
 		}
 		
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 4; j++) {
-				genRoom(rand, i, j, 3, 3);
+		for (int i = 0; i < 5; ++i) {
+			for (int j = 0; j < 5; j++) {
+				genRoom(rand, i, j, 4, 4);
 			}
 		}
 		
@@ -141,10 +145,10 @@ public class Stage {
 			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+size-(size/6), y0+size));
 		}
 		//Random boxes. Fun!
-		for (int i=0;i<4;++i)
+		for (int i=0;i<10;++i)
 			addActor(Actor.class, new Vec2(1, 1), 
-					new Vec2(x0+(rand.nextFloat()*size),
-							y0+(rand.nextFloat()*size)));
+					new Vec2(x0+hw+(rand.nextFloat()*(size-w)),
+							y0+hw+(rand.nextFloat()*(size-w))));
 	}
 	
 	public Actor addActor(Class<?> type, int id, Team t, Vec2 size, Vec2 pos) {
@@ -223,3 +227,5 @@ public class Stage {
 		Console.chat(origin, time, message);
 	}
 }
+
+
