@@ -4,9 +4,11 @@ import java.util.LinkedList;
 
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.contacts.Contact;
 
 import physics.Console;
 import physics.Stage;
@@ -164,6 +166,11 @@ public class Robot extends Actor {
 		treads.b.applyForce(move.mul(speed), b.getWorldCenter());
 		if (held != null)
 			held.b.setTransform(getPointAhead(held.size.length()), held.b.getAngle());
+	}
+	
+	public void preSolve(Contact c, Manifold m, Actor other) {
+		if (other.size.length() < 1 && other.b.getLinearVelocity().length() < 4)
+			take(other);
 	}
 	
 	public void destroy() {

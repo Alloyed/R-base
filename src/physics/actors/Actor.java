@@ -1,11 +1,14 @@
 package physics.actors;
 
+import org.jbox2d.callbacks.ContactImpulse;
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.dynamics.contacts.Contact;
 
 import physics.Stage;
 import physics.Team;
@@ -115,6 +118,28 @@ public class Actor {
 	//Change this to give them their own free will
 	public void force() {
 		
+	}
+	
+	public void beginContact(Contact arg0, Actor other) {
+	}
+
+	public void endContact(Contact arg0, Actor other) {
+	}
+	
+	/*What happens if this collides with another box? */
+	public void preSolve(Contact arg0, Manifold arg1, Actor other) {
+		
+	}
+	
+	/*Damage calculation*/
+	public void postSolve(Contact c, ContactImpulse imp, Actor other) {
+		float force = 0;
+		for (float f : imp.normalImpulses)
+			force += f;
+		force /= 50;
+		force *= force;
+		force *= 50;
+		hurt(force);
 	}
 	
 	public void hurt(float force) {
