@@ -24,36 +24,35 @@ public class Stage {
 	class HEYLISTEN implements ContactListener {
 
 		@Override
-		public void beginContact(Contact arg0) {
+		public void beginContact(Contact c) {
+			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
+			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
+			A.beginContact(c, B);
+			B.beginContact(c, A);
 		}
 
 		@Override
-		public void endContact(Contact arg0) {
+		public void endContact(Contact c) {
+			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
+			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
+			A.endContact(c, B);
+			B.endContact(c, A);
 		}
 
 		@Override
 		public void postSolve(Contact c, ContactImpulse imp) {
-			float force = 0;
-			for (float f : imp.normalImpulses)
-				force += f;
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
-			//I have no idea what's going on here
-			force /= 50;
-			force *= force;
-			force *= 50;
-			if (A instanceof Robot && B.size.length() < 1 && B.b.getLinearVelocity().length() < 4) {
-				((Robot)A).take(B);
-			} else if (A instanceof Robot && B.size.length() < 1 && B.b.getLinearVelocity().length() < 4) {
-				((Robot)B).take(A);
-			} else {
-				A.hurt(force);
-				B.hurt(force);
-			}
+			A.postSolve(c, imp, B);
+			B.postSolve(c, imp, A);
 		}
 
 		@Override
-		public void preSolve(Contact arg0, Manifold arg1) {
+		public void preSolve(Contact c, Manifold m) {
+			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
+			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
+			A.preSolve(c, m, B);
+			B.preSolve(c, m, A);
 		}
 	}
 	
@@ -146,10 +145,10 @@ public class Stage {
 			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+size-(size/6), y0+size));
 		}
 		//Random boxes. Fun!
-		for (int i=0;i<250;++i)
+		for (int i=0;i<10;++i)
 			addActor(Actor.class, new Vec2(1, 1), 
-					new Vec2(x0+(rand.nextFloat()*size),
-							y0+(rand.nextFloat()*size)));
+					new Vec2(x0+hw+(rand.nextFloat()*(size-w)),
+							y0+hw+(rand.nextFloat()*(size-w))));
 	}
 	
 	public Actor addActor(Class<?> type, int id, Team t, Vec2 size, Vec2 pos) {
@@ -228,3 +227,5 @@ public class Stage {
 		Console.chat(origin, time, message);
 	}
 }
+
+
