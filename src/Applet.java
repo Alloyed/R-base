@@ -11,11 +11,13 @@ public class Applet extends PApplet {
 	public void connect() { c.connect(); }
 	public void exit() { super.exit(); }
 	public void inv() { c.inv(); }
-	public void reset() { c.setup(); }
+	public void reset() { c.dispose(); setup(); }
 	
 	public void setup() {
-		size(800, 600, JAVA2D);
 		c = new Client(this);
+		int x = Integer.parseInt(c.settings.WINDOW_WIDTH);
+		int y = Integer.parseInt(c.settings.WINDOW_HEIGHT);
+		size(x, y, JAVA2D);
 		c.setup();
 	}
 	public void draw() {

@@ -15,7 +15,6 @@ import org.jbox2d.dynamics.contacts.Contact;
 import physics.actors.Actor;
 import physics.actors.Floor;
 import physics.actors.Prop;
-import physics.actors.Robot;
 
 /*The representation of the in-game world. 
  * It's more useless right now than it should be.

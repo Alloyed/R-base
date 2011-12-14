@@ -49,6 +49,7 @@ public class Actor {
 	FixtureDef fd;
 	public boolean toStore = false;
 	
+	/*Construction methods*/
 	public Actor(int newid) {
 		modifiers = new String[5];
 		wear = maxWear;
@@ -114,22 +115,18 @@ public class Actor {
 		fd.shape = p;
 	}
 	
+	/*"Action" methods*/
+	
 	//Actors are moving, but useless boxes by default.
 	//Change this to give them their own free will
-	public void force() {
-		
-	}
+	public void force() {}
 	
-	public void beginContact(Contact arg0, Actor other) {
-	}
+	public void beginContact(Contact arg0, Actor other) {}
 
-	public void endContact(Contact arg0, Actor other) {
-	}
+	public void endContact(Contact arg0, Actor other) {}
 	
 	/*What happens if this collides with another box? */
-	public void preSolve(Contact arg0, Manifold arg1, Actor other) {
-		
-	}
+	public void preSolve(Contact arg0, Manifold arg1, Actor other) {}
 	
 	/*Damage calculation*/
 	public void postSolve(Contact c, ContactImpulse imp, Actor other) {
@@ -168,6 +165,7 @@ public class Actor {
 		}
 	}
 	
+	/*Getters and Setters*/
 	public String getImage() {
 		String s = baseImage;
 		for (String m : modifiers)
