@@ -13,6 +13,7 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
 import physics.actors.Actor;
+import physics.actors.Conveyor;
 import physics.actors.Floor;
 import physics.actors.Prop;
 
@@ -145,7 +146,7 @@ public class Stage {
 		}
 		//Random boxes. Fun!
 		for (int i=0;i<10;++i)
-			addActor(Actor.class, new Vec2(1, 1), 
+			addActor(Conveyor.class, new Vec2(1, 1), 
 					new Vec2(x0+hw+(rand.nextFloat()*(size-w)),
 							y0+hw+(rand.nextFloat()*(size-w))));
 	}
