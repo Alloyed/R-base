@@ -34,8 +34,12 @@ public class Settings {
 	public String SKIN_FOLDER = "skin";
 	@ControlElement (x=30,y=310, properties = {"label=Team?", "min=0", "max=1", "width=60", "listen=true"})
 	public int team = 0;
+	@ControlElement (x=30,y=330,label="Fixed timestep?", 
+			properties={"height=20","width=20"})
+	public boolean FIXED_TIMESTEP = false;
 	
 	private PApplet p;
+	
 
 	/* Note: No absolute filenames. */
 	public Settings(PApplet p) {

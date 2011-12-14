@@ -172,12 +172,12 @@ public class Stage {
 	}
 	
 	/*Run one step of the simulation, simulating frame seconds of time.*/
-	public void step() {
+	public void step(float dt) {
 		for (Actor a: activeActors) {
 			a.force();
 		}
 		
-		w.step(frame, 8, 3);
+		w.step(dt, 8, 3);
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
 			Actor a = (Actor) b.getUserData();
 			if (a.toStore) {

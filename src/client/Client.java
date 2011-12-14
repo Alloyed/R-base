@@ -102,7 +102,7 @@ public class Client implements PConstants {
 		// Graphix stuf
 		p.background(0);
 		p.smooth();
-		p.frameRate(100);
+		p.frameRate(27);
 		cam = new Camera(p);
 		skin = new Skin(this);
 		
@@ -132,6 +132,7 @@ public class Client implements PConstants {
 		menu.setTeam(settings.team == 0 ? Team.ORANGE : Team.BLUE);
 		menu.show();
 	}
+	
 
 	//Is looped over to draw things
 	long time, oldtime;
@@ -146,9 +147,9 @@ public class Client implements PConstants {
 		frameTime /= 1000000f;
 		if (frameTime > 2500)
 			frameTime = 2500;
-		oldtime = time;
 		physAccum += frameTime;
 		netAccum  += frameTime;
+		oldtime = time;
 		//Networking
 		if (net != null) {
 			net.poll();
@@ -159,19 +160,21 @@ public class Client implements PConstants {
 		}
 		//Physix
 		int i = 0;
-		while (physAccum > Stage.frame*1000) {
-			for (Actor a: stage.activeActors) {
-				a.oldPos = new Vec2(a.b.getWorldCenter());
-				a.oldAng = a.b.getAngle();
+		if (settings.FIXED_TIMESTEP) {
+			while (physAccum > Stage.frame*1000) {
+				for (Actor a: stage.activeActors) {
+					a.oldPos = new Vec2(a.b.getWorldCenter());
+					a.oldAng = a.b.getAngle();
+				}
+				stage.step(Stage.frame);
+				physAccum -= Stage.frame*1000f;
+				i++;
 			}
-			stage.step();
-			physAccum -= Stage.frame*1000;
-			i++;
-		}
-		Actor.alpha = (physAccum / (Stage.frame*1000.0f));
-		Actor.alpha = 0;
-		if (i == 3) {
-			Console.dbg.println("Skip: " + physAccum);
+			Actor.alpha = (physAccum / (Stage.frame*1000.0f));
+		} else {
+			i = 1;
+			stage.step(frameTime / 1000f);
+			Actor.alpha = 1;
 		}
 		currentMode.draw();
 		gooey.draw();
