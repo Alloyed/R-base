@@ -102,7 +102,7 @@ public class Client implements PConstants {
 		// Graphix stuf
 		p.background(0);
 		p.smooth();
-		p.frameRate(30);
+		p.frameRate(100);
 		cam = new Camera(p);
 		skin = new Skin(this);
 		
@@ -143,34 +143,45 @@ public class Client implements PConstants {
 		//Timing
 		time = System.nanoTime();
 		float frameTime =  time - oldtime;
+		frameTime /= 1000000f;
+		if (frameTime > 2500)
+			frameTime = 2500;
 		oldtime = time;
-		physAccum += frameTime/1000000f/1000f;
-		netAccum  += frameTime/1000000f/1000f;
+		physAccum += frameTime;
+		netAccum  += frameTime;
 		//Networking
 		if (net != null) {
 			net.poll();
-			while (netAccum >= Connection.frame) {
+			while (netAccum >= Connection.frame*1000) {
 				net.send();
-				netAccum -= Connection.frame;
+				netAccum -= Connection.frame*1000;
 			}
 		}
 		//Physix
-		while (physAccum >= Stage.frame) {
+		int i = 0;
+		while (physAccum > Stage.frame*1000) {
 			for (Actor a: stage.activeActors) {
 				a.oldPos = new Vec2(a.b.getWorldCenter());
 				a.oldAng = a.b.getAngle();
 			}
 			stage.step();
-			physAccum -= Stage.frame;
+			physAccum -= Stage.frame*1000;
+			i++;
 		}
-		Actor.alpha = physAccum / Stage.frame;
-		
+		Actor.alpha = (physAccum / (Stage.frame*1000.0f));
+		Actor.alpha = 0;
+		if (i == 3) {
+			Console.dbg.println("Skip: " + physAccum);
+		}
 		currentMode.draw();
 		gooey.draw();
-		fps();
+		fps(i);
 		p.rectMode(CORNERS);
 		p.noFill();
-		p.stroke(p.color(0,255,0));
+		//p.stroke(p.color(0,255,0));
+		p.stroke(p.color(30,30,30,(float)Actor.alpha*255f));
+		p.strokeWeight(30);
+		//p.rect(0, 0, p.width, p.height);
 	}
 	
 	public void draw(Actor a) {
@@ -178,9 +189,10 @@ public class Client implements PConstants {
 		s.draw(a);
 	}
 	
-	public void fps() {
+	public void fps(int i) {
 		p.fill(255);
-		p.text("FPS: " + (int)p.frameRate  + 
+		p.text("Frames: " + i  +
+				", FPS: " + p.frameRate + 
 				", Actors: " + stage.activeActors.size(),
 				0, 10);
 	}
@@ -195,6 +207,9 @@ public class Client implements PConstants {
 			
 		if (p.key == ESC) { //Keeps game from stopping at ESC
 			p.key = 0;
+		} else if (p.key == CODED && p.keyCode == 114) {
+			p.saveFrame("screen-###.png");
+			Console.chat("System", 0 , "Screenshot saved.");
 		}
 	}
 

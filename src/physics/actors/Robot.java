@@ -176,6 +176,7 @@ public class Robot extends Actor {
 		shell.b.setTransform(b.getWorldCenter(), b.getAngle());
 		shell.b.applyLinearImpulse(b.getLinearVelocity(), shell.b.getWorldCenter());
 		shell.baseImage = "playerTop";
+		shell.modifiers = modifiers;
 		for(Actor a : inventory) {
 			a.place(s, b.getWorldCenter(),b.getAngle(), b.getLinearVelocity(), b.getAngularVelocity());
 		}

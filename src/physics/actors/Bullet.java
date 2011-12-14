@@ -21,4 +21,9 @@ public class Bullet extends Actor {
 		fd.density = 60;
 		d.bullet = true;
 	}
+	
+	@Override
+	public void destroy() {
+		
+	}
 }

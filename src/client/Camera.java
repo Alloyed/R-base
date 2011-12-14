@@ -39,7 +39,7 @@ public class Camera {
 	}
 	
 	public Vec2 screenToWorld(Vec2 in) {
-		return new Vec2((in.x-zeroX)/meterScale,(in.y-zeroY)/meterScale);
+		return new Vec2((in.x+zeroX)/meterScale,(in.y+zeroY)/meterScale);
 	}
 	
 	public Vec2 worldToScreen(Vec2 in) {

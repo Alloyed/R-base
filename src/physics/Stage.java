@@ -38,12 +38,17 @@ public class Stage {
 				force += f;
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
+			//I have no idea what's going on here
+			force /= 50;
+			force *= force;
+			force *= 50;
 			if (A instanceof Robot && B.size.length() < 1 && B.b.getLinearVelocity().length() < 4) {
 				((Robot)A).take(B);
-			} else { 
-				//Note: These equations are bullshit that happens to be fun
-				A.hurt(force * B.b.getLinearVelocity().length() * B.b.getMass());
-				B.hurt(force * A.b.getLinearVelocity().length() * A.b.getMass());
+			} else if (A instanceof Robot && B.size.length() < 1 && B.b.getLinearVelocity().length() < 4) {
+				((Robot)B).take(A);
+			} else {
+				A.hurt(force);
+				B.hurt(force);
 			}
 		}
 
@@ -88,15 +93,15 @@ public class Stage {
 	public void startGame(Long seed) {
 		Random rand = new Random(seed); //We need the seed because DETERMINISM!
 		//Two different loops because we have no layers
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 4; j++) {
+		int maxX = 2, maxY = 2;
+		for (int i = 0; i < maxX; ++i) {
+			for (int j = 0; j < maxY; j++) {
 				genFloor(rand, i, j);
 			}
 		}
-		
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 4; j++) {
-				genRoom(rand, i, j, 3, 3);
+		for (int i = 0; i < maxX; ++i) {
+			for (int j = 0; j < maxY; j++) {
+				genRoom(rand, i, j, maxX-1, maxY-1);
 			}
 		}
 		
@@ -107,12 +112,12 @@ public class Stage {
 		float x0 = x*size, y0 = y*size;
 		addActor(Floor.class, 
 				new Vec2(size,size), new Vec2(x0 + (size/2), y0 + (size/2)))
-					.setTeam(Team.get(rand.nextInt(3)-1));
+					.setTeam(rand.nextInt(2) == 0 ? Team.ORANGE : Team.BLUE);
 	}
 	
 	public void genRoom(Random rand, int x, int y, int maxx, int maxy) {
 		float size = 20f;
-		float w = 1, hw = .5f;
+		float w = 1;
 		
 		float x0 = x*size, y0 = y*size;
 		//Right wall
@@ -141,7 +146,7 @@ public class Stage {
 			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+size-(size/6), y0+size));
 		}
 		//Random boxes. Fun!
-		for (int i=0;i<4;++i)
+		for (int i=0;i<250;++i)
 			addActor(Actor.class, new Vec2(1, 1), 
 					new Vec2(x0+(rand.nextFloat()*size),
 							y0+(rand.nextFloat()*size)));

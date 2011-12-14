@@ -56,9 +56,9 @@ public class Botmode extends UI{
 			r.ghostmode.show();
 		}
 		Vec2 oldAim = pc.state.aim;
-		pc.state.aim = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale,
-				(p.mouseY+r.cam.zeroY)/r.cam.meterScale);
-		Vec2 lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
+		pc.state.aim = r.cam.screenToWorld(new Vec2(p.mouseX, p.mouseY));
+		Vec2 lerped = oldAim.mul(1-Actor.alpha).add(pc.state.aim.mul(Actor.alpha));
+		//Optimization, Valve Style!
 		p.background(r.menu.bg);
 		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		for (Actor a:r.stage.activeActors) {
