@@ -116,7 +116,7 @@ public class Stage {
 	
 	public void genRoom(Random rand, int x, int y, int maxx, int maxy) {
 		float size = 20f;
-		float w = 1;
+		float w = 1, hw = .5f;
 		
 		float x0 = x*size, y0 = y*size;
 		//Right wall
