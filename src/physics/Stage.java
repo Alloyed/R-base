@@ -92,15 +92,15 @@ public class Stage {
 	public void startGame(Long seed) {
 		Random rand = new Random(seed); //We need the seed because DETERMINISM!
 		//Two different loops because we have no layers
-		for (int i = 0; i < 5; ++i) {
-			for (int j = 0; j < 5; j++) {
+		int maxX = 2, maxY = 2;
+		for (int i = 0; i < maxX; ++i) {
+			for (int j = 0; j < maxY; j++) {
 				genFloor(rand, i, j);
 			}
 		}
-		
-		for (int i = 0; i < 5; ++i) {
-			for (int j = 0; j < 5; j++) {
-				genRoom(rand, i, j, 4, 4);
+		for (int i = 0; i < maxX; ++i) {
+			for (int j = 0; j < maxY; j++) {
+				genRoom(rand, i, j, maxX-1, maxY-1);
 			}
 		}
 		
@@ -111,7 +111,7 @@ public class Stage {
 		float x0 = x*size, y0 = y*size;
 		addActor(Floor.class, 
 				new Vec2(size,size), new Vec2(x0 + (size/2), y0 + (size/2)))
-					.setTeam(Team.get(rand.nextInt(3)-1));
+					.setTeam(rand.nextInt(2) == 0 ? Team.ORANGE : Team.BLUE);
 	}
 	
 	public void genRoom(Random rand, int x, int y, int maxx, int maxy) {
@@ -172,12 +172,12 @@ public class Stage {
 	}
 	
 	/*Run one step of the simulation, simulating frame seconds of time.*/
-	public void step() {
+	public void step(float dt) {
 		for (Actor a: activeActors) {
 			a.force();
 		}
 		
-		w.step(frame, 8, 3);
+		w.step(dt, 8, 3);
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
 			Actor a = (Actor) b.getUserData();
 			if (a.toStore) {

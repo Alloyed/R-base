@@ -140,8 +140,6 @@ public class Actor {
 	}
 	
 	public void hurt(float force) {
-		if (force < 10)
-			return;
 		wear -= force;
 		wearFrac = wear / maxWear;
 		modifiers[4] = wearFrac < .25f ? "-dmg3" :

@@ -101,7 +101,7 @@ public class Client implements PConstants {
 		// Graphix stuf
 		p.background(0);
 		p.smooth();
-		p.frameRate(30);
+		p.frameRate(27);
 		cam = new Camera(p);
 		skin = new Skin(this);
 		
@@ -131,6 +131,7 @@ public class Client implements PConstants {
 		menu.setTeam(settings.team == 0 ? Team.ORANGE : Team.BLUE);
 		menu.show();
 	}
+	
 
 	//Is looped over to draw things
 	long time, oldtime;
@@ -142,34 +143,47 @@ public class Client implements PConstants {
 		//Timing
 		time = System.nanoTime();
 		float frameTime =  time - oldtime;
+		frameTime /= 1000000f;
+		if (frameTime > 2500)
+			frameTime = 2500;
+		physAccum += frameTime;
+		netAccum  += frameTime;
 		oldtime = time;
-		physAccum += frameTime/1000000f/1000f;
-		netAccum  += frameTime/1000000f/1000f;
 		//Networking
 		if (net != null) {
 			net.poll();
-			while (netAccum >= Connection.frame) {
+			while (netAccum >= Connection.frame*1000) {
 				net.send();
-				netAccum -= Connection.frame;
+				netAccum -= Connection.frame*1000;
 			}
 		}
 		//Physix
-		while (physAccum >= Stage.frame) {
-			for (Actor a: stage.activeActors) {
-				a.oldPos = new Vec2(a.b.getWorldCenter());
-				a.oldAng = a.b.getAngle();
+		int i = 0;
+		if (settings.FIXED_TIMESTEP) {
+			while (physAccum > Stage.frame*1000) {
+				for (Actor a: stage.activeActors) {
+					a.oldPos = new Vec2(a.b.getWorldCenter());
+					a.oldAng = a.b.getAngle();
+				}
+				stage.step(Stage.frame);
+				physAccum -= Stage.frame*1000f;
+				i++;
 			}
-			stage.step();
-			physAccum -= Stage.frame;
+			Actor.alpha = (physAccum / (Stage.frame*1000.0f));
+		} else {
+			i = 1;
+			stage.step(frameTime / 1000f);
+			Actor.alpha = 1;
 		}
-		Actor.alpha = physAccum / Stage.frame;
-		
 		currentMode.draw();
 		gooey.draw();
-		fps();
+		fps(i);
 		p.rectMode(CORNERS);
 		p.noFill();
-		p.stroke(p.color(0,255,0));
+		//p.stroke(p.color(0,255,0));
+		p.stroke(p.color(30,30,30,(float)Actor.alpha*255f));
+		p.strokeWeight(30);
+		//p.rect(0, 0, p.width, p.height);
 	}
 	
 	public void draw(Actor a) {
@@ -177,9 +191,10 @@ public class Client implements PConstants {
 		s.draw(a);
 	}
 	
-	public void fps() {
+	public void fps(int i) {
 		p.fill(255);
-		p.text("FPS: " + (int)p.frameRate  + 
+		p.text("Frames: " + i  +
+				", FPS: " + p.frameRate + 
 				", Actors: " + stage.activeActors.size(),
 				0, 10);
 	}
@@ -194,6 +209,9 @@ public class Client implements PConstants {
 			
 		if (p.key == ESC) { //Keeps game from stopping at ESC
 			p.key = 0;
+		} else if (p.key == CODED && p.keyCode == 114) {
+			p.saveFrame("screen-###.png");
+			Console.chat("System", 0 , "Screenshot saved.");
 		}
 	}
 
