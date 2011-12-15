@@ -56,6 +56,10 @@ public class Ghostmode extends UI {
 			cursor.state.downPressed = false;
 		else if (p.key == 'd')
 			cursor.state.rightPressed = false;
+		else if (p.key == '.') {
+			r.botmode.start();
+			r.botmode.show();
+		}
 	}
 
 	@Override

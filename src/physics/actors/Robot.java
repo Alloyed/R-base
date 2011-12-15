@@ -9,6 +9,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
+import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import physics.Console;
 import physics.Stage;
@@ -51,6 +52,9 @@ public class Robot extends Actor {
 	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
 		treads = st.addActor(Treads.class, new Vec2(1,1), pos);
 		super.place(st, pos, ang, vel, velAng);
+		RevoluteJointDef j = new RevoluteJointDef();
+		j.initialize(b, treads.b, b.getWorldCenter());
+		st.w.createJoint(j);
 	}
 	
 	public Vec2 getLocalPointAhead(float dist) {

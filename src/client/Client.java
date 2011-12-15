@@ -10,6 +10,7 @@ package client;
  */
 
 //Util
+import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -92,6 +93,7 @@ public class Client implements PConstants {
 	//Initializes everything
 	public Client(PApplet p) {
 		this.p = p;
+		Graphics2D g = ((PGraphicsJava2D)p.g).g2;
 		p.registerDraw(this);
 		p.registerDispose(this);
 		settings = new Settings(p);
@@ -124,10 +126,10 @@ public class Client implements PConstants {
 		}
 		
 		oldtime = System.nanoTime();
-		Console.chat("System",oldtime,"Welcome to R-base!");
+		Console.chat("System",oldtime,"Welcome to R-base! Press '.' to spawn.");
 		skin.start();
-		botmode.start();
-		currentMode = botmode;
+		ghostmode.start(new Vec2(1,1));
+		currentMode = ghostmode;
 		menu.setTeam(settings.team == 0 ? Team.ORANGE : Team.BLUE);
 		menu.show();
 	}
