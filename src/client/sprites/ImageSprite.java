@@ -22,7 +22,7 @@ public class ImageSprite implements Sprite {
 		this.c = c;
 		this.p = c.p;
 		this.file = file;
-		if (file.endsWith(".svg"))
+		if (file.endsWith(".svg") || file.endsWith(".svgz"))
 			isVector = true;
 		if (isVector) {
 			PShape shape = p.loadShape(file);
