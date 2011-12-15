@@ -146,9 +146,13 @@ public class Stage {
 		}
 		//Random boxes. Fun!
 		for (int i=0;i<10;++i)
-			addActor(Conveyor.class, new Vec2(1, 1), 
+			addActor(Actor.class, new Vec2(1, 1), 
 					new Vec2(x0+hw+(rand.nextFloat()*(size-w)),
 							y0+hw+(rand.nextFloat()*(size-w))));
+		//A booster. GOTTA GO FAST
+		addActor(Conveyor.class, new Vec2(1, 1), 
+				new Vec2(x0+hw+(rand.nextFloat()*(size-w)),
+						y0+hw+(rand.nextFloat()*(size-w))));
 	}
 	
 	public Actor addActor(Class<?> type, int id, Team t, Vec2 size, Vec2 pos) {

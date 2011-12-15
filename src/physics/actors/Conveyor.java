@@ -11,14 +11,19 @@ public class Conveyor extends Actor {
 	@Override
 	public void makeBody() {
 		super.makeBody();
+		baseImage = "belt";
 		fd.isSensor = true;
 		toScoot = new ArrayList<Actor>();
 	}
 	
 	@Override
 	public void force() {
-		for (Actor a : toScoot)
-			a.b.applyForce(new Vec2(0,-1000f), a.b.getWorldCenter());
+		for (Actor a : toScoot) {
+			Vec2 b = new Vec2(a.b.getLinearVelocity());
+			b.normalize();
+			b.mulLocal(10);
+			a.b.applyLinearImpulse(b, a.b.getWorldCenter());
+		}
 	}
 	
 	@Override

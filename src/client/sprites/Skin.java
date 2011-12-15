@@ -62,6 +62,7 @@ public class Skin extends Thread {
 		sprites.put("floor", new RectSprite(c,getColor("bg")));
 		sprites.put("floor-blue", new RectSprite(c,getColor("bg-blue")));
 		sprites.put("floor-orange", new RectSprite(c,getColor("bg-orange")));
+		sprites.put("belt", new RectSprite(c,0xffffffff));
 	}
 	
 	public void run() {

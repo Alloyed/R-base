@@ -1,6 +1,6 @@
 <R-base>
-<WINDOW_WIDTH TYPE="class java.lang.String">1000</WINDOW_WIDTH>
-<WINDOW_HEIGHT TYPE="class java.lang.String">500</WINDOW_HEIGHT>
+<WINDOW_WIDTH TYPE="class java.lang.String">800</WINDOW_WIDTH>
+<WINDOW_HEIGHT TYPE="class java.lang.String">600</WINDOW_HEIGHT>
 <IP TYPE="class java.lang.String">localhost</IP>
 <PORT TYPE="class java.lang.String">9001</PORT>
 <USERNAME TYPE="class java.lang.String">Player</USERNAME>
