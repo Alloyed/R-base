@@ -13,6 +13,7 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import physics.Console;
 import physics.Stage;
+import physics.Team;
 
 /*A player in the world. TODO:Teams, a lot more*/
 public class Robot extends Actor {
@@ -56,7 +57,10 @@ public class Robot extends Actor {
 		RevoluteJointDef j = new RevoluteJointDef();
 		j.initialize(b, treads.b, b.getWorldCenter());
 		st.w.createJoint(j);
-		
+		if (team == Team.BLUE)
+			st.bluebots++;
+		else if (team == Team.ORANGE)
+			st.orangebots++;
 	}
 	
 	public Vec2 getLocalPointAhead(float dist) {
@@ -181,6 +185,10 @@ public class Robot extends Actor {
 	
 	public void destroy() {
 		Console.out.println(label + " was killed!");
+		if (team == Team.BLUE)
+			s.bluebots--;
+		else if (team == Team.ORANGE)
+			s.orangebots--;
 		s.delete(treads);
 		
 		Actor shell = new Actor();

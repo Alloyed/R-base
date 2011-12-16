@@ -62,6 +62,7 @@ public class Stage {
 	public World w;
 	public HashMap<Integer, Actor> actors; //Every actor, retrievable by id.
 	public LinkedList<Actor> activeActors; //Every actor in the world right now
+	public int orangebots=0, bluebots=0;
 	static int nextId = 0;
 	
 	public Stage() {
@@ -212,7 +213,15 @@ public class Stage {
 	
 	//Anybody win game?
 	public boolean won() {
-		return false;
+		return orangebots == 0 || bluebots == 0;
+	}
+	
+	public Team whoWon() {
+		if (orangebots == 0)
+			return Team.BLUE;
+		else if (bluebots == 0)
+			return Team.ORANGE;
+		return Team.NUETRAL;
 	}
 	
 	//Deletes the actor and it's internal refs
@@ -233,5 +242,3 @@ public class Stage {
 		Console.chat(origin, time, message);
 	}
 }
-
-
