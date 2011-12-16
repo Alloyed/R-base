@@ -1,5 +1,8 @@
 package client.sprites;
 
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
+
 import org.jbox2d.common.Vec2;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -7,6 +10,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.svg.Diagram;
 import org.newdawn.slick.svg.InkscapeLoader;
 import org.newdawn.slick.svg.SimpleDiagramRenderer;
+import org.newdawn.slick.util.ResourceLoader;
 
 import client.ui.Loop;
 
@@ -22,11 +26,14 @@ public class ImageSprite implements Sprite {
 	public ImageSprite(Loop c, String file) {
 		this.c = c;
 		this.file = file;
-		if (file.endsWith(".svg"))
+		if (file.endsWith(".svg") || file.endsWith(".svgz"))
 			isVector = true;
 		try {
 		if (isVector) {
-			Diagram d = InkscapeLoader.load(file);
+			InputStream in = ResourceLoader.getResourceAsStream(file);
+			if (file.endsWith(".svgz"))
+				in = new GZIPInputStream(in);
+			Diagram d = InkscapeLoader.load(in,true);
 			width = d.getWidth()/64f;
 			height = d.getHeight()/64f;
 			length = new Vec2(d.getWidth(),d.getHeight()).length();
@@ -62,13 +69,13 @@ public class ImageSprite implements Sprite {
 		g.pushTransform();
 		g.resetTransform();  {			
 			c.cam.translate(g, pos.x, pos.y);
-			//c.cam.scale(g, a.size.x * width, a.size.y * height);
+			c.cam.scale(g, a.size.x * width, a.size.y * height);
 			c.cam.rotate(g, angle);
 			if (isVector) {
 				if (sprite != null) {
 					((SimpleDiagramRenderer)sprite).render(g);
 				} else {
-					Console.dbg.println(file + " Has no sprites");
+					//Console.dbg.println(file + " Has no sprites");
 				}
 			} else {
 				g.drawImage((Image)sprite,0,0);

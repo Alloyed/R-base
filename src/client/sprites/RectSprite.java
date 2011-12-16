@@ -45,7 +45,7 @@ public class RectSprite implements Sprite {
 			c.cam.scale(g, a.size.x * width, a.size.y * height);
 			c.cam.rotate(g, angle);
 			g.setColor(color);
-			g.fillRect(-32, -32, 64, 64);
+			g.fillRect(-32, -32, 128, 128);
 //			if (a.isHeld) {
 //				p.fill(150, 120, 70, 100);
 //				p.ellipse(0, 0, length, length);
