@@ -1,4 +1,11 @@
 <R-base>
+<UP TYPE="class java.lang.Integer">87</UP>
+<DOWN TYPE="class java.lang.Integer">83</DOWN>
+<LEFT TYPE="class java.lang.Integer">65</LEFT>
+<RIGHT TYPE="class java.lang.Integer">68</RIGHT>
+<USE TYPE="class java.lang.Integer">69</USE>
+<CHAT TYPE="class java.lang.Integer">84</CHAT>
+<SCREENSHOT TYPE="class java.lang.Integer">114</SCREENSHOT>
 <WINDOW_WIDTH TYPE="class java.lang.String">800</WINDOW_WIDTH>
 <WINDOW_HEIGHT TYPE="class java.lang.String">600</WINDOW_HEIGHT>
 <IP TYPE="class java.lang.String">localhost</IP>

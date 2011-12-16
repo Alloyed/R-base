@@ -54,7 +54,7 @@ public class Chat extends OutputStream {
 				in += key;
 				input.setStringValue("> "+in+"_");
 			}
-		} else if (key == 't') { 
+		} else if (p.keyCode == c.settings.CHAT) { 
 			in = "";
 			input.setStringValue("> "+in+"_");
 			isChatting = true;

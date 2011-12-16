@@ -14,6 +14,17 @@ import nanoxml.XMLElement;
 
 /*Client settings*/
 public class Settings {
+	/* Keys
+	 * TODO: make UP or W valid entries
+	 */
+	public Integer 
+		UP           = 87,
+		DOWN         = 83,
+		LEFT         = 65,
+		RIGHT        = 68,
+		USE          = 69,
+		CHAT         = 84,
+		SCREENSHOT   = 114;
 	@ControlElement (x=30,y=220, properties = {"label=width", "width=40", "listen=true"})
 	public String WINDOW_WIDTH = "800";
 	@ControlElement (x=80,y=220, properties = {"label=height", "width=40", "listen=true"})

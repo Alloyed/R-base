@@ -34,13 +34,13 @@ public class Ghostmode extends UI {
 
 	@Override
 	public void keyPressed() {
-		if (p.key == 'w')
+		if (p.keyCode == r.settings.UP)
 			cursor.state.upPressed = true;
-		else if (p.key == 'a')
+		else if (p.keyCode == r.settings.LEFT)
 			cursor.state.leftPressed = true;
-		else if (p.key == 's')
+		else if (p.keyCode == r.settings.DOWN)
 			cursor.state.downPressed = true;
-		else if (p.key == 'd')
+		else if (p.keyCode == r.settings.RIGHT)
 			cursor.state.rightPressed = true;
 		else if (p.key == PConstants.ESC)
 			r.menu.show();
@@ -48,13 +48,13 @@ public class Ghostmode extends UI {
 
 	@Override
 	public void keyReleased() {
-		if (p.key == 'w')
+		if (p.keyCode == r.settings.UP)
 			cursor.state.upPressed = false;
-		else if (p.key == 'a')
+		else if (p.keyCode == r.settings.LEFT)
 			cursor.state.leftPressed = false;
-		else if (p.key == 's')
+		else if (p.keyCode == r.settings.DOWN)
 			cursor.state.downPressed = false;
-		else if (p.key == 'd')
+		else if (p.keyCode == r.settings.RIGHT)
 			cursor.state.rightPressed = false;
 		else if (p.key == '.') {
 			r.botmode.start();

@@ -211,7 +211,7 @@ public class Client implements PConstants {
 			
 		if (p.key == ESC) { //Keeps game from stopping at ESC
 			p.key = 0;
-		} else if (p.key == CODED && p.keyCode == 114) {
+		} else if (p.keyCode == settings.SCREENSHOT) {
 			p.saveFrame("screen-###.png");
 			Console.chat("System", 0 , "Screenshot saved.");
 		}
