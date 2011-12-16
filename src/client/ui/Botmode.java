@@ -32,15 +32,22 @@ public class Botmode extends UI{
 		group = "botmode";
 		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
 		//this sets off a segfault, it's harmless though
-		inv = p.createGraphics(100, 30, PConstants.JAVA2D); 
+		inv = p.createGraphics(100, 30, PConstants.JAVA2D);
+		inv.beginDraw();
+		inv.background(0);
+		inv.endDraw();
 		Button b = r.gooey.addButton("inv",0,0,p.height-30,100,30);
 		b.setImage(inv);
 		b.moveTo(m);
 		
 		health = p.createGraphics(100, 30, PConstants.JAVA2D);
+		health.beginDraw();
+		health.background(0);
+		health.endDraw();
 		b = r.gooey.addButton("health",0,p.width-100,p.height-30,100,30);
 		b.setImage(health);
 		b.moveTo(m);
+		hide();
 	}
 	
 	public void start() {
