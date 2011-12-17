@@ -38,7 +38,7 @@ public class Actor {
 	public boolean isHeld;
 	//Health, damage, etc.
 	public float wear;
-	public float maxWear = 200;
+	public float maxWear = 100;
 	public float wearFrac;
 	//This is for lerping, clients only.
 	public static float alpha;

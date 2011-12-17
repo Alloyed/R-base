@@ -14,5 +14,5 @@
 <ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
 <SKIN_FOLDER TYPE="class java.lang.String">skin</SKIN_FOLDER>
 <team TYPE="class java.lang.Integer">0</team>
-<FIXED_TIMESTEP TYPE="class java.lang.Boolean">false</FIXED_TIMESTEP>
+<FIXED_TIMESTEP TYPE="class java.lang.Boolean">true</FIXED_TIMESTEP>
 </R-base>

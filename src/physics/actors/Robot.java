@@ -144,7 +144,7 @@ public class Robot extends Actor {
 			return;
 		}
 		a.b.setBullet(true);
-		a.b.applyLinearImpulse(getLocalPointAhead(500).mul(a.b.getMass()), b.getWorldCenter());
+		a.b.applyLinearImpulse(getLocalPointAhead(100).mul(a.b.getMass()), b.getWorldCenter());
 	}
 	
 	public void force() {

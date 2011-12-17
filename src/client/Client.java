@@ -103,7 +103,7 @@ public class Client implements PConstants {
 		// Graphix stuf
 		p.background(0);
 		p.smooth();
-		p.frameRate(27);
+		p.frameRate(30);
 		cam = new Camera(p);
 		skin = new Skin(this);
 		
@@ -174,6 +174,7 @@ public class Client implements PConstants {
 			Actor.alpha = (physAccum / (Stage.frame*1000.0f));
 		} else {
 			i = 1;
+			Console.out.println(frameTime/1000f + " " + Stage.frame);
 			stage.step(frameTime / 1000f);
 			Actor.alpha = 1;
 		}
