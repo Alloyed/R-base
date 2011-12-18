@@ -5,6 +5,7 @@ import org.jbox2d.common.Vec2;
 import client.Client;
 
 import physics.actors.Actor;
+import physics.actors.Prop;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -66,5 +67,31 @@ public class RectSprite implements Sprite {
 					a.size.y)));
 			p.text(a.label, spot.x, spot.y);
 		}
+	}
+
+	@Override
+	public void draw(Prop pr) {
+		Vec2 pos = pr.pos;
+		float angle = 0;
+		p.pushStyle();
+		p.pushMatrix();
+		{
+			p.noStroke();
+			p.fill(color);
+			p.imageMode(p.CENTER);
+			p.shapeMode(p.CENTER);
+			p.rectMode(p.CENTER);
+			p.ellipseMode(p.CENTER);
+
+			c.cam.translate(pos.x, pos.y);
+			c.cam.scale(pr.width * width, pr.height * height);
+			c.cam.rotate(angle);
+
+			p.rect(0, 0, 64, 64);
+		}
+		p.popStyle();
+		p.popMatrix();
+
+		p.fill(255);
 	}
 }

@@ -24,7 +24,6 @@ public class Server {
 	Server(int port) throws IOException {
 		n = new Network(this, port);
 		Console.out.println("Server Successfully Started.");
-		n.start();
 		
 		changeAvail(true);
 	}

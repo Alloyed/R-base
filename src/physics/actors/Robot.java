@@ -123,7 +123,8 @@ public class Robot extends Actor {
 	
 	/*Take some scrap*/
 	public void take(Actor a) {
-		if (a != null && s.activeActors.contains(a)) { //Is it a pickup-able thing?
+		//FIXME: a instanceof Map is a pretty bad stopgap
+		if (a != null && !(a instanceof Map) && s.activeActors.contains(a)) { //Is it a pickup-able thing?
 			inventory.add(a);
 			a.wear = a.maxWear;
 			a.store();

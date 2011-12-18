@@ -51,17 +51,19 @@ public class Botmode extends UI{
 	}
 	
 	public void start() {
-		pc = (Robot) r.stage.addActor(Robot.class, 0, 
-				r.settings.team == 0 ? Team.ORANGE : Team.BLUE, 
+		pc = (Robot)r.stage.addActor(Robot.class, 0, 
+				r.settings.team == 0 ? Team.ORANGE : Team.BLUE,
 				new Vec2(1, 1), new Vec2(1,1));
 	}
 	
 	@Override
 	public void draw() {
+		
 		if (pc.isDead()) { 
 			r.ghostmode.start(pc.oldPos);
 			r.ghostmode.show();
 		}
+		
 		Vec2 oldAim = pc.state.aim;
 		pc.state.aim = r.cam.screenToWorld(new Vec2(p.mouseX, p.mouseY));
 		Vec2 lerped = oldAim.mul(1-Actor.alpha).add(pc.state.aim.mul(Actor.alpha));
@@ -106,6 +108,7 @@ public class Botmode extends UI{
 			health.fill(255);
 			health.text((int)pc.wear+"/"+(int)pc.maxWear,10,20);
 		health.endDraw();
+		
 	}
 	
 	@Override

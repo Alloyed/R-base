@@ -40,7 +40,7 @@ public class Network {
 	public void poll() {
 		if (connection != null) {
 			for (DatagramPacket p : connection.packets) {
-				new Buffer(p.getData());
+				Buffer b = new Buffer(p.getData());
 			}
 			connection.packets.clear();
 		}

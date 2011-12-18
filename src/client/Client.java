@@ -87,7 +87,7 @@ public class Client implements PConstants {
 	
 	public void initPhysics() {
 		stage = new Stage();
-		stage.startGame(32l);
+		((Map)stage.addActor(Map.class, -2, Team.NUETRAL, new Vec2(0,0), new Vec2(0,0))).startGame(123l);
 	}
 	
 	//Initializes everything
@@ -146,8 +146,8 @@ public class Client implements PConstants {
 		time = System.nanoTime();
 		float frameTime =  time - oldtime;
 		frameTime /= 1000000f;
-		if (frameTime > 2500)
-			frameTime = 2500;
+		//if (frameTime > 2500)
+		//	frameTime = 2500;
 		physAccum += frameTime;
 		netAccum  += frameTime;
 		oldtime = time;

@@ -1,14 +1,12 @@
 package physics.actors;
 
 
-public class Floor extends Actor {
-	public Floor() {
-		super();
-		baseImage = "floor";
-	}
+public class Floor extends Prop {
 	
 	@Override
-	public void makeBody() {
-		this.fd = null;
+	public void makeFixture() {
+		super.makeFixture();
+		baseImage = "floor";
+		fd.isSensor = true;
 	}
 }

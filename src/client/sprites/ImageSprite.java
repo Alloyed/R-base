@@ -5,6 +5,7 @@ import org.jbox2d.common.Vec2;
 import client.Client;
 
 import physics.actors.Actor;
+import physics.actors.Prop;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -67,8 +68,6 @@ public class ImageSprite implements Sprite {
 			c.cam.translate(pos.x, pos.y);
 			c.cam.scale(a.size.x * width, a.size.y * height);
 			c.cam.rotate(angle);
-			if (a.getImage() == "playerBottom") {
-			}
 			if (isVector)
 				p.shape((PShape)sprite,0,0);
 			else
@@ -86,5 +85,32 @@ public class ImageSprite implements Sprite {
 			Vec2 spot = c.cam.worldToScreen(pos.add(new Vec2(-a.size.x/2,a.size.y)));
 			p.text(a.label, spot.x, spot.y);
 		}
+	}
+	
+	public void draw(Prop a) {
+		//This does linear interpolation: new*alpha + old*( 1.0 - alpha );
+		
+		Vec2 pos = a.pos;
+		float angle = 0;
+		p.pushStyle();
+		p.pushMatrix(); {
+		p.noStroke();
+		p.imageMode(p.CENTER);
+		p.shapeMode(p.CENTER);
+		p.rectMode(p.CENTER);
+		p.ellipseMode(p.CENTER);
+		
+		c.cam.translate(pos.x, pos.y);
+		c.cam.scale(a.width * width, a.height * height);
+		c.cam.rotate(angle);
+		if (isVector)
+			p.shape((PShape)sprite,0,0);
+		else
+			p.image((PImage)sprite,0,0);
+		}
+		p.popStyle();
+		p.popMatrix();
+			
+		p.fill(255);
 	}
 }

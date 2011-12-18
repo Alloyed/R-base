@@ -13,8 +13,9 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
 import physics.actors.Actor;
-import physics.actors.Conveyor;
+import physics.actors.Booster;
 import physics.actors.Floor;
+import physics.actors.Map;
 import physics.actors.Prop;
 
 /*The representation of the in-game world. 
@@ -89,74 +90,6 @@ public class Stage {
 				store(newa);
 		}
 	}
-
-	public void startGame(Long seed) {
-		Random rand = new Random(seed); //We need the seed because DETERMINISM!
-		//Two different loops because we have no layers
-		int maxX = 10, maxY = 2;
-		for (int i = 0; i < maxX; ++i) {
-			for (int j = 0; j < maxY; j++) {
-				genFloor(rand, i, j);
-			}
-		}
-		for (int i = 0; i < maxX; ++i) {
-			for (int j = 0; j < maxY; j++) {
-				genRoom(rand, i, j, maxX-1, maxY-1);
-			}
-		}
-		
-	}
-	
-	public void genFloor(Random rand, int x, int y) {
-		float size = 20f;
-		float x0 = x*size, y0 = y*size;
-		addActor(Floor.class, 
-				new Vec2(size,size), new Vec2(x0 + (size/2), y0 + (size/2)))
-					.setTeam(rand.nextInt(2) == 0 ? Team.ORANGE : Team.BLUE);
-	}
-	
-	public void genRoom(Random rand, int x, int y, int maxx, int maxy) {
-		float size = 20f;
-		float w = 1, hw = .5f;
-		
-		float x0 = x*size, y0 = y*size;
-		//Right wall
-		if (x == 0) {
-			addActor(Prop.class, new Vec2(w,size), new Vec2(x0, y0+(size/2)));
-		}
-		
-		//Top wall
-		if (y == 0) {
-			addActor(Prop.class, new Vec2(size,w), new Vec2(x0+(size/2), y0));
-		}
-
-		//Left wall
-		if (x == maxx) {
-			addActor(Prop.class, new Vec2(w,size), new Vec2(x0+size, y0+(size/2)));
-		} else {
-			addActor(Prop.class, new Vec2(w, size/3), new Vec2(x0+size, y0+(size/6)));
-			addActor(Prop.class, new Vec2(w, size/3), new Vec2(x0+size, y0+size-(size/6)));
-		}
-		
-		//Bottom wall
-		if (y == maxy) {
-			addActor(Prop.class, new Vec2(size, w), new Vec2(x0+(size/2),y0+size));
-		} else {
-			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+(size/6), y0+size));
-			addActor(Prop.class, new Vec2(size/3, w), new Vec2(x0+size-(size/6), y0+size));
-		}
-		//A booster. GOTTA GO FAST
-		addActor(Conveyor.class, new Vec2(3, 3), 
-				new Vec2(x0+(size/2f),
-						y0+(size/2f)));
-				
-		//Random boxes. Fun!
-		for (int i=0;i<10;++i)
-			addActor(Actor.class, new Vec2(1, 1), 
-					new Vec2(x0+hw+(rand.nextFloat()*(size-w)),
-							y0+hw+(rand.nextFloat()*(size-w))));
-		
-	}
 	
 	public Actor addActor(Class<?> type, int id, Team t, Vec2 size, Vec2 pos) {
 		try {
@@ -226,6 +159,8 @@ public class Stage {
 	
 	//Deletes the actor and it's internal refs
 	public void delete(Actor a) {
+		if (a instanceof Map)
+			Console.dbg.println("WSFSAF");
 		w.destroyBody(a.b);
 		actors.remove(a.id);
 		activeActors.remove(a);

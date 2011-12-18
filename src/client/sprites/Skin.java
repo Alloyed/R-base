@@ -58,6 +58,7 @@ public class Skin extends Thread {
 		sprites.put("none", new EmptySprite());
 		sprites.put("logo", new ImageSprite(c, path+"logo.png"));
 		sprites.put("box", new ImageSprite(c, path+"box.svgz"));
+		sprites.put("map", new MapSprite(c));
 		sprites.put("prop", new RectSprite(c,getColor("wall")));
 		sprites.put("floor", new RectSprite(c,getColor("bg")));
 		sprites.put("floor-blue", new RectSprite(c,getColor("bg-blue")));

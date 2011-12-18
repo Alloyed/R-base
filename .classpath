@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/nanoxml.jar"/>
 	<classpathentry kind="lib" path="lib/controlp5-svn.jar"/>
+	<classpathentry kind="lib" path="lib/svgSalamander.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

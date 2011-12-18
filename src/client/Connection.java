@@ -21,7 +21,7 @@ import physics.actors.Actor;
 import physics.actors.PlayerState;
 /*Main client network class. Is horribly broken as of the start of newNet.*/
 @SuppressWarnings("unused")
-public class Connection extends newNet.Network {
+public class Connection extends newNet.Connection {
 	public static final float frame = 1/20f;
 	public DatagramSocket s;
 	public DatagramPacket p;
@@ -34,6 +34,7 @@ public class Connection extends newNet.Network {
 	StatusListener l;
 	
 	public Connection(String ip, int port, StatusListener l) throws Exception {
+		super(ip, port);
 		Console.out.println("Connecting to " + ip + ":" + port);
 		i = InetAddress.getByName(ip);
 		this.port = port;
