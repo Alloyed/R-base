@@ -93,7 +93,7 @@ public class Stage {
 	public void startGame(Long seed) {
 		Random rand = new Random(seed); //We need the seed because DETERMINISM!
 		//Two different loops because we have no layers
-		int maxX = 2, maxY = 2;
+		int maxX = 10, maxY = 2;
 		for (int i = 0; i < maxX; ++i) {
 			for (int j = 0; j < maxY; j++) {
 				genFloor(rand, i, j);

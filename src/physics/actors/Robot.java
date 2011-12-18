@@ -189,6 +189,8 @@ public class Robot extends Actor {
 			s.bluebots--;
 		else if (team == Team.ORANGE)
 			s.orangebots--;
+		if (held != null)
+			release();
 		s.delete(treads);
 		
 		Actor shell = new Actor();
