@@ -7,12 +7,13 @@ import client.Client;
 import physics.actors.Actor;
 import physics.actors.Prop;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PShape;
 
 /* draws vectors or images */
-public class ImageSprite implements Sprite {
+public class ImageSprite implements Sprite, PConstants {
 	Client c;
 	PApplet p;
 	String file;
@@ -52,7 +53,6 @@ public class ImageSprite implements Sprite {
 	}
 	
 
-	@SuppressWarnings("static-access")
 	public void draw(Actor a) {
 		//This does linear interpolation: new*alpha + old*( 1.0 - alpha );
 		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) .add( a.oldPos.mul(1 - Actor.alpha) );
@@ -60,10 +60,10 @@ public class ImageSprite implements Sprite {
 		p.pushStyle();
 		p.pushMatrix(); {
 			p.noStroke();
-			p.imageMode(p.CENTER);
-			p.shapeMode(p.CENTER);
-			p.rectMode(p.CENTER);
-			p.ellipseMode(p.CENTER);
+			p.imageMode(CENTER);
+			p.shapeMode(CENTER);
+			p.rectMode(CENTER);
+			p.ellipseMode(CENTER);
 			
 			c.cam.translate(pos.x, pos.y);
 			c.cam.scale(a.size.x * width, a.size.y * height);
@@ -95,10 +95,10 @@ public class ImageSprite implements Sprite {
 		p.pushStyle();
 		p.pushMatrix(); {
 		p.noStroke();
-		p.imageMode(p.CENTER);
-		p.shapeMode(p.CENTER);
-		p.rectMode(p.CENTER);
-		p.ellipseMode(p.CENTER);
+		p.imageMode(CENTER);
+		p.shapeMode(CENTER);
+		p.rectMode(CENTER);
+		p.ellipseMode(CENTER);
 		
 		c.cam.translate(pos.x, pos.y);
 		c.cam.scale(a.width * width, a.height * height);

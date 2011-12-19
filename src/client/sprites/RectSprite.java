@@ -7,9 +7,10 @@ import client.Client;
 import physics.actors.Actor;
 import physics.actors.Prop;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class RectSprite implements Sprite {
+public class RectSprite implements Sprite, PConstants {
 	Client c;
 	PApplet p;
 	int color;
@@ -31,7 +32,6 @@ public class RectSprite implements Sprite {
 		pg.popMatrix();
 	}
 
-	@SuppressWarnings("static-access")
 	public void draw(Actor a) {
 		// This does linear interpolation: new*alpha + old*( 1.0 - alpha );
 		Vec2 pos = a.b.getWorldCenter().mul((float)Actor.alpha)
@@ -43,10 +43,10 @@ public class RectSprite implements Sprite {
 		{
 			p.noStroke();
 			p.fill(color);
-			p.imageMode(p.CENTER);
-			p.shapeMode(p.CENTER);
-			p.rectMode(p.CENTER);
-			p.ellipseMode(p.CENTER);
+			p.imageMode(CENTER);
+			p.shapeMode(CENTER);
+			p.rectMode(CENTER);
+			p.ellipseMode(CENTER);
 
 			c.cam.translate(pos.x, pos.y);
 			c.cam.scale(a.size.x * width, a.size.y * height);
@@ -78,10 +78,10 @@ public class RectSprite implements Sprite {
 		{
 			p.noStroke();
 			p.fill(color);
-			p.imageMode(p.CENTER);
-			p.shapeMode(p.CENTER);
-			p.rectMode(p.CENTER);
-			p.ellipseMode(p.CENTER);
+			p.imageMode(CENTER);
+			p.shapeMode(CENTER);
+			p.rectMode(CENTER);
+			p.ellipseMode(CENTER);
 
 			c.cam.translate(pos.x, pos.y);
 			c.cam.scale(pr.width * width, pr.height * height);

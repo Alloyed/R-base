@@ -2,7 +2,6 @@ package physics;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Random;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
@@ -13,10 +12,7 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
 import physics.actors.Actor;
-import physics.actors.Booster;
-import physics.actors.Floor;
 import physics.actors.Map;
-import physics.actors.Prop;
 
 /*The representation of the in-game world. 
  * It's more useless right now than it should be.

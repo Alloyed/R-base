@@ -5,25 +5,24 @@ import java.util.ArrayList;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.contacts.Contact;
 
-
-/* I'm gonna convey the shit outta you*/
-public class Conveyor extends Prop {
+/* Speeds things up */
+public class Booster extends Prop {
 	public ArrayList<Actor> toScoot;
-	float k = .4f;
-	Vec2 scoot;
 	@Override
 	public void makeFixture() {
 		super.makeFixture();
 		baseImage = "belt";
 		fd.isSensor = true;
 		toScoot = new ArrayList<Actor>();
-		scoot = new Vec2(0,-250);
 	}
 	
 	@Override
 	public void force() {
 		for (Actor a : toScoot) {
-			a.b.applyForce(scoot.sub(a.b.getLinearVelocity()).mul(k), a.b.getWorldCenter());
+			Vec2 b = new Vec2(a.b.getLinearVelocity());
+			b.normalize();
+			b.mulLocal(10);
+			a.b.applyLinearImpulse(b, a.b.getWorldCenter());
 		}
 	}
 	

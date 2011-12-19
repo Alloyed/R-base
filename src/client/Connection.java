@@ -19,7 +19,7 @@ import physics.Console;
 import physics.Stage;
 import physics.actors.Actor;
 import physics.actors.PlayerState;
-/*Main client network class. Is horribly broken as of the start of newNet.*/
+/*A connection to a server. Is horribly broken as of the start of newNet.*/
 @SuppressWarnings("unused")
 public class Connection extends newNet.Connection {
 	public static final float frame = 1/20f;

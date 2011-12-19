@@ -36,6 +36,7 @@ public class Connection extends Thread {
 			while(b.hasNext()) {
 				Object o = b.next();
 				//TODO: assign to stage and stuff
+				//FIXME: Put this/stage in network, so connectionless servers can use it too
 				if(o instanceof Actor) {
 					
 				} else if(o instanceof RPC) {
