@@ -74,10 +74,10 @@ public class Map extends Actor {
 		}
 	}
 
-	public Prop addProp(Class<? extends Prop> type, Vec2 size, Vec2 pos) {
+	public Prop addProp(Class<? extends Prop> type, Vec2 size, Vec2 pos, float ang) {
 		try {
 			Prop a = type.newInstance();
-			a.create(pos, size);
+			a.create(pos, size, ang);
 			a.place(this);
 			props.add(a);
 			return a;
@@ -87,6 +87,10 @@ public class Map extends Actor {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public Prop addProp(Class<? extends Prop> type, Vec2 size, Vec2 pos) {
+		return addProp(type, size, pos, 0);
 	}
 
 	public void startGame(Long seed) {
@@ -107,16 +111,14 @@ public class Map extends Actor {
 	}
 
 	public void genFloor(Random rand, int x, int y) {
-		float size = 20f;
 		float x0 = x * size, y0 = y * size;
 		addProp(Floor.class, new Vec2(size, size), new Vec2(x0 + (size / 2), y0
 				+ (size / 2)));
 	}
-
+	
+	final float size = 20f;
+	final float w = 1, hw = .5f;
 	public void genRoom(Random rand, int x, int y, int maxx, int maxy) {
-		float size = 20f;
-		float w = 1, hw = .5f;
-
 		float x0 = x * size, y0 = y * size;
 		// Right wall
 		if (x == 0) {
@@ -151,15 +153,37 @@ public class Map extends Actor {
 			addProp(Prop.class, new Vec2(size / 3, w), new Vec2(x0 + size
 					- (size / 6), y0 + size));
 		}
-		// A booster. GOTTA GO FAST
-		addProp(physics.actors.Conveyor.class, new Vec2(5, 3), new Vec2(x0
-				+ (size / 2f), y0 + (size / 2f)));
-
-		// Random boxes. Fun!
+		int r = rand.nextInt(3);
+		if (r == 0)
+			boxRoom(rand, x0, y0);
+		else if (r == 1)
+			boosterRoom(rand, x0, y0);
+		else if (r == 2)
+			beltRoom(rand, x0, y0);
+	}
+	
+	// Random boxes. Fun!
+	void boxRoom(Random rand, float x0, float y0) {
 		for (int i = 0; i < 10; ++i)
 			s.addActor(Actor.class, new Vec2(1, 1),
 					new Vec2(x0 + hw + (rand.nextFloat() * (size - w)),
-							 y0 + hw + (rand.nextFloat() * (size - w))));
-
-	}	
+					 y0 + hw + (rand.nextFloat() * (size - w))));
+	}
+	
+	//GOTTA GO FAST
+	void boosterRoom(Random rand, float x0, float y0) {
+		addProp(Booster.class, 
+				new Vec2(2,2),
+				new Vec2(x0+(size/2), y0+(size/2)));
+	}
+	
+	//TODO: an actual chain of these
+	void beltRoom(Random rand, float x0, float y0) {
+		for (int i = 0; i < 5; ++i) {
+			addProp(physics.actors.Conveyor.class, new Vec2(3,1), 
+					new Vec2(x0 + hw + (rand.nextFloat() * (size - w)),
+							y0 + hw + (rand.nextFloat() * (size - w))),
+							rand.nextFloat()*2*(float)Math.PI);
+		}
+	}
 }

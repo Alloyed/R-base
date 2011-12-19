@@ -20,17 +20,17 @@ public class Actor {
 	//The stage it belongs to
 	public Stage s;
 	//Unique ID, doesn't work right now
-	public int id; 
+	public int id;
 	//The team the Actor belongs to
 	public Team team;
 	//dimensions of the box. 
 	//I can't find an easy way to get this out of a fixture
-	public Vec2 size; 
+	public Vec2 size;
 	//Important things, right now, get their labels drawn.
 	public boolean isImportant = false;
 	//What gets drawn next to the box to identify it, 
 	//if the box's labeled important
-	public String label="Box"; 
+	public String label="Box";
 	//The filename of the sprite used to represent it
 	public String baseImage="box";
 	public String[] modifiers;

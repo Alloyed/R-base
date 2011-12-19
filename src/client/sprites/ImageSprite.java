@@ -4,6 +4,7 @@ import org.jbox2d.common.Vec2;
 
 import client.Client;
 
+import physics.Console;
 import physics.actors.Actor;
 import physics.actors.Prop;
 import processing.core.PApplet;
@@ -60,8 +61,10 @@ public class ImageSprite implements Sprite, PConstants {
 
 	public void draw(Actor a) {
 		//This does linear interpolation: new*alpha + old*( 1.0 - alpha );
-		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) .add( a.oldPos.mul(1 - Actor.alpha) );
-		float angle = a.b.getAngle()*Actor.alpha + a.oldAng * (1 - Actor.alpha);
+		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) 
+					.add(a.oldPos.mul(1 - Actor.alpha) );
+		float angle = a.b.getAngle()*Actor.alpha + 
+						a.oldAng * (1 - Actor.alpha);
 		p.pushStyle();
 		p.pushMatrix(); {
 			p.noStroke();
@@ -90,10 +93,10 @@ public class ImageSprite implements Sprite, PConstants {
 	}
 	
 	public void draw(Prop a) {
-		//This does linear interpolation: new*alpha + old*( 1.0 - alpha );
-		
+		//This should never move
 		Vec2 pos = a.pos;
-		float angle = 0;
+		float angle = a.angle;
+		Console.dbg.println(angle);
 		p.pushStyle();
 		p.pushMatrix(); {
 			p.noStroke();

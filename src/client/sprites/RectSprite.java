@@ -72,7 +72,7 @@ public class RectSprite implements Sprite, PConstants {
 	@Override
 	public void draw(Prop pr) {
 		Vec2 pos = pr.pos;
-		float angle = 0;
+		float angle = pr.angle;
 		p.pushStyle();
 		p.pushMatrix();
 		{
@@ -82,10 +82,11 @@ public class RectSprite implements Sprite, PConstants {
 			p.shapeMode(CENTER);
 			p.rectMode(CENTER);
 			p.ellipseMode(CENTER);
-
+			
 			c.cam.translate(pos.x, pos.y);
-			c.cam.scale(pr.width * width, pr.height * height);
 			c.cam.rotate(angle);
+			c.cam.scale(pr.width * width, pr.height * height);
+			
 
 			p.rect(0, 0, 64, 64);
 		}

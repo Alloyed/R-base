@@ -20,17 +20,19 @@ public class Prop {
 	Team team;
 	public float width, height;
 	public Vec2 pos;
+	public float angle;
 	
 	public Prop() {
 		baseImage = "prop";
 		modifiers = new String[5];
 	}
 	
-	public void create(Vec2 pos, Vec2 size) {
+	public void create(Vec2 pos, Vec2 size, float angle) {
 		width = size.x;
 		height = size.y;
 		fd = new FixtureDef();
 		this.pos = pos;
+		this.angle = angle;
 		makeFixture();
 	}
 	
@@ -42,7 +44,7 @@ public class Prop {
 	
 	public void makeFixture() {
 		PolygonShape ps = new PolygonShape();
-		ps.setAsBox(width/2, height/2, pos, 0);
+		ps.setAsBox(width/2, height/2, pos, angle);
 		fd.shape = ps;
 		fd.friction = .5f;
 		fd.restitution = 1.1f; //Wee!

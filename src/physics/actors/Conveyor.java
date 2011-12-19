@@ -17,7 +17,7 @@ public class Conveyor extends Prop {
 		baseImage = "belt";
 		fd.isSensor = true;
 		toScoot = new ArrayList<Actor>();
-		scoot = new Vec2(0,-250);
+		scoot = new Vec2(250*(float)Math.cos(angle),250*(float)Math.sin(angle));
 	}
 	
 	@Override

@@ -29,7 +29,10 @@ public class Chat extends OutputStream {
 		labels = new Textlabel[size];
 		r = new Random();
 		for (int i = 0; i < labels.length; ++i) {
-			Textlabel l = c.gooey.addTextlabel("chatlabel-"+i, " ", 110, c.p.height-40-(10*i));
+			Textlabel l = c.gooey.addTextlabel("chatlabel-"+i, 
+												" ", 
+												110, 
+												c.p.height-40-(10*i));
 			labels[i] = l;
 		}
 		input = c.gooey.addTextlabel("inlabel", "", 110, c.p.height-30);
@@ -47,7 +50,9 @@ public class Chat extends OutputStream {
 				in = "";
 				input.setStringValue(in);
 				isChatting = false;
-			} else if (in.length() > 0 && key == PConstants.BACKSPACE || key == PConstants.DELETE) {
+			} else if (in.length() > 0 && 
+					key == PConstants.BACKSPACE || 
+					key == PConstants.DELETE) {
 				in = in.substring(0, in.length()-1);
 				input.setStringValue("> "+in+"_");
 			} else if (key > 31 && key != PConstants.CODED) {

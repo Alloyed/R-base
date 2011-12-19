@@ -103,7 +103,7 @@ public class Client implements PConstants {
 		// Graphix stuf
 		p.background(0);
 		p.smooth();
-		p.frameRate(30);
+		p.frameRate(60);
 		cam = new Camera(p);
 		skin = new Skin(this);
 		
@@ -172,6 +172,7 @@ public class Client implements PConstants {
 				i++;
 			}
 			Actor.alpha = (physAccum / (Stage.frame*1000.0f));
+			Actor.alpha = 1;
 		} else {
 			i = 1;
 			Console.out.println(frameTime/1000f + " " + Stage.frame);
@@ -183,10 +184,10 @@ public class Client implements PConstants {
 		fps(i);
 		p.rectMode(CORNERS);
 		p.noFill();
-		//p.stroke(p.color(0,255,0));
+		p.stroke(p.color(0,255,0));
 		p.stroke(p.color(30,30,30,(float)Actor.alpha*255f));
 		p.strokeWeight(30);
-		//p.rect(0, 0, p.width, p.height);
+		p.rect(0, 0, p.width, p.height);
 	}
 	
 	public void draw(Actor a) {
