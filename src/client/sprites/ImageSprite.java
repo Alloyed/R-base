@@ -12,13 +12,16 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PShape;
 
-/* draws vectors or images */
+/* draws vectors or images. 
+ * Vectors are rendered as rasters, I think. 
+ * TODO: Render svgs at different resolutions.
+ */
 public class ImageSprite implements Sprite, PConstants {
 	Client c;
 	PApplet p;
 	String file;
 	boolean isVector = false;
-	public Object sprite;
+	public PImage sprite;
 	final float width, height, length;
 	public ImageSprite(Client c, String file) {
 		this.c = c;
@@ -31,7 +34,12 @@ public class ImageSprite implements Sprite, PConstants {
 			width = shape.width/64f;
 			height = shape.height/64f;
 			length = new Vec2(shape.width,shape.height).length();
-			sprite = shape;
+			PGraphics pg = p.createGraphics(64, 64, PConstants.JAVA2D);
+			pg.beginDraw();
+				pg.smooth();
+				pg.shape(shape, 0, 0);
+			pg.endDraw();
+			sprite = pg;
 		} else {
 			PImage image = p.loadImage(file);
 			width = image.width/64f;
@@ -45,10 +53,7 @@ public class ImageSprite implements Sprite, PConstants {
 	public void draw(PGraphics pg, float x, float y, float max) {
 			pg.pushMatrix();
 			pg.scale(.3f); //TODO: unhardcode this
-			if (isVector)
-				pg.shape((PShape)sprite,x,y);
-			else
-				pg.image((PImage)sprite,x,y);
+			pg.image(sprite,x,y);
 			pg.popMatrix();
 	}
 	
@@ -68,10 +73,7 @@ public class ImageSprite implements Sprite, PConstants {
 			c.cam.translate(pos.x, pos.y);
 			c.cam.scale(a.size.x * width, a.size.y * height);
 			c.cam.rotate(angle);
-			if (isVector)
-				p.shape((PShape)sprite,0,0);
-			else
-				p.image((PImage)sprite,0,0);
+			p.image(sprite,0,0);
 			if (a.isHeld) {
 				p.fill(150,120,70,100);
 				p.ellipse(0,0,length,length);
@@ -94,19 +96,16 @@ public class ImageSprite implements Sprite, PConstants {
 		float angle = 0;
 		p.pushStyle();
 		p.pushMatrix(); {
-		p.noStroke();
-		p.imageMode(CENTER);
-		p.shapeMode(CENTER);
-		p.rectMode(CENTER);
-		p.ellipseMode(CENTER);
+			p.noStroke();
+			p.imageMode(CENTER);
+			p.shapeMode(CENTER);
+			p.rectMode(CENTER);
+			p.ellipseMode(CENTER);
 		
-		c.cam.translate(pos.x, pos.y);
-		c.cam.scale(a.width * width, a.height * height);
-		c.cam.rotate(angle);
-		if (isVector)
-			p.shape((PShape)sprite,0,0);
-		else
-			p.image((PImage)sprite,0,0);
+			c.cam.translate(pos.x, pos.y);
+			c.cam.scale(a.width * width, a.height * height);
+			c.cam.rotate(angle);
+			p.image(sprite,0,0);
 		}
 		p.popStyle();
 		p.popMatrix();

@@ -70,6 +70,7 @@ public class Botmode extends UI{
 		//Optimization, Valve Style!
 		p.background(r.menu.bg);
 		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
+		
 		for (Actor a:r.stage.activeActors) {
 			r.draw(a);
 		}
@@ -87,7 +88,6 @@ public class Botmode extends UI{
 		
 		//Button.
 		inv.beginDraw();
-			
 			inv.smooth();
 			inv.background(100);
 			Sprite s;
@@ -101,6 +101,7 @@ public class Botmode extends UI{
 			inv.fill(255);
 			inv.text(""+pc.inventory.size(),70,20);
 		inv.endDraw();
+		
 		//Button 2.0
 		health.beginDraw();
 			health.smooth();
@@ -108,7 +109,6 @@ public class Botmode extends UI{
 			health.fill(255);
 			health.text((int)pc.wear+"/"+(int)pc.maxWear,10,20);
 		health.endDraw();
-		
 	}
 	
 	@Override
