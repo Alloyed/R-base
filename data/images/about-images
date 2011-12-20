@@ -2,17 +2,18 @@ A skin is a folder with a number of images inside.
 All images have a base, and some modifiers.
 to make a filename we do
 <base>-<modifier1>-<modifier2, etc>.<type>
-type can be png or svg. You can mix the two in a single skin. 64px is the default size.
+type can be png or svg. You can mix the two in a single skin. 64px by 64px is the default size.
 
 The existing bases are:
 	box
-	player
+	playerBottom (The treads of the player)
+	playerTop (The rest of the player)
 	bullet
 
 the modifiers are, in the order you should add them in:
 	blue or orange (for teams, only players should have teams right now)
 	dmg1 or dmg2 or dmg3 (This means "damaged". the larger the numbers the more damage)
-	frameX (for animations. the first frame has no modifier.)
+	frameX (for animations. the first frame(0th) has no modifier.)
 
 so to have a moderately damaged orange player, the name of the file would be:
 	player-orange-dmg2.png

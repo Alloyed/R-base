@@ -9,7 +9,7 @@ import org.jbox2d.dynamics.contacts.Contact;
 /* I'm gonna convey the shit outta you*/
 public class Conveyor extends Prop {
 	public ArrayList<Actor> toScoot;
-	float k = .4f;
+	float k = 10f;
 	Vec2 scoot;
 	@Override
 	public void makeFixture() {
@@ -17,7 +17,7 @@ public class Conveyor extends Prop {
 		baseImage = "belt";
 		fd.isSensor = true;
 		toScoot = new ArrayList<Actor>();
-		scoot = new Vec2(250*(float)Math.cos(angle),250*(float)Math.sin(angle));
+		scoot = new Vec2(25*(float)Math.cos(angle),25*(float)Math.sin(angle));
 	}
 	
 	@Override

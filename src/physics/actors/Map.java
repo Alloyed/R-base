@@ -179,11 +179,16 @@ public class Map extends Actor {
 	
 	//TODO: an actual chain of these
 	void beltRoom(Random rand, float x0, float y0) {
+		Vec2 head = new Vec2(x0+(size/2), y0+(size/2));
+		float ang = 0;
 		for (int i = 0; i < 5; ++i) {
+			ang += rand.nextFloat()*Math.PI - (Math.PI/2);
 			addProp(physics.actors.Conveyor.class, new Vec2(3,1), 
-					new Vec2(x0 + hw + (rand.nextFloat() * (size - w)),
-							y0 + hw + (rand.nextFloat() * (size - w))),
-							rand.nextFloat()*2*(float)Math.PI);
+					head.add(
+							new Vec2(1.5f*(float)Math.cos(ang), 
+									1.5f*(float)Math.sin(ang))), 
+					ang);
+			head = head.add(new Vec2(3f*(float)Math.cos(ang), 3f*(float)Math.sin(ang)));
 		}
 	}
 }
