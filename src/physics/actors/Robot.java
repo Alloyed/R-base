@@ -64,8 +64,7 @@ public class Robot extends Actor {
 	}
 	
 	public Vec2 getLocalPointAhead(float dist) {
-		Vec2 dir = state.aim.sub(b.getWorldCenter());
-		float ang = (float)Math.atan2(dir.y, dir.x);
+		float ang = (float)Math.atan2(state.aim.y, state.aim.x);
 		return new Vec2(dist*(float)Math.cos(ang),dist*(float)Math.sin(ang));
 	}
 	
@@ -149,26 +148,37 @@ public class Robot extends Actor {
 	}
 	
 	public void force() {
-		Vec2 dir = state.aim.sub(b.getWorldCenter());
+		Vec2 dir = state.aim;
 		float ang = (float)Math.atan2(dir.y, dir.x);
 		b.setTransform(b.getWorldCenter(), ang);
 
 		Vec2 move = new Vec2(0, 0);
-		if (state.upPressed)
-			move.addLocal(0, -1);
-		if (state.leftPressed)
-			move.addLocal(-1, 0);
-		if (state.rightPressed)
-			move.addLocal(1, 0);
-		if (state.downPressed)
-			move.addLocal(0, 1);
-		move.normalize();
-		if (state.ROTATE_FORCE) {
-			ang += HALF_PI;
-			move.set(move.x * (float)Math.cos(ang)
-					- move.y * (float)Math.sin(ang),
-					move.x * (float)Math.sin(ang)
-					+ move.y * (float)Math.cos(ang));
+		if (state.move.x == 0 && state.move.y == 0) {
+			if (state.upPressed)
+				move.addLocal(0, -1);
+			if (state.leftPressed)
+				move.addLocal(-1, 0);
+			if (state.rightPressed)
+				move.addLocal(1, 0);
+			if (state.downPressed)
+				move.addLocal(0, 1);
+			move.normalize();
+			if (state.ROTATE_FORCE) {
+				ang += HALF_PI;
+				move.set(move.x * (float)Math.cos(ang)
+						- move.y * (float)Math.sin(ang),
+						move.x * (float)Math.sin(ang)
+						+ move.y * (float)Math.cos(ang));
+			}
+		} else {
+			move.set(state.move);
+			if (state.ROTATE_FORCE) {
+				ang += HALF_PI;
+				move.set(move.x * (float)Math.cos(ang)
+						- move.y * (float)Math.sin(ang),
+						move.x * (float)Math.sin(ang)
+						+ move.y * (float)Math.cos(ang));
+			}
 		}
 
 		b.applyForce(move.mul(speed), b.getWorldCenter());

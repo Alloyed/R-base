@@ -1,0 +1,45 @@
+This is the output for an xbox 360 controller.
+Linux plugin claims to have found 1 controllers
+1
+
+<<< available proCONTROLL devices: >>>
+
+     0: Microsoft X-Box 360 pad
+
+<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+<<< available Microsoft X-Box 360 pad buttons: >>>
+
+     0: A
+     1: B
+     2: X
+     3: Y
+     4: Left Thumb
+     5: Right Thumb
+     6: Select
+     7: Unknown
+     8: Mode
+     9: Left Thumb 3
+     10: Right Thumb 3
+     11: cooliehat: pov
+
+<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+<<< available Microsoft X-Box 360 pad sliders: >>>
+
+     0: x absolute
+     1: y absolute
+     2: z absolute
+     3: rx absolute
+     4: ry absolute
+     5: rz absolute
+
+<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+<<< available Microsoft X-Box 360 pad sticks: >>>
+
+     0: y x
+     1: rx z
+     2: rz ry
+
+<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

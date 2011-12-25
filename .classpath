@@ -8,5 +8,10 @@
 	<classpathentry kind="lib" path="lib/nanoxml.jar"/>
 	<classpathentry kind="lib" path="lib/controlp5-svn.jar"/>
 	<classpathentry kind="lib" path="lib/svgSalamander.jar"/>
+	<classpathentry kind="lib" path="lib/procontroll.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/natives"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
