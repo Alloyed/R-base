@@ -155,8 +155,6 @@ public class Stage {
 	
 	//Deletes the actor and it's internal refs
 	public void delete(Actor a) {
-		if (a instanceof Map)
-			Console.dbg.println("WSFSAF");
 		w.destroyBody(a.b);
 		actors.remove(a.id);
 		activeActors.remove(a);

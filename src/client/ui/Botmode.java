@@ -3,6 +3,7 @@ package client.ui;
 import org.jbox2d.common.Vec2;
 
 import processing.core.*;
+import procontroll.ControllStick;
 import controlP5.*;
 
 import client.Client;
@@ -63,11 +64,16 @@ public class Botmode extends UI{
 			r.ghostmode.start(pc.oldPos);
 			r.ghostmode.show();
 		}
+		if (r.joypad == null) {
+			pc.state.aim = r.cam.screenToWorld(new Vec2(p.mouseX, p.mouseY)).sub(pc.b.getPosition());
+		} else {
+			ControllStick s = r.joypad.getStick(0);  //Left
+			ControllStick s1 = r.joypad.getStick(1); //Right+trigger
+			ControllStick s2 = r.joypad.getStick(2); //Right+trigger
+			pc.state.aim = new Vec2(s1.getX(), s2.getY());
+			pc.state.move = new Vec2(s.getY(), s.getX());
+		}
 		
-		Vec2 oldAim = pc.state.aim;
-		pc.state.aim = r.cam.screenToWorld(new Vec2(p.mouseX, p.mouseY));
-		Vec2 lerped = oldAim.mul(1-Actor.alpha).add(pc.state.aim.mul(Actor.alpha));
-		//Optimization, Valve Style!
 		p.background(r.menu.bg);
 		r.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		
@@ -81,8 +87,7 @@ public class Botmode extends UI{
 			p.noFill();
 			p.stroke(255);
 			p.strokeWeight(2);
-			r.cam.translate(lerped.x,lerped.y);
-			p.rect(-2, -2, 2, 2);
+			p.rect(p.mouseX-2, p.mouseY-2, 2, 2);
 			p.smooth();
 		p.popMatrix();
 		

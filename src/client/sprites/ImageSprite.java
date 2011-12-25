@@ -14,8 +14,9 @@ import processing.core.PImage;
 import processing.core.PShape;
 
 /* draws vectors or images. 
- * Vectors are rendered as rasters, I think. 
- * TODO: Render svgs at different resolutions.
+ * Vectors are rendered as rasters for performance reasons
+ * TODO: Render svgs at different resolutions, 
+ * 		allow for straight vector rendering again
  */
 public class ImageSprite implements Sprite, PConstants {
 	Client c;
@@ -28,14 +29,15 @@ public class ImageSprite implements Sprite, PConstants {
 		this.c = c;
 		this.p = c.p;
 		this.file = file;
-		if (file.endsWith(".svg") || file.endsWith(".svgz"))
+		if (file.endsWith(".svg") || file.endsWith(".svgz")) {
 			isVector = true;
-		if (isVector) {
 			PShape shape = p.loadShape(file);
 			width = shape.width/64f;
 			height = shape.height/64f;
 			length = new Vec2(shape.width,shape.height).length();
-			PGraphics pg = p.createGraphics(64, 64, PConstants.JAVA2D);
+			//TODO: Find some way to differentiate hitbox size and drawn size
+			//Images are being clipped as of right now
+			PGraphics pg = p.createGraphics((int)(shape.width*1f), (int)(shape.height*1f), PConstants.JAVA2D); 
 			pg.beginDraw();
 				pg.smooth();
 				pg.shape(shape, 0, 0);
@@ -74,8 +76,8 @@ public class ImageSprite implements Sprite, PConstants {
 			p.ellipseMode(CENTER);
 			
 			c.cam.translate(pos.x, pos.y);
-			c.cam.scale(a.size.x * width, a.size.y * height);
 			c.cam.rotate(angle);
+			c.cam.scale(a.size.x / width, a.size.y / height);
 			p.image(sprite,0,0);
 			if (a.isHeld) {
 				p.fill(150,120,70,100);
@@ -96,7 +98,6 @@ public class ImageSprite implements Sprite, PConstants {
 		//This should never move
 		Vec2 pos = a.pos;
 		float angle = a.angle;
-		Console.dbg.println(angle);
 		p.pushStyle();
 		p.pushMatrix(); {
 			p.noStroke();
@@ -104,10 +105,10 @@ public class ImageSprite implements Sprite, PConstants {
 			p.shapeMode(CENTER);
 			p.rectMode(CENTER);
 			p.ellipseMode(CENTER);
-		
+			
 			c.cam.translate(pos.x, pos.y);
-			c.cam.scale(a.width * width, a.height * height);
 			c.cam.rotate(angle);
+			c.cam.scale(a.width / width, a.height / height);
 			p.image(sprite,0,0);
 		}
 		p.popStyle();

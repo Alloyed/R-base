@@ -30,6 +30,7 @@ import client.sprites.*;
 import client.ui.*;
 //gooey
 import controlP5.*;
+import procontroll.*;
 //graphix
 import processing.core.*;
 
@@ -62,6 +63,7 @@ public class Client implements PConstants {
 	public PFont font;
 	ControlFont cfont;
 	public Skin skin;
+	public ControllDevice joypad;
 
 	private Chat chat;
 	
@@ -93,7 +95,6 @@ public class Client implements PConstants {
 	//Initializes everything
 	public Client(PApplet p) {
 		this.p = p;
-		Graphics2D g = ((PGraphicsJava2D)p.g).g2;
 		p.registerDraw(this);
 		p.registerDispose(this);
 		settings = new Settings(p);
@@ -121,7 +122,11 @@ public class Client implements PConstants {
 				if (c instanceof Textfield)
 					((Textfield) c).setAutoClear(false);
 			}
-			
+			try {
+				joypad = ControllIO.getInstance(p).getDevice(0);
+				for (int i = 0; i < joypad.getNumberOfSticks(); ++i)
+					joypad.getStick(i).setTolerance(.1f);
+			} catch (Exception e) {} //No joypad
 			net = new Network(this);
 		}
 		
@@ -142,6 +147,7 @@ public class Client implements PConstants {
 		if (font != null) {
 			p.textFont(font);
 		}
+		
 		//Timing
 		time = System.nanoTime();
 		float frameTime =  time - oldtime;
@@ -151,6 +157,7 @@ public class Client implements PConstants {
 		physAccum += frameTime;
 		netAccum  += frameTime;
 		oldtime = time;
+		
 		//Networking
 		if (net != null) {
 			net.poll();
@@ -159,6 +166,7 @@ public class Client implements PConstants {
 				netAccum -= Connection.frame*1000;
 			}
 		}
+		
 		//Physix
 		int i = 0;
 		if (settings.FIXED_TIMESTEP) {
@@ -179,20 +187,15 @@ public class Client implements PConstants {
 			stage.step(frameTime / 1000f);
 			Actor.alpha = 1;
 		}
+		
+		//Drawing
 		currentMode.draw();
 		gooey.draw();
 		fps(i);
-		p.rectMode(CORNERS);
-		p.noFill();
-		p.stroke(p.color(0,255,0));
-		p.stroke(p.color(30,30,30,(float)Actor.alpha*255f));
-		p.strokeWeight(30);
-		p.rect(0, 0, p.width, p.height);
 	}
 	
 	public void draw(Actor a) {
-		Sprite s = skin.get(a);
-		s.draw(a);
+		skin.get(a).draw(a);
 	}
 	
 	public void fps(int i) {
