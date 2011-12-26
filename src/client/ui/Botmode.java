@@ -70,8 +70,9 @@ public class Botmode extends UI{
 			ControllStick s = r.joypad.getStick(0);  //Left
 			ControllStick s1 = r.joypad.getStick(1); //Right+trigger
 			ControllStick s2 = r.joypad.getStick(2); //Right+trigger
-			pc.state.aim = new Vec2(s1.getX(), s2.getY());
 			pc.state.move = new Vec2(s.getY(), s.getX());
+			if (s1.getX() != 0 && s2.getY() != 0) //The old orientation should stick
+				pc.state.aim = new Vec2(s1.getX(), s2.getY());
 		}
 		
 		p.background(r.menu.bg);
@@ -82,12 +83,14 @@ public class Botmode extends UI{
 		}
 		
 		//crosshairs
+		Vec2 aim = pc.state.aim.add(pc.b.getPosition());
 		p.pushMatrix();
 			p.noSmooth();
 			p.noFill();
 			p.stroke(255);
 			p.strokeWeight(2);
-			p.rect(p.mouseX-2, p.mouseY-2, 2, 2);
+			r.cam.translate(aim.x, aim.y);
+			p.rect(-2, -2, 2, 2);
 			p.smooth();
 		p.popMatrix();
 		
