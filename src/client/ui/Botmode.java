@@ -67,9 +67,9 @@ public class Botmode extends UI{
 		if (r.joypad == null) {
 			pc.state.aim = r.cam.screenToWorld(new Vec2(p.mouseX, p.mouseY)).sub(pc.b.getPosition());
 		} else {
-			ControllStick s = r.joypad.getStick(0);  //Left
-			ControllStick s1 = r.joypad.getStick(1); //Right+trigger
-			ControllStick s2 = r.joypad.getStick(2); //Right+trigger
+			ControllStick s = r.joypad.getStick(0);  //Left stick
+			ControllStick s1 = r.joypad.getStick(1); //Right stick + Left trigger
+			ControllStick s2 = r.joypad.getStick(2); //Right trigger + Right stick
 			pc.state.move = new Vec2(s.getY(), s.getX());
 			if (s1.getX() != 0 && s2.getY() != 0) //The old orientation should stick
 				pc.state.aim = new Vec2(s1.getX(), s2.getY());

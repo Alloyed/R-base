@@ -63,7 +63,7 @@ public class ImageSprite implements Sprite, PConstants {
 
 	public void draw(Actor a) {
 		//This does linear interpolation: new*alpha + old*( 1.0 - alpha );
-		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha) 
+		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha)
 					.add(a.oldPos.mul(1 - Actor.alpha) );
 		float angle = a.b.getAngle()*Actor.alpha + 
 						a.oldAng * (1 - Actor.alpha);

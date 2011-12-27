@@ -24,8 +24,9 @@ public class Robot extends Actor {
 	public LinkedList<Actor> inventory;
 	
 	final float HALF_PI = (float) (Math.PI/2f);
-	public Robot(int id) {
-		super(id);
+	public Robot() {
+		super();
+		treads = new Treads();
 		maxWear = 100;
 		wear    = maxWear;
 		isImportant = true;
@@ -34,25 +35,22 @@ public class Robot extends Actor {
 		inventory = new LinkedList<Actor>();
 		for (int i=0; i<5; ++i) {
 			Bullet b = new Bullet();
-			b.create(.3f);
+			b.create(new Vec2(.3f, .3f), new Vec2(0, 0));
 			inventory.add(b);
 		}
 		
 		state = new PlayerState();
 	}
 	
-	public Robot() {
-		this(Stage.getNewId());
-	}
-	
 	@Override
-	public void makeBody() {
-		super.makeBody();
+	public void create(Vec2 size, Vec2 pos, float ang, Vec2 vel, float velAng) {
+		super.create(size, pos, ang, vel, velAng);
+		treads.create(size, pos, ang, vel, velAng);
 	}
 	
-	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
-		treads = st.addActor(Treads.class, new Vec2(1,1), pos);
-		super.place(st, pos, ang, vel, velAng);
+	public void place(Stage st) {
+		treads.place(st);
+		super.place(st);
 		
 		RevoluteJointDef j = new RevoluteJointDef();
 		j.initialize(b, treads.b, b.getWorldCenter());
@@ -139,7 +137,8 @@ public class Robot extends Actor {
 			release();
 		} else if (!inventory.isEmpty()) {
 			a = inventory.pollFirst();
-			a.place(s,getPointAhead(a.size.length()+.1f));
+			a.create(a.size,  getPointAhead(a.size.length()+.1f));
+			a.place(s);
 		} else {
 			return;
 		}
@@ -205,14 +204,19 @@ public class Robot extends Actor {
 		s.delete(treads);
 		
 		Actor shell = new Actor();
-		shell.create(size);
-		shell.place(s,b.getWorldCenter());
+		shell.create(size, b.getWorldCenter());
+		shell.place(s);
 		shell.b.setTransform(b.getWorldCenter(), b.getAngle());
-		shell.b.applyLinearImpulse(b.getLinearVelocity(), shell.b.getWorldCenter());
+		shell.b.applyLinearImpulse(b.getLinearVelocity(), 
+				shell.b.getWorldCenter());
 		shell.baseImage = "playerTop";
 		shell.modifiers = modifiers;
 		for(Actor a : inventory) {
-			a.place(s, b.getWorldCenter(),b.getAngle(), b.getLinearVelocity(), b.getAngularVelocity());
+			a.create(a.size, b.getWorldCenter(),  
+							b.getAngle(), 
+							b.getLinearVelocity(), 
+							b.getAngularVelocity());
+			a.place(s);
 		}
 	}
 

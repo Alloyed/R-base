@@ -205,7 +205,7 @@ public class Client implements PConstants {
 				", Actors: " + stage.activeActors.size(),
 				0, 10);
 	}
-
+	
 	public void keyPressed() {
 		if (currentMode != menu || chat.isChatting) {
 			chat.keyPressed();

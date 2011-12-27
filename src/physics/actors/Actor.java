@@ -19,7 +19,7 @@ public class Actor {
 	public Body b;
 	//The stage it belongs to
 	public Stage s;
-	//Unique ID, doesn't work right now
+	//Unique ID
 	public int id;
 	//The team the Actor belongs to
 	public Team team;
@@ -50,41 +50,36 @@ public class Actor {
 	public boolean toStore = false;
 	
 	/*Construction methods*/
-	public Actor(int newid) {
+	public Actor() {
 		modifiers = new String[5];
 		wear = maxWear;
-		id = newid;
-	}
-	
-	public Actor() {
-		this(Stage.getNewId());
 	}
 
-	public void create(Vec2 size) {
+	public void create(Vec2 size, Vec2 pos, float ang, Vec2 vel, float velAng) {
 		this.size = size;
 		d = new BodyDef();
 		fd = new FixtureDef();
 		d.type = BodyType.DYNAMIC;
+		d.position = pos;
+		oldPos = new Vec2(pos);
+		d.angle = ang;
+		oldAng = ang;
+		d.linearVelocity = vel;
+		d.angularVelocity = velAng;
 		fd.density = 1.6f;
 		fd.friction = .3f;
 		
 		makeBody();
 	}
 	
-	public void create(float size) {
-		create(new Vec2(size,size));
+	public void create(Vec2 size, Vec2 pos) {
+		create(size, pos, 0, new Vec2(0, 0), 0);
 	}
 	
 	//Places the Actor on the stage, in a given position, etc.
 	//TODO: make actors invincible for the first few frames of their life
-	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
+	public void place(Stage st) {
 		s = st;
-		d.position = new Vec2(pos);
-		oldPos = new Vec2(pos);
-		oldAng = ang;
-		d.angle = ang;
-		d.linearVelocity.set(vel);
-		d.angularVelocity = velAng;
 		b = s.w.createBody(d);
 		float friction = .5f;
 		if (fd != null) {
@@ -96,11 +91,6 @@ public class Actor {
 		b.setAngularDamping(friction*9.8f);
 		s.actors.put(id, this);
 		s.activeActors.add(this);
-	}
-	
-	public void place (Stage st, Vec2 pos) {
-		toStore = false;
-		place(st, pos, 0, new Vec2(0, 0), 0);
 	}
 	
 	//Takes the Actor off the stage
@@ -155,10 +145,10 @@ public class Actor {
 		for (int i = -1; i < 2; i += 2) {
 			for (int j = -1; j < 2; j += 2) {
 				Actor a = new Actor();
-				a.create(new Vec2(size.x / 2,size.y / 2));
 				Vec2 pos = new Vec2(size.x * i / 4f,size.y * j / 4f);
-				a.place(s, b.getWorldPoint(pos), b.getAngle(),
+				a.create(new Vec2(size.x / 2,size.y / 2), b.getWorldPoint(pos), b.getAngle(),
 						b.getLinearVelocity(), b.getAngularVelocity());
+				a.place(s);
 			}
 		}
 	}

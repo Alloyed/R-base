@@ -42,7 +42,7 @@ public class Server {
 			//Send state to clients here.
 			try { Thread.sleep((long) Stage.frame * 1000); } 
 			catch (Exception e) {}
-			main.step();
+			main.step(Stage.frame);
 			if (main.won()) {
 				Console.out.println("Game finished, restarting.");
 				//TODO: empty state across all clients
