@@ -4,7 +4,6 @@ import org.jbox2d.common.Vec2;
 
 import client.Client;
 
-import physics.Console;
 import physics.actors.Actor;
 import physics.actors.Prop;
 import processing.core.PApplet;

@@ -20,6 +20,7 @@ public class Map extends Actor {
 
 	public Map() {
 		super();
+		dmg = 0;
 		props = new ArrayList<Prop>();
 	}
 	

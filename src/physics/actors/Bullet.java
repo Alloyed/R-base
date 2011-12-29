@@ -7,6 +7,7 @@ public class Bullet extends Actor {
 	
 	public Bullet() {
 		super();
+		dmg = 5;
 		maxWear = 1000;
 		wear = maxWear;
 		baseImage = "bullet";

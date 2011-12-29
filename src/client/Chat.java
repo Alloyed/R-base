@@ -63,7 +63,7 @@ public class Chat extends OutputStream {
 			in = "";
 			input.setStringValue("> "+in+"_");
 			isChatting = true;
-		}	
+		}
 	}
 	
 	@Override
@@ -80,10 +80,13 @@ public class Chat extends OutputStream {
 			if (out.contains(">")) {
 				Console.dbg.println("VLAD THE IMPLIER");
 				color = 0x00ff00;
-			} else if (out.contains("[")) {
+			} else if (out.contains("]")) {
 				//Orange team only
-			} else if (out.contains("{")) {
+			} else if (out.contains("}")) {
 				//Blue team only
+			} else if (out.charAt(0) == '\\') {
+				//This is a system message.
+				labels[0].setStringValue(out.substring(1));
 			}
 			labels[0].setColorValueLabel(color);
 			out = "";

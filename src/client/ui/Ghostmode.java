@@ -2,6 +2,7 @@ package client.ui;
 
 import org.jbox2d.common.Vec2;
 
+import physics.Console;
 import physics.Team;
 import physics.actors.Actor;
 import physics.actors.Ghost;
@@ -20,6 +21,7 @@ public class Ghostmode extends UI {
 	
 	public void start(Vec2 pos) {
 		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), new Vec2(1,1), pos);
+		Console.chat.println("\\Press '.' to spawn in Robot mode, and ',' to spawn in Commander mode.");
 	}
 	
 	@Override
@@ -59,6 +61,9 @@ public class Ghostmode extends UI {
 		else if (p.key == '.') {
 			r.botmode.start();
 			r.botmode.show();
+		} else if (p.key == ',') {
+			r.godmode.start();
+			r.godmode.show();
 		}
 	}
 

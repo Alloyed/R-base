@@ -53,6 +53,7 @@ public class Client implements PConstants {
 	public Menu menu;
 	public Botmode botmode;
 	public Ghostmode ghostmode;
+	public Godmode godmode;
 	public UI currentMode;
 	
 	//Gui stuff
@@ -118,20 +119,24 @@ public class Client implements PConstants {
 			menu = new Menu(this);
 			botmode = new Botmode(this);
 			ghostmode = new Ghostmode(this);
+			godmode = new Godmode(this);
 			for (ControllerInterface c : gooey.getControllerList()) {
 				if (c instanceof Textfield)
 					((Textfield) c).setAutoClear(false);
 			}
 			try {
-				joypad = ControllIO.getInstance(p).getDevice(0);
-				for (int i = 0; i < joypad.getNumberOfSticks(); ++i)
-					joypad.getStick(i).setTolerance(.1f);
+				for (int i = 0; i < ControllIO.getInstance(p).getNumberOfDevices(); ++i) {
+					ControllDevice d = ControllIO.getInstance(p).getDevice(i);
+					if (!(d.getName().equals("Mouse") || d.getName().equals("Keyboard"))) {
+						joypad = d;
+						break;
+					}
+				}
 			} catch (Exception e) {} //No joypad
 			net = new Network(this);
 		}
 		
 		oldtime = System.nanoTime();
-		Console.chat("System",oldtime,"Welcome to R-base! Press '.' to spawn.");
 		skin.start();
 		ghostmode.start(new Vec2(1,1));
 		currentMode = ghostmode;
@@ -146,6 +151,13 @@ public class Client implements PConstants {
 	public void draw() {
 		if (font != null) {
 			p.textFont(font);
+			font = null;
+		}
+		
+		if (joypad != null) {
+			for (int i = 0; i < joypad.getNumberOfButtons(); ++i) {
+				joypad.getButton(i).pressed();
+			}
 		}
 		
 		//Timing
@@ -218,7 +230,7 @@ public class Client implements PConstants {
 			p.key = 0;
 		} else if (p.keyCode == settings.SCREENSHOT) {
 			p.saveFrame("screen-###.png");
-			Console.chat("System", 0 , "Screenshot saved.");
+			Console.chat.println("\\Screenshot saved.");
 		}
 	}
 
@@ -234,8 +246,11 @@ public class Client implements PConstants {
 	}
 	
 	public void mouseReleased() {
+		currentMode.mouseReleased();
+		/*
 		if (!gooey.getGroup(currentMode.group).isMouseOver()) {
 			;
 		}
+		*/
 	}
 }

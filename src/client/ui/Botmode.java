@@ -55,6 +55,7 @@ public class Botmode extends UI{
 		pc = (Robot)r.stage.addActor(Robot.class, 0, 
 				r.settings.team == 0 ? Team.ORANGE : Team.BLUE,
 				new Vec2(1, 1), new Vec2(1,1));
+		Console.chat.println("\\You are a robot. Kill the other team!");
 	}
 	
 	@Override
@@ -71,8 +72,11 @@ public class Botmode extends UI{
 			ControllStick s1 = r.joypad.getStick(1); //Right stick + Left trigger
 			ControllStick s2 = r.joypad.getStick(2); //Right trigger + Right stick
 			pc.state.move = new Vec2(s.getY(), s.getX());
-			if (s1.getX() != 0 && s2.getY() != 0) //The old orientation should stick
-				pc.state.aim = new Vec2(s1.getX(), s2.getY());
+			if (pc.state.move.length() < .2f)
+				pc.state.move.set(0,0);
+			Vec2 newAim = new Vec2(s1.getX(), s2.getY());
+			if (newAim.length()  > .1f)
+				pc.state.aim = newAim;
 		}
 		
 		p.background(r.menu.bg);

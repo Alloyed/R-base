@@ -37,6 +37,7 @@ public class Actor {
 	//Has the actor been picked up by another?
 	public boolean isHeld;
 	//Health, damage, etc.
+	public float dmg = 1; //multiplier
 	public float wear;
 	public float maxWear = 100;
 	public float wearFrac;
@@ -126,7 +127,7 @@ public class Actor {
 		force /= 50;
 		force *= force;
 		force *= 50;
-		hurt(force);
+		hurt(force * other.dmg);
 	}
 	
 	public void hurt(float force) {

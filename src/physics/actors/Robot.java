@@ -194,7 +194,7 @@ public class Robot extends Actor {
 	}
 	
 	public void destroy() {
-		Console.out.println(label + " was killed!");
+		Console.chat.println("\\" + label + " has died.");
 		if (team == Team.BLUE)
 			s.bluebots--;
 		else if (team == Team.ORANGE)
