@@ -51,7 +51,7 @@ public class Godmode extends UI implements PConstants {
 	}
 
 	@Override
-	public void keyPressed() {
+	public void keyPressed(int keycode) {
 		if (p.key == 'w')
 			cursor.state.upPressed = true;
 		else if (p.key == 'a')
@@ -67,7 +67,7 @@ public class Godmode extends UI implements PConstants {
 	}
 
 	@Override
-	public void keyReleased() {
+	public void keyReleased(int keycode) {
 		if (p.key == 'w')
 			cursor.state.upPressed = false;
 		else if (p.key == 'a')

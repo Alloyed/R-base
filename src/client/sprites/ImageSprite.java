@@ -36,10 +36,11 @@ public class ImageSprite implements Sprite, PConstants {
 			length = new Vec2(shape.width,shape.height).length();
 			//TODO: Find some way to differentiate hitbox size and drawn size
 			//Images are being clipped as of right now
-			PGraphics pg = p.createGraphics((int)(shape.width*1f), (int)(shape.height*1f), PConstants.JAVA2D); 
+			PGraphics pg = p.createGraphics((int)(shape.width*2f), (int)(shape.height*2f), PConstants.JAVA2D); 
 			pg.beginDraw();
 				pg.smooth();
-				pg.shape(shape, 0, 0);
+				pg.shapeMode(CENTER);
+				pg.shape(shape, pg.width/2, pg.height/2);
 			pg.endDraw();
 			sprite = pg;
 		} else {

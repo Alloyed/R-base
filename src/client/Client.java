@@ -65,7 +65,9 @@ public class Client implements PConstants {
 	ControlFont cfont;
 	public Skin skin;
 	public ControllDevice joypad;
-
+	public boolean[] buttons;
+	public int[] buttonMap;
+	
 	private Chat chat;
 	
 	/* Gooey methods. */
@@ -129,6 +131,9 @@ public class Client implements PConstants {
 					ControllDevice d = ControllIO.getInstance(p).getDevice(i);
 					if (!(d.getName().equals("Mouse") || d.getName().equals("Keyboard"))) {
 						joypad = d;
+						buttons = new boolean[d.getNumberOfButtons()];
+						buttonMap = new int[d.getNumberOfButtons()];
+						buttonMap[1] = settings.USE;
 						break;
 					}
 				}
@@ -156,7 +161,16 @@ public class Client implements PConstants {
 		
 		if (joypad != null) {
 			for (int i = 0; i < joypad.getNumberOfButtons(); ++i) {
-				joypad.getButton(i).pressed();
+				boolean btn = joypad.getButton(i).pressed();
+				if (btn != buttons[i]) {
+					buttons[i] = btn;
+					Console.out.println(i);
+					if (btn) {
+						keyPressed(buttonMap[i]);
+					} else {
+						keyReleased(buttonMap[i]);
+					}
+				}
 			}
 		}
 		
@@ -218,28 +232,42 @@ public class Client implements PConstants {
 				0, 10);
 	}
 	
+	/*
+	 * Key pressed/released from processing's side.
+	 * All game keys that can also be used by controllers 
+	 *  are handled by keyPressed(int keycode) 
+	 *  so that I can arbitrarily call it for the joypads.
+	 * Chat is left here, 'cause it needs straight keys, 
+	 *  and shouldn't respond to a joypad.
+	 */
 	public void keyPressed() {
 		if (currentMode != menu || chat.isChatting) {
 			chat.keyPressed();
 		}
-		if (!chat.isChatting) {
-			currentMode.keyPressed();
-		}
-			
+		keyPressed(p.keyCode);	
 		if (p.key == ESC) { //Keeps game from stopping at ESC
 			p.key = 0;
-		} else if (p.keyCode == settings.SCREENSHOT) {
-			p.saveFrame("screen-###.png");
-			Console.chat.println("\\Screenshot saved.");
 		}
 	}
 
 	public void keyReleased() {
-		if (!chat.isChatting) {
-			currentMode.keyReleased();
+		keyReleased(p.keyCode);
+	}
+	
+	public void keyPressed(int keycode) {
+		if (keycode == settings.SCREENSHOT) {
+			p.saveFrame("screen-###.png");
+			Console.chat.println("\\Screenshot saved.");
+		} else if (!chat.isChatting) {
+			currentMode.keyPressed(keycode);
 		}
 	}
 	
+	public void keyReleased(int keycode) {
+		if (!chat.isChatting) {
+			currentMode.keyReleased(keycode);
+		}
+	}
 	
 	public void mousePressed() {
 		currentMode.mousePressed();

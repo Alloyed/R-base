@@ -124,14 +124,14 @@ public class Botmode extends UI{
 	}
 	
 	@Override
-	public void keyPressed() {
-		if (p.keyCode == r.settings.UP)
+	public void keyPressed(int keycode) {
+		if (keycode == r.settings.UP)
 			pc.state.upPressed = true;
-		else if (p.keyCode == r.settings.LEFT)
+		else if (keycode == r.settings.LEFT)
 			pc.state.leftPressed = true;
-		else if (p.keyCode == r.settings.DOWN)
+		else if (keycode == r.settings.DOWN)
 			pc.state.downPressed = true;
-		else if (p.keyCode == r.settings.RIGHT)
+		else if (keycode == r.settings.RIGHT)
 			pc.state.rightPressed = true;
 		else if (p.key == PConstants.ESC)
 			r.menu.show();
@@ -140,16 +140,16 @@ public class Botmode extends UI{
 	}
 	
 	@Override
-	public void keyReleased() {
-		if (p.keyCode == r.settings.USE)
+	public void keyReleased(int keycode) {
+		if (keycode == r.settings.USE)
 			pc.toggleHold();
-		if (p.keyCode == r.settings.UP)
+		if (keycode == r.settings.UP)
 			pc.state.upPressed = false;
-		else if (p.keyCode == r.settings.LEFT)
+		else if (keycode == r.settings.LEFT)
 			pc.state.leftPressed = false;
-		else if (p.keyCode == r.settings.DOWN)
+		else if (keycode == r.settings.DOWN)
 			pc.state.downPressed = false;
-		else if (p.keyCode == r.settings.RIGHT)
+		else if (keycode == r.settings.RIGHT)
 			pc.state.rightPressed = false;
 	}
 	

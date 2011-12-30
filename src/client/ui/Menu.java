@@ -93,28 +93,19 @@ public class Menu extends UI {
 	}
 
 	@Override
-	public void keyPressed() {
+	public void keyPressed(int keycode) {
 		if (p.key == PConstants.ESC)
 			lastMode.show();
 	}
 
 	@Override
-	public void keyReleased() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyReleased(int keycode) {}
 
 	@Override
-	public void mousePressed() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed() {}
 
 	@Override
-	public void mouseReleased() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased() {}
 
 	@Override
 	public void show() {

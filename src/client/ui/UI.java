@@ -12,8 +12,8 @@ public abstract class UI {
 		p = r.p;
 	}
 	public abstract void draw();
-	public abstract void keyPressed();
-	public abstract void keyReleased();
+	public abstract void keyPressed(int keycode);
+	public abstract void keyReleased(int keycode);
 	public abstract void mousePressed();
 	public abstract void mouseReleased();
 	public void show() {
