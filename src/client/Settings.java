@@ -2,7 +2,6 @@ package client;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
@@ -17,6 +16,17 @@ import nanoxml.XMLElement;
 
 /*Client settings*/
 public class Settings {
+	/* Keys
+	 * TODO: make UP or W valid entries
+	 */
+	public Integer 
+		UP           = 87,
+		DOWN         = 83,
+		LEFT         = 65,
+		RIGHT        = 68,
+		USE          = 69,
+		CHAT         = 84,
+		SCREENSHOT   = 114;
 //	@ControlElement (x=30,y=220, properties = {"label=width", "width=40", "listen=true"})
 	public String WINDOW_WIDTH = "800";
 //	@ControlElement (x=80,y=220, properties = {"label=height", "width=40", "listen=true"})
@@ -34,9 +44,12 @@ public class Settings {
 	public boolean ROTATE_FORCE = true;
 	
 //	@ControlElement (x=30,y=260, properties = {"label=skin", "width=60", "listen=true"})
-	public String SKIN_FOLDER = "skin";
+	public String SKIN_FOLDER = "suave";
 //	@ControlElement (x=30,y=310, properties = {"label=Team?", "min=0", "max=1", "width=60", "listen=true"})
 	public int team = 0;
+//	@ControlElement (x=30,y=330,label="Fixed timestep?", 
+//			properties={"height=20","width=20"})
+	public boolean FIXED_TIMESTEP = false;
 	
 //	private PApplet p;
 

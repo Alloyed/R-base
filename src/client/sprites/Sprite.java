@@ -3,6 +3,7 @@ package client.sprites;
 import org.newdawn.slick.Graphics;
 
 import physics.actors.Actor;
+import physics.actors.Prop;
 
 /*A sprite draws an actor to the screen.*/
 public interface Sprite {
@@ -16,4 +17,8 @@ public interface Sprite {
 	 * See Actor for the variables you can use to customize this. 
 	 */
 	public void draw(Graphics g, Actor a);
+	/*
+	 * Draws the Prop pr, used by MapSprite.
+	 */
+	public void draw(Graphics g, Prop pr);
 }

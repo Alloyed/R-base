@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import physics.Console;
 import physics.Team;
 import physics.actors.Actor;
 import physics.actors.Ghost;
@@ -22,45 +23,47 @@ public class Ghostmode  extends BasicGameState {
 	
 	public void start(Vec2 pos) {
 		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), new Vec2(1,1), pos);
+		Console.chat.println("\\Press '.' to spawn in Robot mode, and ',' to spawn in Commander mode.");
 	}
-	
-	public void keyPressed() {
-		/*if (p.key == 'w')
+	/*
+	@Override
+	public void keyPressed(int keycode) {
+		if (keycode == r.settings.UP)
 			cursor.state.upPressed = true;
-		else if (p.key == 'a')
+		else if (keycode == r.settings.LEFT)
 			cursor.state.leftPressed = true;
-		else if (p.key == 's')
+		else if (keycode == r.settings.DOWN)
 			cursor.state.downPressed = true;
-		else if (p.key == 'd')
+		else if (keycode == r.settings.RIGHT)
 			cursor.state.rightPressed = true;
 		else if (p.key == PConstants.ESC)
 			r.menu.show();
-			*/
+		
 	}
 
-	public void keyReleased() {
-		/*
-		if (p.key == 'w')
+	@Override
+	public void keyReleased(int keycode) {
+		if (keycode == r.settings.UP)
 			cursor.state.upPressed = false;
-		else if (p.key == 'a')
+		else if (keycode == r.settings.LEFT)
 			cursor.state.leftPressed = false;
-		else if (p.key == 's')
+		else if (keycode == r.settings.DOWN)
 			cursor.state.downPressed = false;
-		else if (p.key == 'd')
+		else if (keycode == r.settings.RIGHT)
 			cursor.state.rightPressed = false;
+		else if (p.key == '.') {
+			r.botmode.start();
+			r.botmode.show();
+		} else if (p.key == ',') {
+			r.godmode.start();
+			r.godmode.show();
+		}
+	}
+
+	public void mousePressed() {}
+
+	public void mouseReleased() {}
 	*/
-	}
-
-	public void mousePressed() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseReleased() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {

@@ -3,12 +3,11 @@ package client.sprites;
 import org.jbox2d.common.Vec2;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Shape;
 
-import client.Client;
 import client.ui.Loop;
 
 import physics.actors.Actor;
+import physics.actors.Prop;
 
 public class RectSprite implements Sprite {
 	Loop c;
@@ -45,7 +44,7 @@ public class RectSprite implements Sprite {
 			c.cam.scale(g, a.size.x * width, a.size.y * height);
 			c.cam.rotate(g, angle);
 			g.setColor(color);
-			g.fillRect(-32, -32, 128, 128);
+			g.fillRect(-32, -32, 64, 64);
 //			if (a.isHeld) {
 //				p.fill(150, 120, 70, 100);
 //				p.ellipse(0, 0, length, length);
@@ -60,5 +59,28 @@ public class RectSprite implements Sprite {
 //			p.text(a.label, spot.x, spot.y);
 //		}
 	}
-	
+	@Override
+	public void draw(Graphics g, Prop pr) {
+		
+		Vec2 pos = pr.pos;
+		float angle = pr.angle;
+		g.pushTransform();
+		g.resetTransform();
+		{
+			c.cam.translate(g, pos.x, pos.y);
+			c.cam.rotate(g, angle);
+			c.cam.scale(g, pr.width / width, pr.height / height);
+			
+			g.setColor(color);
+			g.fillRect(-32, -32, 64, 64);
+//			if (a.isHeld) {
+//				p.fill(150, 120, 70, 100);
+//				p.ellipse(0, 0, length, length);
+//			}
+		}
+		g.popTransform();
+	}
+	public void draw(Vec2 pos, float ang) {
+		
+	}
 }

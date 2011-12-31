@@ -4,12 +4,16 @@ import java.util.LinkedList;
 
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.contacts.Contact;
+import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import physics.Console;
 import physics.Stage;
+import physics.Team;
 
 /*A player in the world. TODO:Teams, a lot more*/
 public class Robot extends Actor {
@@ -20,8 +24,9 @@ public class Robot extends Actor {
 	public LinkedList<Actor> inventory;
 	
 	final float HALF_PI = (float) (Math.PI/2f);
-	public Robot(int id) {
-		super(id);
+	public Robot() {
+		super();
+		treads = new Treads();
 		maxWear = 100;
 		wear    = maxWear;
 		isImportant = true;
@@ -30,30 +35,34 @@ public class Robot extends Actor {
 		inventory = new LinkedList<Actor>();
 		for (int i=0; i<5; ++i) {
 			Bullet b = new Bullet();
-			b.create(.3f);
+			b.create(new Vec2(.3f, .3f), new Vec2(0, 0));
 			inventory.add(b);
 		}
 		
 		state = new PlayerState();
 	}
 	
-	public Robot() {
-		this(Stage.getNewId());
-	}
-	
 	@Override
-	public void makeBody() {
-		super.makeBody();
+	public void create(Vec2 size, Vec2 pos, float ang, Vec2 vel, float velAng) {
+		super.create(size, pos, ang, vel, velAng);
+		treads.create(size, pos, ang, vel, velAng);
 	}
 	
-	public void place(Stage st, Vec2 pos, float ang, Vec2 vel, float velAng) {
-		treads = st.addActor(Treads.class, new Vec2(1,1), pos);
-		super.place(st, pos, ang, vel, velAng);
+	public void place(Stage st) {
+		treads.place(st);
+		super.place(st);
+		
+		RevoluteJointDef j = new RevoluteJointDef();
+		j.initialize(b, treads.b, b.getWorldCenter());
+		st.w.createJoint(j);
+		if (team == Team.BLUE)
+			st.bluebots++;
+		else if (team == Team.ORANGE)
+			st.orangebots++;
 	}
 	
 	public Vec2 getLocalPointAhead(float dist) {
-		Vec2 dir = state.aim.sub(b.getWorldCenter());
-		float ang = (float)Math.atan2(dir.y, dir.x);
+		float ang = (float)Math.atan2(state.aim.y, state.aim.x);
 		return new Vec2(dist*(float)Math.cos(ang),dist*(float)Math.sin(ang));
 	}
 	
@@ -111,7 +120,8 @@ public class Robot extends Actor {
 	
 	/*Take some scrap*/
 	public void take(Actor a) {
-		if (a != null && s.activeActors.contains(a)) { //Is it a pickup-able thing?
+		//FIXME: a instanceof Map is a pretty bad stopgap
+		if (a != null && !(a instanceof Map) && s.activeActors.contains(a)) { //Is it a pickup-able thing?
 			inventory.add(a);
 			a.wear = a.maxWear;
 			a.store();
@@ -127,7 +137,8 @@ public class Robot extends Actor {
 			release();
 		} else if (!inventory.isEmpty()) {
 			a = inventory.pollFirst();
-			a.place(s,getPointAhead(a.size.length()+.1f));
+			a.create(a.size,  getPointAhead(a.size.length()+.1f));
+			a.place(s);
 		} else {
 			return;
 		}
@@ -136,28 +147,38 @@ public class Robot extends Actor {
 	}
 	
 	public void force() {
-		Vec2 dir = state.aim.sub(b.getWorldCenter());
+		Vec2 dir = state.aim;
 		float ang = (float)Math.atan2(dir.y, dir.x);
 		b.setTransform(b.getWorldCenter(), ang);
 
 		Vec2 move = new Vec2(0, 0);
-		if (state.upPressed)
-			move.addLocal(0, -1);
-		if (state.leftPressed)
-			move.addLocal(-1, 0);
-		if (state.rightPressed)
-			move.addLocal(1, 0);
-		if (state.downPressed)
-			move.addLocal(0, 1);
-		move.normalize();
-		if (state.ROTATE_FORCE) {
-			ang += HALF_PI;
-			move.set(move.x * (float)Math.cos(ang)
-					- move.y * (float)Math.sin(ang),
-					move.x * (float)Math.sin(ang)
-					+ move.y * (float)Math.cos(ang));
+		if (state.move.x == 0 && state.move.y == 0) {
+			if (state.upPressed)
+				move.addLocal(0, -1);
+			if (state.leftPressed)
+				move.addLocal(-1, 0);
+			if (state.rightPressed)
+				move.addLocal(1, 0);
+			if (state.downPressed)
+				move.addLocal(0, 1);
+			move.normalize();
+			if (state.ROTATE_FORCE) {
+				ang += HALF_PI;
+				move.set(move.x * (float)Math.cos(ang)
+						- move.y * (float)Math.sin(ang),
+						move.x * (float)Math.sin(ang)
+						+ move.y * (float)Math.cos(ang));
+			}
+		} else {
+			move.set(state.move);
+			if (state.ROTATE_FORCE) {
+				ang += HALF_PI;
+				move.set(move.x * (float)Math.cos(ang)
+						- move.y * (float)Math.sin(ang),
+						move.x * (float)Math.sin(ang)
+						+ move.y * (float)Math.cos(ang));
+			}
 		}
-
 		b.applyForce(move.mul(speed), b.getWorldCenter());
 		Vec2 vel = b.getLinearVelocity();
 		treads.b.setTransform(b.getWorldCenter(), (float)Math.atan2(vel.y, vel.x));
@@ -166,18 +187,35 @@ public class Robot extends Actor {
 			held.b.setTransform(getPointAhead(held.size.length()), held.b.getAngle());
 	}
 	
+	public void preSolve(Contact c, Manifold m, Actor other) {
+		if (other.size.length() < 1 && other.b.getLinearVelocity().length() < 4)
+			take(other);
+	}
+	
 	public void destroy() {
-		Console.out.println(label + " was killed!");
+		Console.chat.println("\\" + label + " has died.");
+		if (team == Team.BLUE)
+			s.bluebots--;
+		else if (team == Team.ORANGE)
+			s.orangebots--;
+		if (held != null)
+			release();
 		s.delete(treads);
 		
 		Actor shell = new Actor();
-		shell.create(size);
-		shell.place(s,b.getWorldCenter());
+		shell.create(size, b.getWorldCenter());
+		shell.place(s);
 		shell.b.setTransform(b.getWorldCenter(), b.getAngle());
-		shell.b.applyLinearImpulse(b.getLinearVelocity(), shell.b.getWorldCenter());
+		shell.b.applyLinearImpulse(b.getLinearVelocity(), 
+				shell.b.getWorldCenter());
 		shell.baseImage = "playerTop";
+		shell.modifiers = modifiers;
 		for(Actor a : inventory) {
-			a.place(s, b.getWorldCenter(),b.getAngle(), b.getLinearVelocity(), b.getAngularVelocity());
+			a.create(a.size, b.getWorldCenter(),  
+							b.getAngle(), 
+							b.getLinearVelocity(), 
+							b.getAngularVelocity());
+			a.place(s);
 		}
 	}
 

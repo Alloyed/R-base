@@ -1,5 +1,6 @@
 package client;
 
+import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -19,7 +20,7 @@ public class Camera {
 	public Camera(GameContainer p) {
 		this.p = p;
 		scale = p.getWidth() < p.getHeight() ? p.getWidth() / 1680f : p.getHeight() / 1050f;
-		//meterScale *= scale;
+		meterScale *= scale;
 		Console.dbg.println(p.getHeight() +"  "+meterScale);
 	}
 	
@@ -27,16 +28,14 @@ public class Camera {
 		this.x = (x * meterScale) - zeroX;
 		this.y = (y * meterScale) - zeroY;
 		g.translate(this.x,this.y);
-//		g.translate(400, 300);
 	}
 	
 	public void scale(Graphics g, float x, float y) {
 		g.scale(scale * x,scale * y); //wat
 	}
 	
-	//Note: does not work
 	public void rotate(Graphics g, float theta) {
-		g.rotate(this.x, this.y, theta);
+		g.rotate(0, 0,(float) Math.toDegrees(theta));
 	}
 		
 	//Moves pos to center
@@ -47,7 +46,7 @@ public class Camera {
 	}
 	
 	public Vec2 screenToWorld(Vec2 in) {
-		return new Vec2((in.x-zeroX)/meterScale,(in.y-zeroY)/meterScale);
+		return new Vec2((in.x+zeroX)/meterScale,(in.y+zeroY)/meterScale);
 	}
 	
 	public Vec2 worldToScreen(Vec2 in) {

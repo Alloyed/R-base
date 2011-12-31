@@ -1,10 +1,18 @@
 <R-base>
+<UP TYPE="class java.lang.Integer">87</UP>
+<DOWN TYPE="class java.lang.Integer">83</DOWN>
+<LEFT TYPE="class java.lang.Integer">65</LEFT>
+<RIGHT TYPE="class java.lang.Integer">68</RIGHT>
+<USE TYPE="class java.lang.Integer">69</USE>
+<CHAT TYPE="class java.lang.Integer">84</CHAT>
+<SCREENSHOT TYPE="class java.lang.Integer">114</SCREENSHOT>
 <WINDOW_WIDTH TYPE="class java.lang.String">800</WINDOW_WIDTH>
 <WINDOW_HEIGHT TYPE="class java.lang.String">600</WINDOW_HEIGHT>
 <IP TYPE="class java.lang.String">localhost</IP>
 <PORT TYPE="class java.lang.String">9001</PORT>
-<USERNAME TYPE="class java.lang.String">tttttsdsdsd</USERNAME>
+<USERNAME TYPE="class java.lang.String">Vidya</USERNAME>
 <ROTATE_FORCE TYPE="class java.lang.Boolean">true</ROTATE_FORCE>
 <SKIN_FOLDER TYPE="class java.lang.String">skin</SKIN_FOLDER>
 <team TYPE="class java.lang.Integer">1</team>
+<FIXED_TIMESTEP TYPE="class java.lang.Boolean">true</FIXED_TIMESTEP>
 </R-base>

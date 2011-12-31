@@ -19,8 +19,9 @@ public class Buffer {
 	}
 	
 	public byte[] get() {
-		byte[] b = new byte[bytes.size()];
-		for (int i = 0; i < bytes.size(); ++i) {
+		byte[] b = new byte[bytes.size()+1];
+		b[0] = 12;
+		for (int i = 1; i < bytes.size(); ++i) {
 			b[i] = bytes.get(i);
 		}
 		return b;

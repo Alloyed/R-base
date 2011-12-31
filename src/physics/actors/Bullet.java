@@ -7,6 +7,7 @@ public class Bullet extends Actor {
 	
 	public Bullet() {
 		super();
+		dmg = 5;
 		maxWear = 1000;
 		wear = maxWear;
 		baseImage = "bullet";
@@ -18,7 +19,12 @@ public class Bullet extends Actor {
 		s.m_radius = size.length() / 2f;
 		fd.shape = s;
 		fd.friction = .3f;
-		fd.density = 60;
+		fd.density = 50;
 		d.bullet = true;
+	}
+	
+	@Override
+	public void destroy() {
+		
 	}
 }

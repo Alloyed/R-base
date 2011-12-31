@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="lib/scalar.jar"/>
 	<classpathentry kind="lib" path="lib/slick.jar"/>
 	<classpathentry kind="lib" path="lib/tinylinepp.jar"/>
+	<classpathentry kind="lib" path="lib/svgSalamander.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

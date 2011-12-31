@@ -15,7 +15,6 @@ import physics.Console;
 import physics.actors.Actor;
 //import processing.core.PApplet;
 
-import client.Client;
 import client.ui.Loop;
 
 
@@ -31,7 +30,7 @@ public class Skin extends Thread {
 		//colors
 		colors = new HashMap<String, Color>();
 		InputStream colorFile = ResourceLoader
-				.getResourceAsStream("data/images/"+c.settings.SKIN_FOLDER+"/colors.txt");
+				.getResourceAsStream(path+"colors.txt");
 		Scanner sc = new Scanner(colorFile);
 		while (sc.hasNext()) {
 				String s = sc.nextLine();
@@ -64,23 +63,27 @@ public class Skin extends Thread {
 		sprites.put("none", new EmptySprite());
 		sprites.put("logo", new ImageSprite(c, path+"logo.png"));
 		sprites.put("box", new ImageSprite(c, path+"box.svgz"));
+		sprites.put("map", new MapSprite(c));
 		sprites.put("prop", new RectSprite(c,getColor("wall")));
 		sprites.put("floor", new RectSprite(c,getColor("bg")));
 		sprites.put("floor-blue", new RectSprite(c,getColor("bg-blue")));
 		sprites.put("floor-orange", new RectSprite(c,getColor("bg-orange")));
-		//String path = "data/images/"+c.settings.SKIN_FOLDER+"/";
-		File dir = new File(path);
+		
 		//c.font = p.createFont("uni05_53.ttf",8,false);
 		//p.textFont(c.font);
-		if(dir.exists())
-			for (File f : dir.listFiles())
+		
+		File dir = new File(path);
+		if(dir.exists()) {
+			for (File f : dir.listFiles()) {
 				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg") || f.getName().endsWith(".svgz")) {
 					String s = f.getName().split("\\.")[0];
 					sprites.remove(s);
 					sprites.put(s, new ImageSprite(c, f.toString()));
 				}
+			}
+		}
+		
 		Console.dbg.println("Skins loaded.");
-		 
 	}
 	
 	public void run() {
@@ -91,7 +94,7 @@ public class Skin extends Thread {
 		//p.textFont(c.font);
 		if(dir.exists())
 			for (File f : dir.listFiles())
-				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg")) {
+				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg") || f.getName().endsWith(".svgz")) {
 					String s = f.getName().split("\\.")[0];
 					sprites.remove(s);
 					sprites.put(s, new ImageSprite(c, f.toString()));
