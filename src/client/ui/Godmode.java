@@ -6,16 +6,16 @@ import org.jbox2d.common.Vec2;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import physics.Console;
 import physics.Team;
 import physics.actors.Actor;
 import physics.actors.Ghost;
+import TWLSlick.BasicTWLGameState;
 
 /*One Giant TODO*/
-public class Godmode  extends BasicGameState {
+public class Godmode  extends BasicTWLGameState {
 	public Ghost cursor;
 	public Loop r;
 	ArrayList<Actor> selected;
@@ -24,6 +24,12 @@ public class Godmode  extends BasicGameState {
 		r = l;
 		//group = "godmode";
 		//r.gooey.addGroup(group, 0, 0);
+	}
+	
+	final static int id = 3;
+	@Override
+	public int getID() {
+		return id;
 	}
 	
 	public void start() {
@@ -177,7 +183,7 @@ public class Godmode  extends BasicGameState {
 		g.setBackground(r.skin.getColor("bg"));
 		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
 		for (Actor a:r.stage.activeActors) {
-			r.draw(g, a);
+			r.skin.draw(g, a);
 		}
 		
 	}
@@ -187,12 +193,6 @@ public class Godmode  extends BasicGameState {
 			throws SlickException {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

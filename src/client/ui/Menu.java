@@ -5,21 +5,27 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import client.*;
 import client.sprites.*;
-
 import physics.Team;
+import TWLSlick.BasicTWLGameState;
+import de.matthiasmann.twl.Button;
 
 /* I've tried to move all those callback methods into here. 
  * It didn't work. 
  */
-public class Menu extends BasicGameState {
+public class Menu extends BasicTWLGameState {
 	Image logo;
 	String team = "";
 	Color bg;
+	Loop l;
+	public final static int id = 0;
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return id;
+	}
 	
 	/*Gooey methods*/
 	public void connect() {
@@ -47,7 +53,10 @@ public class Menu extends BasicGameState {
 				.setColorActive(r.skin.getColor(s+"-pressed"));
 	}
 	*/
-	public Menu(Client r) {
+	public Menu(Loop l) {
+		this.l = l;
+		bg = Color.black;
+		logo = ((ImageSprite)l.skin.get("logo")).sprite;
 //		group = "menu";
 		//logo = (PImage) ((ImageSprite)r.skin.get("logo")).sprite;
 		//ControlP5 gooey = r.gooey;
@@ -117,23 +126,68 @@ public class Menu extends BasicGameState {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
 			throws SlickException {
 		g.setBackground(bg);
-		g.drawImage(logo, gc.getWidth() / 2f, gc.getHeight() / 2f);		
+		g.drawImage(logo, (gc.getWidth() / 2f) - (logo.getWidth()/2), 
+				(gc.getHeight() / 2f) - (logo.getHeight() / 2));		
 	}
+	
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
-
-		
-	}
-
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
+		if (toResume)
+			sg.enterState(1);
+		if (toQuit)
+			gc.exit();
 	}
 	
+	public boolean toResume = false, toQuit = false;
+	private Button resume, quit, connect;
+
+    @Override
+    protected void createRootPane() {
+        super.createRootPane();
+
+        resume = new Button("Resume");
+        resume.addCallback(new Runnable() {
+            public void run() {
+                toResume = true;
+            }
+        });
+        rootPane.add(resume);
+        
+        quit = new Button("Quit");
+        quit.addCallback(new Runnable() {
+            public void run() {
+                toQuit = true;
+            }
+        });
+        rootPane.add(quit);
+        
+        connect = new Button("Connect");
+        connect.addCallback(new Runnable() {
+            public void run() {
+                System.out.println("It works!");
+            }
+        });
+        rootPane.add(connect);
+    }
+    //btn("resume").setPosition(30, 30).setSize(100, 30);
+  	//btn("quit").setPosition(30, 70).setSize(100, 30);		
+  	//btn("connect").setPosition(670, 120).setSize(100, 30);
+    @Override
+    protected void layoutRootPane() {
+        resume.adjustSize();
+        resume.setPosition(30, 30);
+        
+        quit.adjustSize();
+        quit.setPosition(30, 70);
+        
+        connect.adjustSize();
+        connect.setPosition(670, 120);
+    }
+    
 }

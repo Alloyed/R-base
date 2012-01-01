@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.util.ResourceLoader;
 
 import physics.Console;
@@ -19,6 +21,15 @@ import client.ui.Loop;
 
 
 public class Skin extends Thread {
+	//TODO: non-image promises
+	class ImagePromise {
+		public String key, file;
+		public ImagePromise(String k, String f) {
+			key = k; file = f;
+		}
+	}
+	
+	LinkedList<ImagePromise> toLoad;
 	Map<String, Sprite>  sprites;
 	HashMap<String, Color> colors;
 	Loop c;
@@ -26,7 +37,7 @@ public class Skin extends Thread {
 	public Skin(Loop c) {
 		//Sprites
 		this.c = c;
-		String path = "data/images/"+c.settings.SKIN_FOLDER+"/";
+		String path = "images/"+c.settings.SKIN_FOLDER+"/";
 		//colors
 		colors = new HashMap<String, Color>();
 		InputStream colorFile = ResourceLoader
@@ -59,10 +70,9 @@ public class Skin extends Thread {
 		
 		//Sprites
 		sprites = Collections.synchronizedMap(new HashMap<String, Sprite>());
-		//Special cases, rest are handled by thread
+		toLoad = new LinkedList<ImagePromise>();
+		//Special cases
 		sprites.put("none", new EmptySprite());
-		sprites.put("logo", new ImageSprite(c, path+"logo.png"));
-		sprites.put("box", new ImageSprite(c, path+"box.svgz"));
 		sprites.put("map", new MapSprite(c));
 		sprites.put("prop", new RectSprite(c,getColor("wall")));
 		sprites.put("floor", new RectSprite(c,getColor("bg")));
@@ -72,35 +82,24 @@ public class Skin extends Thread {
 		//c.font = p.createFont("uni05_53.ttf",8,false);
 		//p.textFont(c.font);
 		
-		File dir = new File(path);
+		File dir = new File("data/" + path);
 		if(dir.exists()) {
 			for (File f : dir.listFiles()) {
 				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg") || f.getName().endsWith(".svgz")) {
 					String s = f.getName().split("\\.")[0];
-					sprites.remove(s);
-					sprites.put(s, new ImageSprite(c, f.toString()));
+					toLoad.add(new ImagePromise(s, f.toString()));
 				}
 			}
 		}
-		
-		Console.dbg.println("Skins loaded.");
 	}
 	
-	public void run() {
-		/*
-		String path = "data/images/"+c.settings.SKIN_FOLDER+"/";
-		File dir = new File(path);
-		//c.font = p.createFont("uni05_53.ttf",8,false);
-		//p.textFont(c.font);
-		if(dir.exists())
-			for (File f : dir.listFiles())
-				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg") || f.getName().endsWith(".svgz")) {
-					String s = f.getName().split("\\.")[0];
-					sprites.remove(s);
-					sprites.put(s, new ImageSprite(c, f.toString()));
-				}
-		Console.dbg.println("Skins loaded.");
-		*/
+	/**
+	 * Loads the next resource. returns true as soon as it's done
+	 */
+	public boolean next() {
+		ImagePromise p = toLoad.poll();
+		sprites.put(p.key, new ImageSprite(c, p.file));
+		return toLoad.isEmpty();
 	}
 	
 	public Sprite get(String str) {
@@ -125,6 +124,10 @@ public class Skin extends Thread {
 	
 	public Sprite get(Actor a) {
 		return get(a.getImage());
+	}
+	
+	public void draw(Graphics g, Actor a) {
+		get(a).draw(g, a);
 	}
 	
 	public Color getColor(String s) {

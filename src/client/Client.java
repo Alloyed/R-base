@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.net.InetAddress;
@@ -28,41 +30,26 @@ import org.jbox2d.common.*;
 import org.newdawn.slick.*;
 import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.FileSystemLocation;
+import org.newdawn.slick.util.ResourceLoader;
+import org.newdawn.slick.util.ResourceLocation;
+
+import TWLSlick.TWLStateBasedGame;
 
 import client.sprites.*;
 import client.ui.*;
 
 @SuppressWarnings("unused")
-public class Client extends StateBasedGame {
+public class Client extends TWLStateBasedGame {
 	public Client(String name) {
 		super(name);
 	}
-
-
-	// Config options
-
 	
-	// Game state
+	@Override
+	protected URL getThemeURL() {
+			return ResourceLoader.getResource("gui/simple.xml");
+	}
 	
-	
-	//Views
-//	public Menu menu;
-//	public Botmode botmode;
-//	public Ghostmode ghostmode;
-//	public Godmode godmode;
-//	public UI currentMode;
-	
-	//Gui stuff
-	//public PApplet p;
-	
-//	public ControlP5 gooey;
-	int mode = 0;
-//	public PFont font;
-//	ControlFont cfont;
-//	public Skin skin;
-//	public ControllDevice joypad;
-//	public boolean[] buttons;
-//	public int[] buttonMap;
 	
 //	private Chat chat;
 	
@@ -290,10 +277,12 @@ public class Client extends StateBasedGame {
 	
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
+			ResourceLoader.addResourceLocation(new FileSystemLocation(new File("data")));
 			Loop l = new Loop(gc);
-			gc.setMouseCursor(new Image("blank.png"), 0, 0);
-			gc.setFullscreen(true);
-			addState(new Botmode(l));
+			//WHY.jpg
+			//gc.setMouseCursor(new Image("blank.png"), 0, 0);
+			addState(new Loading(l));
+			enterState(Loading.id);
 	}
 	
 	/**

@@ -6,18 +6,25 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import TWLSlick.BasicTWLGameState;
 
 import physics.Console;
 import physics.Team;
 import physics.actors.*;
 
-public class Botmode  extends BasicGameState {
+public class Botmode  extends BasicTWLGameState {
 	public Robot pc;
 	Loop l;
 //	public PGraphics inv, health;
 	private Vec2 lerped;
+	
+	final static int id = 2;
+	@Override
+	public int getID() {
+		return id;
+	}
 	
 	public void inv() {
 		//TODO: make boolet from scrap metal
@@ -128,50 +135,6 @@ public class Botmode  extends BasicGameState {
 	}
 	*/
 	/*
-	@Override
-	public void keyPressed(int keycode) {
-		if (keycode == r.settings.UP)
-			pc.state.upPressed = true;
-		else if (keycode == r.settings.LEFT)
-			pc.state.leftPressed = true;
-		else if (keycode == r.settings.DOWN)
-			pc.state.downPressed = true;
-		else if (keycode == r.settings.RIGHT)
-			pc.state.rightPressed = true;
-		else if (p.key == PConstants.ESC)
-			r.menu.show();
-		else if (p.key == 'q')
-			inv();
-	}
-	*/
-	/*
-	@Override
-	public void keyReleased(int keycode) {
-		if (keycode == r.settings.USE)
-			pc.toggleHold();
-		if (keycode == r.settings.UP)
-			pc.state.upPressed = false;
-		else if (keycode == r.settings.LEFT)
-			pc.state.leftPressed = false;
-		else if (keycode == r.settings.DOWN)
-			pc.state.downPressed = false;
-		else if (keycode == r.settings.RIGHT)
-			pc.state.rightPressed = false;
-	}
-	*/
-	/*
-	public void mousePressed() {
-		/*
-		 * TODO: keep from firing when moused over the UI.
-		 * There is a function to do this in the ControlP5 docs.
-		 * It does not work with groups or tabs.
-		 * SDFSDFSDFASDFAJFGGASDJSDF
-		 *
-		pc.fire();
-	}
-	*/
-	public void mouseReleased() {}
-	/*
 	public void show() {
 		pc.state.ROTATE_FORCE = r.settings.ROTATE_FORCE;
 		pc.label = r.settings.USERNAME;
@@ -187,17 +150,15 @@ public class Botmode  extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
 			throws SlickException {
-		/*
+		
 		if (pc.isDead()) { 
-			r.ghostmode.start(pc.oldPos);
-			r.ghostmode.show();
+			sg.enterState(Ghostmode.id);
 		}
-		*/
 
 		g.setBackground(l.skin.getColor("bg"));
 		l.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		for (Actor a:l.stage.activeActors) {
-			l.draw(g, a);
+			l.skin.draw(g, a);
 		}
 		
 		Vec2 aim = lerped.add(pc.b.getPosition());
@@ -249,19 +210,21 @@ public class Botmode  extends BasicGameState {
 		keys(gc, input);
 	}
 	
+	boolean firePressed = false;
 	public void keys(GameContainer gc, Input in) {
-		pc.state.upPressed = in.isKeyDown(Input.KEY_W);
-		pc.state.leftPressed = in.isKeyDown(Input.KEY_A);
-		pc.state.rightPressed = in.isKeyDown(Input.KEY_D);
-		pc.state.downPressed = in.isKeyDown(Input.KEY_S);
+		pc.state.upPressed = in.isKeyDown(l.settings.UP);
+		pc.state.leftPressed = in.isKeyDown(l.settings.LEFT);
+		pc.state.rightPressed = in.isKeyDown(l.settings.RIGHT);
+		pc.state.downPressed = in.isKeyDown(l.settings.DOWN);
+		if (in.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) && firePressed == false) {
+			pc.fire();
+			firePressed = true;
+		} else if (firePressed && !in.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
+			firePressed = false;
+		}
+		
 		if (in.isKeyDown(Input.KEY_Q)) {
 			gc.exit();
 		}
-	}
-
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

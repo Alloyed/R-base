@@ -1,6 +1,7 @@
 package client.sprites;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.net.URI;
@@ -50,6 +51,8 @@ public class ImageSprite implements Sprite {
 				g.setColor(java.awt.Color.white);
 				d.setIgnoringClipHeuristic(true);
 				g.translate(d.getWidth()/4, d.getHeight()/4);
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+									RenderingHints.VALUE_ANTIALIAS_ON);
 				d.render(g);
 				g.dispose();
 				buf.flush();
@@ -89,15 +92,19 @@ public class ImageSprite implements Sprite {
 		g.pushTransform();
 		g.resetTransform();  {
 			
+			
 			c.cam.translate(g, pos.x, pos.y);
 			c.cam.rotate(g, angle);
 			c.cam.scale(g, a.size.x, a.size.y);
 			
 			g.setColor(Color.black);
 			g.drawImage(sprite, -width*.75f, -height*.75f);
-			//if (a.isHeld) {
+			if (a.isHeld) {
+				g.setAntiAlias(true);
+				g.setColor(new Color(150,120,70,50));
+				g.drawOval(-length/2, -length/2, length, length);
 				g.fillOval(-length/2, -length/2, length, length);
-			//}
+			}
 		} g.popTransform();
 		
 //		p.fill(255);

@@ -13,7 +13,7 @@
 	<classpathentry kind="lib" path="lib/jorbis-0.0.15.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/linux"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="R-base/lib/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/packulike.jar"/>
@@ -22,5 +22,8 @@
 	<classpathentry kind="lib" path="lib/slick.jar"/>
 	<classpathentry kind="lib" path="lib/tinylinepp.jar"/>
 	<classpathentry kind="lib" path="lib/svgSalamander.jar"/>
+	<classpathentry kind="lib" path="lib/TWL.jar"/>
+	<classpathentry kind="lib" path="lib/xpp3-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="lib/lzma.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

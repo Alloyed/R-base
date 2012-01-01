@@ -27,11 +27,8 @@ public class Loop {
 				Team.NUETRAL, new Vec2(0,0), 
 				new Vec2(0,0))).startGame(123l);
 		skin = new Skin(this);
-		skin.start();
-	}
-	
-	public void draw(Graphics g, Actor a) {
-		skin.get(a).draw(g, a);
+		skin.run();
+		//gc.setVSync(true);
 	}
 	
 	int accum = 0;
@@ -48,4 +45,5 @@ public class Loop {
 			a.oldAng = a.b.getAngle();
 		}
 	}
+	
 }

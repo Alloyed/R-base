@@ -8,7 +8,9 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.util.ResourceLoader;
+
 
 import physics.Console;
 
@@ -20,13 +22,13 @@ public class Settings {
 	 * TODO: make UP or W valid entries
 	 */
 	public Integer 
-		UP           = 87,
-		DOWN         = 83,
-		LEFT         = 65,
-		RIGHT        = 68,
-		USE          = 69,
-		CHAT         = 84,
-		SCREENSHOT   = 114;
+		UP           = Input.KEY_W,
+		DOWN         = Input.KEY_S,
+		LEFT         = Input.KEY_A,
+		RIGHT        = Input.KEY_D,
+		USE          = Input.KEY_E,
+		CHAT         = Input.KEY_T,
+		SCREENSHOT   = Input.KEY_F3;
 //	@ControlElement (x=30,y=220, properties = {"label=width", "width=40", "listen=true"})
 	public String WINDOW_WIDTH = "800";
 //	@ControlElement (x=80,y=220, properties = {"label=height", "width=40", "listen=true"})
@@ -44,7 +46,7 @@ public class Settings {
 	public boolean ROTATE_FORCE = true;
 	
 //	@ControlElement (x=30,y=260, properties = {"label=skin", "width=60", "listen=true"})
-	public String SKIN_FOLDER = "suave";
+	public String SKIN_FOLDER = "skin";
 //	@ControlElement (x=30,y=310, properties = {"label=Team?", "min=0", "max=1", "width=60", "listen=true"})
 	public int team = 0;
 //	@ControlElement (x=30,y=330,label="Fixed timestep?", 
@@ -58,7 +60,7 @@ public class Settings {
 		XMLElement x = new XMLElement();
 		try {
 			Reader f = new InputStreamReader(
-					ResourceLoader.getResourceAsStream("data/ClientSettings.xml"));
+					ResourceLoader.getResourceAsStream("ClientSettings.xml"));
 			x.parseFromReader(f);
 			@SuppressWarnings("unchecked")
 			Enumeration<XMLElement> e = x.enumerateChildren();
