@@ -2,12 +2,10 @@ package client.sprites;
 
 import org.newdawn.slick.Graphics;
 
-import client.Client;
-import client.ui.Loop;
-
 import physics.actors.Actor;
 import physics.actors.Map;
 import physics.actors.Prop;
+import client.ui.Loop;
 
 /*the map*/
 public class MapSprite implements Sprite {
@@ -27,9 +25,7 @@ public class MapSprite implements Sprite {
 	}
 
 	@Override
-	public void draw(Graphics pg, float x, float y, float max) {
-		;
-	}
+	public void draw(Graphics pg, float x, float y, float max) {}
 
 	@Override
 	public void draw(Graphics g, Prop pr) {}

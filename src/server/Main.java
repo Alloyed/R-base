@@ -5,6 +5,10 @@ import java.net.DatagramPacket;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+
 import physics.*;
 
 /*
@@ -14,15 +18,37 @@ import physics.*;
  * TODO: handle events, collate clients, provide global map, etc.
  */
 
-public class Server {
-	Network n;
+public class Main {
+	class HEYLISTEN extends Listener {
+		@Override
+		public void connected(Connection connection) {
+			Console.dbg.println("WHAT!");
+		}
+		
+		@Override
+		public void disconnected(Connection connection) {
+			
+		}
+		
+		@Override
+		public void received(Connection connection, Object o) {
+			
+		}
+	}
+	
+	Server serv;
 	URL master;
 	URLConnection c;
 	String ip;
 	Stage main; //we might need extra states to emulate the client's state
 	
-	Server(int port) throws IOException {
-		n = new Network(this, port);
+	Main(int tcpPort, int udpPort) throws IOException {
+		serv = new Server();
+		serv.bind(tcpPort, udpPort);
+		Network.register(serv.getKryo());
+		serv.addListener(new HEYLISTEN());
+		serv.start();
+		
 		Console.out.println("Server Successfully Started.");
 		
 		changeAvail(true);
@@ -33,7 +59,7 @@ public class Server {
 		main = new Stage();
 		long seed = System.currentTimeMillis();
 		try {
-			n.call(main, "startGame", new Object[] {seed});
+			//
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -43,7 +69,7 @@ public class Server {
 			try { Thread.sleep((long) Stage.frame * 1000); } 
 			catch (Exception e) {}
 			main.step(Stage.frame);
-			if (main.won()) {
+			if (!main.won()) {
 				Console.out.println("Game finished, restarting.");
 				//TODO: empty state across all clients
 				break;
@@ -69,7 +95,7 @@ public class Server {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Server s = new Server(9001);
+		Main s = new Main(9001, 9002);
 		while (true) {
 			s.game();
 		}

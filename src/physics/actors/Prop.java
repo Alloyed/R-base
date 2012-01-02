@@ -8,13 +8,14 @@ import org.jbox2d.dynamics.contacts.Contact;
 import physics.Team;
 
 
-/* Use for permanent squares in the world
- * TODO: add a texture mode to Sprite so we can make rectangles
+/**
+ * Use for permanent walls in the world
  */
 public class Prop {
 	FixtureDef fd;
 	Fixture f;
 	Actor parent;
+	String label;
 	String baseImage;
 	String modifiers[];
 	Team team;
@@ -23,6 +24,7 @@ public class Prop {
 	public float angle;
 	
 	public Prop() {
+		label = "wall";
 		baseImage = "prop";
 		modifiers = new String[5];
 	}

@@ -6,8 +6,16 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+
 import TWLSlick.BasicTWLGameState;
 
+/**
+ * This is the loading/splash screen. It's called at the very beginning.
+ * It doesn't look nice.
+ * 
+ * @author kyle
+ *
+ */
 
 public class Loading extends BasicTWLGameState {
 	Image logo;
@@ -16,7 +24,6 @@ public class Loading extends BasicTWLGameState {
 	public final static int id = 4;
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
 		return id;
 	}
 	
@@ -33,7 +40,6 @@ public class Loading extends BasicTWLGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sg)
 			throws SlickException {
-		
 	}
 	
 	@Override
@@ -54,5 +60,5 @@ public class Loading extends BasicTWLGameState {
 			sg.addState(new Godmode(l));
 			sg.enterState(Menu.id);
 		}
-	}
+	}	
 }

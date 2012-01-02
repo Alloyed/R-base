@@ -6,31 +6,29 @@ import java.util.Random;
 
 import client.ui.Loop;
 
-import physics.actors.Actor;
-import physics.Console;
-//import processing.core.PApplet;
-//import processing.core.PConstants;
-
-//import controlP5.*;
-/* 
- * Allows the Client to make and print chat messages.
- * TODO: escape chars for line color, moveable insert point, maybe make messages expire
+/**
+ * A stream that should print to an onscreen chat console.
+ * TODO: all of this
+ * 
+ * @author kyle
+ *
  */
-public class Chat extends OutputStream {
-//	Textlabel labels[];
-//	Textlabel input;
+public class Chat /*extends OutputStream*/ {
+	/*
+	Textlabel labels[];
+	Textlabel input;
 	boolean isChatting;
 	String out, in;
 	Random r;
 	Loop c;
-//	PApplet p;
+	PApplet p;
 	
 	public Chat(Loop c, int size) {
 		this.c = c;
-//		p = c.p;
-//		labels = new Textlabel[size];
+		p = c.p;
+		labels = new Textlabel[size];
 		r = new Random();
-		/*
+		
 		for (int i = 0; i < labels.length; ++i) {
 			Textlabel l = c.gooey.addTextlabel("chatlabel-"+i, 
 												" ", 
@@ -39,11 +37,11 @@ public class Chat extends OutputStream {
 			labels[i] = l;
 		}
 		input = c.gooey.addTextlabel("inlabel", "", 110, c.p.height-30);
-		*/
+		
 		out = "";
 		in = "";
 	}
-/*	
+
 	public void keyPressed() {
 		char key = p.key;
 		if (isChatting) {
@@ -69,11 +67,11 @@ public class Chat extends OutputStream {
 			isChatting = true;
 		}
 	}
-*/	
+
 	@Override
 	public void write(int b) throws IOException {
 		char c = (char) b;
-		/*
+		
 		if (c == '\n') {
 			for (int i = labels.length-1; i > 0 ; --i) {
 				Textlabel oldL = labels[i], newL = labels[i-1];
@@ -98,7 +96,7 @@ public class Chat extends OutputStream {
 		} else {
 			out += c;
 		}
-		*/
+		
 	}
-
+*/
 }

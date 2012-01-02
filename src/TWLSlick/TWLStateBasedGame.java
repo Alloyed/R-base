@@ -45,7 +45,6 @@ import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.Transition;
 
-import physics.Console;
 
 /**
  * A StateBaseGame subclass with support for a TWL Ui per state.

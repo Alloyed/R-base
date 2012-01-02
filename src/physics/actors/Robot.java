@@ -4,33 +4,36 @@ import java.util.LinkedList;
 
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
-import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
-import org.jbox2d.dynamics.joints.RevoluteJointDef;
+import org.jbox2d.dynamics.joints.DistanceJointDef;
 
 import physics.Console;
 import physics.Stage;
 import physics.Team;
 
-/*A player in the world. TODO:Teams, a lot more*/
+/**
+ * One of the robot players
+ * 
+ * @author kyle
+ *
+ */
 public class Robot extends Actor {
-	final int speed=60;
+	final int speed=200;
 	public PlayerState state;
 	public Actor treads;
 	public Actor held;
 	public LinkedList<Actor> inventory;
-	
-	final float HALF_PI = (float) (Math.PI/2f);
+
 	public Robot() {
 		super();
 		treads = new Treads();
 		maxWear = 100;
 		wear    = maxWear;
 		isImportant = true;
-		label = "Robot";
+		label = "robot";
 		baseImage = "playerTop";
 		inventory = new LinkedList<Actor>();
 		for (int i=0; i<5; ++i) {
@@ -48,12 +51,13 @@ public class Robot extends Actor {
 		treads.create(size, pos, ang, vel, velAng);
 	}
 	
+	@Override
 	public void place(Stage st) {
 		treads.place(st);
 		super.place(st);
 		
-		RevoluteJointDef j = new RevoluteJointDef();
-		j.initialize(b, treads.b, b.getWorldCenter());
+		DistanceJointDef j = new DistanceJointDef();
+		j.initialize(b, treads.b, b.getWorldCenter(), treads.b.getWorldCenter());
 		st.w.createJoint(j);
 		if (team == Team.BLUE)
 			st.bluebots++;
@@ -61,23 +65,37 @@ public class Robot extends Actor {
 			st.orangebots++;
 	}
 	
+	/**
+	 * return the point dist away in the direction we're facing.
+	 * @param dist
+	 * @return
+	 */
 	public Vec2 getLocalPointAhead(float dist) {
 		float ang = (float)Math.atan2(state.aim.y, state.aim.x);
 		return new Vec2(dist*(float)Math.cos(ang),dist*(float)Math.sin(ang));
 	}
 	
+	/**
+	 * return the point dist away from us in the direction we're facing.
+	 * TODO: see if b.getWorldVector has the same effect.
+	 * @param dist
+	 * @return
+	 */
 	public Vec2 getPointAhead(float dist) {
 		return b.getWorldCenter().add(getLocalPointAhead(dist));
 	}
 
-	/* Get the point where it would pick things up and hold them, 
-	 * if it had hands
+	/**
+	 * Get the point where the robot would pick things up and hold them, 
+	 * if it had hands.
 	 */
 	public Vec2 getPointAhead() {
 		return getPointAhead(1);
 	}
 	
-	/*Pickup another object in the world and hold it*/
+	/**
+	 * Pickup the object in front of us.
+	 */
 	public void hold() {
 		AABB area = new AABB();
 		Vec2 center = getPointAhead();
@@ -86,7 +104,7 @@ public class Robot extends Actor {
 		QueryCallback q = new QueryCallback() {
 			public boolean reportFixture(Fixture f) {
 				if (held != null)
-					return true;
+					return false;
 				Object data = f.getBody().getUserData();
 				if (data instanceof Actor) {
 					Actor a = (Actor)data;
@@ -105,20 +123,75 @@ public class Robot extends Actor {
 		s.w.queryAABB(q, area);
 	}
 	
-	/*Drop the object being held*/
+	/**
+	 * Drop what we're holding.
+	 */
 	public void release() {
 		held.isHeld = false;
 		held = null;
 	}
 	
+	/**
+	 * Drops anything we're holding, 
+	 * and if we weren't holding anything, picks something up
+	 */
 	public void toggleHold() {
 		if (held == null)
 			hold();
 		else
 			release();
 	}
+		
+	/**
+	 * Fire something. 
+	 * It can either be something we're holding or an object in our inventory.
+	 */
+	public void fire() {
+		Actor a;
+		if (held != null) {
+			a = held;
+			release();
+			a.b.setBullet(true);
+			a.b.applyLinearImpulse(getLocalPointAhead(100), a.b.getWorldCenter());
+		} else if (!inventory.isEmpty()) {
+			a = inventory.pollFirst();
+			a.create(a.size, getPointAhead(a.size.length()+.1f), 
+					0, getLocalPointAhead(100), 0);
+			a.d.bullet = true;
+			a.place(s);
+		} else {
+			return;
+		}
+	}
 	
-	/*Take some scrap*/
+	/**
+	 * Calculates the movement of our robot
+	 */
+	@Override
+	public void force() {
+		state.force(this, speed);
+		
+		Vec2 vel = b.getLinearVelocity();
+		
+		treads.b.setTransform(treads.b.getWorldCenter(), (float)Math.atan2(vel.y, vel.x));
+		if (held != null)
+			held.b.setTransform(getPointAhead(held.size.length()), held.b.getAngle());
+	}
+	
+	/**
+	 * Is there anything nearby we can pick up?
+	 */
+	@Override
+	public void beginContact(Contact c, Actor other) {
+		super.beginContact(c, other);
+		if (other.size.length() < 1 && other.b.getLinearVelocity().length() < 4)
+			take(other);
+	}
+	
+	/**
+	 * Puts an actor into our inventory.
+	 * @param a
+	 */
 	public void take(Actor a) {
 		//FIXME: a instanceof Map is a pretty bad stopgap
 		if (a != null && !(a instanceof Map) && s.activeActors.contains(a)) { //Is it a pickup-able thing?
@@ -129,69 +202,11 @@ public class Robot extends Actor {
 		}
 	}
 	
-	/*Fire either the object being held or some scrap*/
-	public void fire() {
-		Actor a;
-		if (held != null) {
-			a = held;
-			release();
-		} else if (!inventory.isEmpty()) {
-			a = inventory.pollFirst();
-			a.create(a.size,  getPointAhead(a.size.length()+.1f));
-			a.place(s);
-		} else {
-			return;
-		}
-		a.b.setBullet(true);
-		a.b.applyLinearImpulse(getLocalPointAhead(100).mul(a.b.getMass()), b.getWorldCenter());
-	}
-	
-	public void force() {
-		Vec2 dir = state.aim;
-		float ang = (float)Math.atan2(dir.y, dir.x);
-		b.setTransform(b.getWorldCenter(), ang);
-
-		Vec2 move = new Vec2(0, 0);
-		if (state.move.x == 0 && state.move.y == 0) {
-			if (state.upPressed)
-				move.addLocal(0, -1);
-			if (state.leftPressed)
-				move.addLocal(-1, 0);
-			if (state.rightPressed)
-				move.addLocal(1, 0);
-			if (state.downPressed)
-				move.addLocal(0, 1);
-			move.normalize();
-			if (state.ROTATE_FORCE) {
-				ang += HALF_PI;
-				move.set(move.x * (float)Math.cos(ang)
-						- move.y * (float)Math.sin(ang),
-						move.x * (float)Math.sin(ang)
-						+ move.y * (float)Math.cos(ang));
-			}
-		} else {
-			move.set(state.move);
-			if (state.ROTATE_FORCE) {
-				ang += HALF_PI;
-				move.set(move.x * (float)Math.cos(ang)
-						- move.y * (float)Math.sin(ang),
-						move.x * (float)Math.sin(ang)
-						+ move.y * (float)Math.cos(ang));
-			}
-		}
-		b.applyForce(move.mul(speed), b.getWorldCenter());
-		Vec2 vel = b.getLinearVelocity();
-		treads.b.setTransform(b.getWorldCenter(), (float)Math.atan2(vel.y, vel.x));
-		treads.b.applyForce(move.mul(speed), b.getWorldCenter());
-		if (held != null)
-			held.b.setTransform(getPointAhead(held.size.length()), held.b.getAngle());
-	}
-	
-	public void preSolve(Contact c, Manifold m, Actor other) {
-		if (other.size.length() < 1 && other.b.getLinearVelocity().length() < 4)
-			take(other);
-	}
-	
+	/**
+	 * Makes the spaghetti fall out our pockets.
+	 * TODO: handle respawning, etc.
+	 */
+	@Override
 	public void destroy() {
 		Console.chat.println("\\" + label + " has died.");
 		if (team == Team.BLUE)
@@ -217,9 +232,5 @@ public class Robot extends Actor {
 							b.getAngularVelocity());
 			a.place(s);
 		}
-	}
-
-	public boolean isDead() {
-		return wear < 1;
 	}
 }

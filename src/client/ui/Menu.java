@@ -8,12 +8,16 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import client.sprites.*;
+import physics.Console;
 import physics.Team;
 import TWLSlick.BasicTWLGameState;
 import de.matthiasmann.twl.Button;
 
-/* I've tried to move all those callback methods into here. 
- * It didn't work. 
+/**
+ * The main menu. 
+ * 
+ * @author kyle
+ *
  */
 public class Menu extends BasicTWLGameState {
 	Image logo;
@@ -138,6 +142,7 @@ public class Menu extends BasicTWLGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
+		l.update(dt);
 		if (toResume)
 			sg.enterState(1);
 		if (toQuit)
@@ -170,7 +175,7 @@ public class Menu extends BasicTWLGameState {
         connect = new Button("Connect");
         connect.addCallback(new Runnable() {
             public void run() {
-                System.out.println("It works!");
+                l.net.connect("localhost", 9001, 9002);
             }
         });
         rootPane.add(connect);
@@ -190,4 +195,8 @@ public class Menu extends BasicTWLGameState {
         connect.setPosition(670, 120);
     }
     
+    @Override
+	public void keyPressed(int key, char c) {
+		Console.dbg.println(key);
+	}
 }

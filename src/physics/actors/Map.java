@@ -14,7 +14,12 @@ import org.jbox2d.dynamics.contacts.Contact;
 import physics.*;
 
 import com.kitfox.svg.*;
-
+/**
+ * Holds anything in the background.
+ * TODO: load from .svg
+ * @author kyle
+ *
+ */
 public class Map extends Actor {
 	public ArrayList<Prop> props;
 
@@ -26,9 +31,10 @@ public class Map extends Actor {
 	
 	@Override
 	public void makeBody() {
+		label = "game map";
 		baseImage = "map";
 		d.type = BodyType.STATIC;
-		fd = null; // We will make the fixtures later
+		fd = null; // We make the fixtures later
 	}
 	
 	@Override
@@ -39,18 +45,22 @@ public class Map extends Actor {
 	
 	@Override
 	public void beginContact(Contact c, Actor other) {
+		
 		if (c.getFixtureA().getBody() == b)
 			((Prop)c.getFixtureA().getUserData()).beginContact(c, other);
 		else
 			((Prop)c.getFixtureB().getUserData()).beginContact(c, other);
+			
 	}
 
 	@Override
 	public void endContact(Contact c, Actor other) {
+		
 		if (c.getFixtureA().getBody() == b)
 			((Prop)c.getFixtureA().getUserData()).endContact(c, other);
 		else
 			((Prop)c.getFixtureB().getUserData()).endContact(c, other);
+		
 	}
 	
 	@Override

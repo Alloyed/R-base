@@ -1,6 +1,7 @@
 package client.sprites;
 
 import java.awt.Graphics2D;
+
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -20,10 +21,13 @@ import client.ui.Loop;
 import physics.Console;
 import physics.actors.Actor;
 import physics.actors.Prop;
-/* draws vectors or images. 
+
+/**
+ * draws vectors or images. 
  * Vectors are rendered as rasters for performance reasons
  * TODO: Render svgs at different resolutions, 
- * 		(NVM)allow for straight vector rendering again
+ * 		allow for straight vector rendering again
+ * NVM the sprites actually look pretty ok
  */
 
 public class ImageSprite implements Sprite {
@@ -32,7 +36,7 @@ public class ImageSprite implements Sprite {
 	String file;
 	boolean isVector = false;
 	public Image sprite;
-	float width, height, length;
+	float width, height, sw, sh, length;
 	public ImageSprite(Loop c, String file) {
 		this.c = c;
 		this.file = file;
@@ -45,6 +49,13 @@ public class ImageSprite implements Sprite {
 				SVGDiagram d = u.getDiagram(ind);
 				width = d.getWidth();
 				height = d.getHeight();
+				if (width > height) {
+					sh = 1;
+					sw = width/height;
+				} else {
+					sw = 1;
+					sh = height/width;
+				}
 				length = new Vec2(d.getWidth(),d.getHeight()).length();
 				BufferedImage buf = new BufferedImage((int)d.getWidth()*2, (int)d.getHeight()*2, BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g = buf.createGraphics();
@@ -88,6 +99,7 @@ public class ImageSprite implements Sprite {
 		//Vec2 pos = a.b.getWorldCenter();
 		float angle = a.b.getAngle()*Actor.alpha + 
 					a.oldAng * (1 - Actor.alpha);
+
 		//float angle = a.b.getAngle();
 		g.pushTransform();
 		g.resetTransform();  {
@@ -95,7 +107,7 @@ public class ImageSprite implements Sprite {
 			
 			c.cam.translate(g, pos.x, pos.y);
 			c.cam.rotate(g, angle);
-			c.cam.scale(g, a.size.x, a.size.y);
+			c.cam.scale(g, a.size.x / sw, a.size.y / sh);
 			
 			g.setColor(Color.black);
 			g.drawImage(sprite, -width*.75f, -height*.75f);
@@ -107,16 +119,15 @@ public class ImageSprite implements Sprite {
 			}
 		} g.popTransform();
 		
-//		p.fill(255);
-//		if (a.isImportant) {
-//			Vec2 spot = c.cam.worldToScreen(pos.add(new Vec2(-a.size.x/2,a.size.y)));
-//			p.text(a.label, spot.x, spot.y);
-//		}
+			if (a.isImportant) {
+				Vec2 spot = c.cam.worldToScreen(pos.add(new Vec2(-a.size.x/2,a.size.y)));
+				//TODO: The fuck is wrong with that font?
+				g.drawString(a.label, spot.x, spot.y);
+			}
 		}
 		
 	public void draw(Graphics g, Prop a) {
 		//This should never move
-		
 		Vec2 pos = a.pos;
 		float angle = a.angle;
 		g.pushTransform();
@@ -124,7 +135,7 @@ public class ImageSprite implements Sprite {
 			
 			c.cam.translate(g, pos.x, pos.y);
 			c.cam.rotate(g, angle);
-			//c.cam.scale(g, a.width, a.height);
+			c.cam.scale(g, a.width / sw, a.height / sh);
 			
 			g.drawImage(sprite, -width*.75f, -height*.75f);
 		} g.popTransform();

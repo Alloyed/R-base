@@ -10,38 +10,31 @@ package client;
  */
 
 //Util
-import java.awt.Graphics2D;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.net.InetAddress;
-//Physix
-import physics.*;
-import physics.actors.*;
 
-import org.jbox2d.dynamics.*;
-import org.jbox2d.collision.shapes.PolygonShape;
-import org.jbox2d.common.*;
-import org.newdawn.slick.*;
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.opengl.renderer.Renderer;
-import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.FileSystemLocation;
 import org.newdawn.slick.util.ResourceLoader;
-import org.newdawn.slick.util.ResourceLocation;
 
 import TWLSlick.TWLStateBasedGame;
+import client.ui.Loading;
+import client.ui.Loop;
 
-import client.sprites.*;
-import client.ui.*;
-
-@SuppressWarnings("unused")
-public class Client extends TWLStateBasedGame {
-	public Client(String name) {
+/**
+ * The main client class.
+ * 
+ * @author kyle
+ *
+ */
+public class Main extends TWLStateBasedGame {
+	Loop l;
+	
+	public Main(String name) {
 		super(name);
 	}
 	
@@ -265,20 +258,21 @@ public class Client extends TWLStateBasedGame {
 */
 	@Override
 	public boolean closeRequested() {
-		// TODO Auto-generated method stub
-		return false;
+		l.settings.save();
+		return true;
 	}
 
 	@Override
 	public String getTitle() {
 		// TODO Auto-generated method stub
-		return null;
+		return "R-base";
 	}
 	
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 			ResourceLoader.addResourceLocation(new FileSystemLocation(new File("data")));
-			Loop l = new Loop(gc);
+			l = new Loop(gc);
+			SoundStore.get().setMaxSources(32);
 			//WHY.jpg
 			//gc.setMouseCursor(new Image("blank.png"), 0, 0);
 			addState(new Loading(l));
@@ -295,7 +289,7 @@ public class Client extends TWLStateBasedGame {
 			Renderer.setRenderer(Renderer.VERTEX_ARRAY_RENDERER);
 			Renderer.setLineStripRenderer(Renderer.QUAD_BASED_LINE_STRIP_RENDERER);
 			
-			AppGameContainer container = new AppGameContainer(new Client("R-base"));
+			AppGameContainer container = new AppGameContainer(new Main("R-base"));
 			container.setDisplayMode(800,600,false);
 			
 			container.start();
