@@ -21,8 +21,10 @@ public class Actor {
 	public Stage s;
 	//Unique ID
 	public int id;
-	//The team the Actor belongs to
+	//The player the Actor belongs to
+	//and that players team
 	public Team team;
+	public int owner;
 	//dimensions of the box. 
 	//I can't find an easy way to get this out of a fixture
 	public Vec2 size;
@@ -30,8 +32,8 @@ public class Actor {
 	public boolean isImportant = false;
 	//What gets drawn next to the box to identify it, 
 	//if the box's labeled important
-	public String label="Box";
-	//The filename of the sprite used to represent it
+	public String label="box";
+	//The name of the sprite used to represent it
 	public String baseImage="box";
 	public String[] modifiers;
 	//Has the actor been picked up by another?
@@ -45,6 +47,7 @@ public class Actor {
 	public static float alpha;
 	public Vec2 oldPos;
 	public float oldAng;
+	public boolean hit = false;
 	
 	BodyDef d;
 	FixtureDef fd;
@@ -55,7 +58,15 @@ public class Actor {
 		modifiers = new String[5];
 		wear = maxWear;
 	}
-
+	
+	/**
+	 * Creates an object definition to be placed later.
+	 * @param size
+	 * @param pos
+	 * @param ang
+	 * @param vel
+	 * @param velAng
+	 */
 	public void create(Vec2 size, Vec2 pos, float ang, Vec2 vel, float velAng) {
 		this.size = size;
 		d = new BodyDef();
@@ -77,8 +88,12 @@ public class Actor {
 		create(size, pos, 0, new Vec2(0, 0), 0);
 	}
 	
-	//Places the Actor on the stage, in a given position, etc.
-	//TODO: make actors invincible for the first few frames of their life
+	/**
+	 * Places the Actor on the stage.
+	 * Use create to change where it will placed etc.
+	 * TODO: make actors invincible for the first few frames of their life
+	 * @param st
+	 */
 	public void place(Stage st) {
 		s = st;
 		b = s.w.createBody(d);
@@ -90,16 +105,23 @@ public class Actor {
 		b.setUserData(this);
 		b.setLinearDamping(friction*9.8f);
 		b.setAngularDamping(friction*9.8f);
-		s.actors.put(id, this);
+		if (!s.actors.containsKey(id))
+			s.actors.put(id, this);
 		s.activeActors.add(this);
 	}
 	
-	//Takes the Actor off the stage
+	/**
+	 * Flags the the Actor for removal off the stage.
+	 * Use this if you might want to use the actor later
+	 */
 	public void store() {
 		toStore = true;
 	}
 	
-	//Override this to do what you want to the defs before they are used
+	/**
+	 * Creates a basic definition of the Actor.
+	 * Override this to change shape, friction, etc.
+	 */
 	public void makeBody() {
 		PolygonShape p = new PolygonShape();
 		p.setAsBox(size.x/2, size.y/2);
@@ -108,18 +130,48 @@ public class Actor {
 	
 	/*"Action" methods*/
 	
-	//Actors are moving, but useless boxes by default.
-	//Change this to give them their own free will
+	/**
+	 * Actors are moving, but useless boxes by default.
+	 * Change this to give them their own free will
+	 */
 	public void force() {}
 	
-	public void beginContact(Contact arg0, Actor other) {}
-
-	public void endContact(Contact arg0, Actor other) {}
+	/**
+	 * What happens when two actors collide?
+	 * By default, they make a noise.
+	 * @param contact
+	 * @param other
+	 */
+	public void beginContact(Contact contact, Actor other) {
+		if (!(contact.getFixtureA().m_isSensor || contact.getFixtureB().m_isSensor)) {
+			hit = true;
+		}
+	}
 	
-	/*What happens if this collides with another box? */
-	public void preSolve(Contact arg0, Manifold arg1, Actor other) {}
+	/**
+	 * What happens when two actors pull away from each other?
+	 * Nothing.
+	 * @param c
+	 * @param other
+	 */
+	public void endContact(Contact c, Actor other) {}
 	
-	/*Damage calculation*/
+	/**
+	 * Called before the actors get normals applied to them.
+	 * Use for whatever.
+	 * @param c
+	 * @param m
+	 * @param other
+	 */
+	public void preSolve(Contact c, Manifold m, Actor other) {}
+	
+	/**
+	 * Lets us access the normals from the collision.
+	 * We do damage calculation here.
+	 * @param c
+	 * @param imp
+	 * @param other
+	 */
 	public void postSolve(Contact c, ContactImpulse imp, Actor other) {
 		float force = 0;
 		for (float f : imp.normalImpulses)
@@ -130,6 +182,10 @@ public class Actor {
 		hurt(force * other.dmg);
 	}
 	
+	/**
+	 * Hurt the box
+	 * @param force
+	 */
 	public void hurt(float force) {
 		wear -= force;
 		wearFrac = wear / maxWear;
@@ -138,7 +194,9 @@ public class Actor {
 						wearFrac < .75f ? "-dmg1" : "";
 	}
 	
-	//What happens when the box wears out?
+	/**
+	 * What happens when the box wears out?
+	 */
 	public void destroy() {
 		if (s == null)
 			return;

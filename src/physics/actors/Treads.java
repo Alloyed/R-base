@@ -5,13 +5,15 @@ package physics.actors;
 public class Treads extends Actor {
 	public Treads() {
 		super();
+		label = "treads";
 		baseImage = "playerBottom";
-		maxWear = 99999;
-		wear    = maxWear;
 	}
-	
+	/*
 	@Override
 	public void makeBody() {
 		fd = null;
 	}
+	*/
+	@Override
+	public void hurt(float dmg) {}
 }

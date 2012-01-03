@@ -1,61 +1,57 @@
 package server;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.util.ArrayList;
-import java.util.Random;
+import java.net.URL;
+import java.net.URLConnection;
 
+import newNet.Player;
+import physics.Console;
 
-/* TODO: handle events, Limit one connection per IP. */
+import com.esotericsoftware.kryonet.*;
+
 
 public class Network extends newNet.Network {
-	DatagramSocket socket;
-	DatagramPacket p;
-	Server server;
-	ArrayList<byte[]> keys;
-	Random keygen = new Random();
-	byte[] buf = new byte[256],
-		initBytes = new byte[] {70},
-		endBytes = new byte[] {07},
-		nextKey = new byte[16];
-	
-	Network(Server s, int port) throws IOException {
-		server = s;
-		socket = new DatagramSocket(port);
-		socket.setSoTimeout(0);
-		p = new DatagramPacket(buf, buf.length);
-		keys = new ArrayList<byte[]>();
-	}
-	
-	public void run() {
-		while(true) {
-			try {
-				server.giveEvent(getEvent());
-			} catch (IOException e) {
-				e.printStackTrace();
+	Server serv;
+	String serverName; //you know, [CTF] Unlimited respawns No Scrubs Allowed awesumservers.net [CTF] 
+	URL master;
+	URLConnection c;
+	class HEYLISTEN extends Listener {
+		@Override
+		public void connected(Connection connection) {
+			Console.dbg.println("WHAT!");
+		}
+		
+		@Override
+		public void disconnected(Connection connection) {
+			
+		}
+		
+		@Override
+		public void received(Connection connection, Object o) {
+			if (o instanceof Player) {
+				Player p = (Player) o;
+				//If this player is already part of the playerlist, add the changes
+				//Else, give the player an ID etc.
 			}
 		}
 	}
 	
-	public boolean matchKeys(byte[] b) {
-		for(byte[] key : keys)
-			for(int i = 0; i < key.length; i++)
-				if(key[i] != b[i])
-					return false;
-		return true;
+	public void start(int tcpPort, int udpPort) throws IOException {
+		serv = new Server();
+		serv.bind(tcpPort, udpPort);
+		Network.register(serv.getKryo());
+		serv.addListener(new HEYLISTEN());
+		serv.start();
+		Console.dbg.println("Server Started");
 	}
 	
-	public DatagramPacket getEvent() throws IOException {
-		socket.receive(p);
-		if(p.getData()[0] == initBytes[0]) {
-			keygen.nextBytes(nextKey);
-			keys.add(nextKey);
-			socket.send(new DatagramPacket(nextKey, nextKey.length, p.getAddress(), p.getPort()));
-			System.out.println("New client at: "+p.getAddress());
-			return null;
-		} else if(p.getData() == null || !matchKeys(p.getData()))
-			return null;
-		return p;
+	public boolean changeAvail(boolean avail) {
+		try {
+			master = new URL("http://shsprog.com/wp-content/uploads/servers.php?ip="+serverName+"&avail="+(avail?"true":"false"));
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
 	}
+	
 }

@@ -14,6 +14,7 @@ public class Conveyor extends Prop {
 	@Override
 	public void makeFixture() {
 		super.makeFixture();
+		label = "conveyor belt";
 		baseImage = "belt";
 		fd.isSensor = true;
 		toScoot = new ArrayList<Actor>();

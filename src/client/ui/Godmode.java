@@ -2,9 +2,14 @@ package client.ui;
 
 import java.util.ArrayList;
 
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.Fixture;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -22,8 +27,6 @@ public class Godmode  extends BasicTWLGameState {
 	public Godmode(Loop l) {
 		super();
 		r = l;
-		//group = "godmode";
-		//r.gooey.addGroup(group, 0, 0);
 	}
 	
 	final static int id = 3;
@@ -31,99 +34,92 @@ public class Godmode  extends BasicTWLGameState {
 	public int getID() {
 		return id;
 	}
+
+	@Override
+	public void init(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame sg) 
+			throws SlickException {
+		super.enter(gc, sg);
+		start();
+	}
 	
 	public void start() {
 		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), new Vec2(1,1), new Vec2(1,1));
 		Console.chat.println("\\You are the commander. Help your team kill the other team!");
 		selected = new ArrayList<Actor>();
 	}
-
-	public void keyPressed() {
-	/*	if (p.key == 'w')
-=======
+	
 	@Override
-	public void draw() {
-		p.background(r.skin.getColor("bg"));
+	public void leave(GameContainer gc, StateBasedGame sg) 
+			throws SlickException {
+		super.leave(gc, sg);
+	}
+
+
+	@Override
+	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
+			throws SlickException {
 		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
-		for (Actor a:r.stage.activeActors) {
-			r.draw(a);
-		}
-		if (selecting != null) {
-			p.rectMode(CORNERS);
-			p.noFill();
-			p.stroke(255);
-			Vec2 tmp = r.cam.worldToScreen(selecting);
-			p.rect(tmp.x, tmp.y, p.mouseX, p.mouseY);
-		}
-	}
-
-	@Override
-	public void keyPressed(int keycode) {
-		if (p.key == 'w')
->>>>>>> graphics
-			cursor.state.upPressed = true;
-		else if (p.key == 'a')
-			cursor.state.leftPressed = true;
-		else if (p.key == 's')
-			cursor.state.downPressed = true;
-		else if (p.key == 'd')
-			cursor.state.rightPressed = true;
-		else if (p.key == ESC)
-			r.menu.show();
-<<<<<<< HEAD
-	*/}
-	/*
-	public void keyReleased() {
-		if (p.key == 'w')
-=======
-		else if (p.keyCode == CONTROL)
-			chain = true;
-	}
-
-	@Override
-	public void keyReleased(int keycode) {
-		if (p.key == 'w')
->>>>>>> graphics
-			cursor.state.upPressed = false;
-		else if (p.key == 'a')
-			cursor.state.leftPressed = false;
-		else if (p.key == 's')
-			cursor.state.downPressed = false;
-		else if (p.key == 'd')
-<<<<<<< HEAD
-			cursor.state.rightPressed = false;
-=======
-			cursor.state.rightPressed = false;
-		else if (p.keyCode == CONTROL)
-			chain = false;
->>>>>>> graphics
-	}
-
-	public void mousePressed() {
-<<<<<<< HEAD
-		//Vec2 pos = new Vec2((p.mouseX+r.cam.zeroX)/r.cam.meterScale, 
-		//		(p.mouseY+r.cam.zeroY)/r.cam.meterScale);
-		//r.stage.addActor(Actor.class, new Vec2(1,1), pos);
+		r.render(gc, sg, g);
 		
-=======
-		if (p.mouseButton == CENTER) {
-			Vec2 pos = r.cam.screenToWorld(new Vec2(p.mouseX, p.mouseY));
-			r.stage.addActor(Actor.class, new Vec2(1,1), pos);
-		} else if (p.mouseButton == LEFT) {
-			selecting = r.cam.screenToWorld(new Vec2(p.mouseX, p.mouseY));
+		if (selecting != null) {
+			Input in = gc.getInput();
+			Vec2 start = r.cam.worldToScreen(selecting);
+			g.drawRect(start.x, start.y, in.getAbsoluteMouseX()-start.x, in.getAbsoluteMouseY()-start.y);
 		}
->>>>>>> graphics
 	}
 
-	public void mouseReleased() {
-		if (p.mouseButton == LEFT && selecting != null) {
+	@Override
+	public void update(GameContainer gc, StateBasedGame sg, int dt)
+			throws SlickException {
+		r.update(dt);
+		if (cursor == null)
+			start();
+		Input input = gc.getInput();
+		int mouseX = input.getAbsoluteMouseX();
+		int mouseY = input.getAbsoluteMouseY();
+		//Vec2 oldAim = cursor.state.aim;
+		cursor.state.aim = r.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(cursor.b.getPosition());
+		keys(gc, sg, gc.getInput());
+	}
+	
+	public void keys(GameContainer gc, StateBasedGame sg, Input in) {
+		if (cursor != null) {
+			cursor.state.upPressed = in.isKeyDown(r.settings.UP);
+			cursor.state.leftPressed = in.isKeyDown(r.settings.LEFT);
+			cursor.state.rightPressed = in.isKeyDown(r.settings.RIGHT);
+			cursor.state.downPressed = in.isKeyDown(r.settings.DOWN);
+		}
+	}
+	
+	Vec2 selecting;
+	boolean chain = false;
+	@Override
+	public void mousePressed(int btn, int x, int y) {
+		if (btn == Input.MOUSE_MIDDLE_BUTTON) {
+			Vec2 pos = cursor.state.aim.add(cursor.b.getWorldCenter());
+			r.stage.addActor(Actor.class, new Vec2(1,1), pos);
+		} else if (btn == Input.MOUSE_LEFT_BUTTON) {
+			selecting = r.cam.screenToWorld(new Vec2(x, y));
+		} else if (btn == Input.MOUSE_RIGHT_BUTTON) {
+			//TODO:Orders/interactions.
+		}
+		
+	}
+	
+	@Override
+	public void mouseReleased(int btn, int x, int y) {
+		if (btn == Input.MOUSE_LEFT_BUTTON && selecting != null) {
 			//Select objects
 			if (!chain) {
 				unselect();
 			}
 			
 			Vec2 lower = selecting;
-			Vec2 upper = r.cam.screenToWorld(new Vec2(p.mouseX, p.mouseY));
+			Vec2 upper = r.cam.screenToWorld(new Vec2(x, y));
 			//AABB needs to order the coords so that lower is in top left
 			if (lower.x > upper.x) { 
 				float t = lower.x;
@@ -153,46 +149,19 @@ public class Godmode  extends BasicTWLGameState {
 			};
 			r.stage.w.queryAABB(q, box);
 			selecting = null;
-		} else if (p.mouseButton == RIGHT && selected.size() > 0) {
-			Vec2 to = r.cam.screenToWorld(new Vec2(p.mouseX,p.mouseY));
-			for (Actor a : selected) {
-				Vec2 from = a.b.getWorldCenter();
-				Vec2 imp = to.sub(from);
-				imp.normalize();
-				imp.mulLocal(50);
-				a.b.applyLinearImpulse(imp, from);
-			}
-			unselect();
 		}
 	}
-	*/
+	
+	@Override 
+	public void keyPressed(int key, char c) {
+		
+	}
+
 	void unselect() {
 		for (Actor a : selected) {
 			a.isHeld = false;
 		}
 		selected.clear();
-	}
-
-	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {}
-
-	@Override
-	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
-			throws SlickException {
-		g.setBackground(r.skin.getColor("bg"));
-		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
-		for (Actor a:r.stage.activeActors) {
-			r.skin.draw(g, a);
-		}
-		
-	}
-
-	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-			throws SlickException {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

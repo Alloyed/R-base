@@ -1,24 +1,30 @@
 package client.ui;
 
 import org.jbox2d.common.Vec2;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import TWLSlick.BasicTWLGameState;
-
 import physics.Console;
 import physics.Team;
-import physics.actors.*;
+import physics.actors.Actor;
+import physics.actors.Robot;
+import TWLSlick.BasicTWLGameState;
 
-public class Botmode  extends BasicTWLGameState {
+/**
+ * This is robot mode, for players who are robots. 
+ * Beep. Beep. Beep.
+ * 
+ * @author kyle
+ *
+ */
+public class Botmode extends BasicTWLGameState {
 	public Robot pc;
 	Loop l;
 //	public PGraphics inv, health;
-	private Vec2 lerped;
+//	private Vec2 lerped;
 	
 	final static int id = 2;
 	@Override
@@ -39,7 +45,7 @@ public class Botmode  extends BasicTWLGameState {
 	public Botmode(Loop l) {
 		super();
 		this.l = l;
-		start();
+	}
 //		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
 		//this sets off a segfault, it's harmless though
 		/*
@@ -60,13 +66,12 @@ public class Botmode  extends BasicTWLGameState {
 		b.moveTo(m);
 		hide();
 		*/
-	}
 	
 	public void start() {
 		pc = (Robot)l.stage.addActor(Robot.class, 0, 
 				l.settings.team == 0 ? Team.ORANGE : Team.BLUE,
 				new Vec2(1, 1), new Vec2(1,1));
-		lerped = new Vec2(0,0);
+//		lerped = new Vec2(0,0);
 		Console.chat.println("\\You are a robot. Kill the other team!");
 	}
 	
@@ -141,33 +146,58 @@ public class Botmode  extends BasicTWLGameState {
 		//p.noCursor();
 	}
 	*/
-		
-	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
-	}
+	
 
+	@Override
+	public void init(GameContainer gc, StateBasedGame sg)
+			throws SlickException {
+		
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame sg) 
+			throws SlickException {
+		super.enter(gc, sg);
+		start();
+		//gc.getInput().addKeyListener(this);
+	}
+	
+	@Override
+	public void leave(GameContainer gc, StateBasedGame sg) 
+			throws SlickException {
+		super.leave(gc, sg);
+		pc = null; 
+	}
+	
 	@Override
 	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
 			throws SlickException {
+		l.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		
-		if (pc.isDead()) { 
+		if (pc.wear <= 1) {
 			sg.enterState(Ghostmode.id);
 		}
-
-		g.setBackground(l.skin.getColor("bg"));
-		l.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
+		
+		//TODO:Find some nicer way to trigger sounds
 		for (Actor a:l.stage.activeActors) {
-			l.skin.draw(g, a);
+			if (a.hit) {
+				a.hit = false;
+				l.skin.playAt("hit", pc.b.getLocalPoint(a.b.getWorldCenter()));
+			}
 		}
 		
-		Vec2 aim = lerped.add(pc.b.getPosition());
+		l.render(gc, sg, g);
+		
 		//crosshairs
+		//FIXME: This is broken still
+		/*
+		Vec2 aim = lerped.add(pc.b.getWorldCenter());
 		g.pushTransform();
 			g.setColor(Color.white);
 			l.cam.translate(g, aim.x,aim.y);
 			g.drawRect(-2, -2, 4, 4);
 		g.popTransform();
+		*/
 		
 		/*
 		//Button.
@@ -203,28 +233,37 @@ public class Botmode  extends BasicTWLGameState {
 		Input input = gc.getInput();
 		int mouseX = input.getAbsoluteMouseX();
 		int mouseY = input.getAbsoluteMouseY();
-		Vec2 oldAim = pc.state.aim;
+//		Vec2 oldAim = pc.state.aim;
 		pc.state.aim = l.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(pc.b.getPosition());
-		lerped = oldAim.mul(Actor.alpha).add(pc.state.aim.mul(1-Actor.alpha));
-		//lerped = pc.state.aim;
+//		lerped = oldAim.mul(1-Actor.alpha).add(pc.state.aim.mul(Actor.alpha));
+//		lerped = pc.state.aim;
 		keys(gc, input);
 	}
 	
-	boolean firePressed = false;
-	public void keys(GameContainer gc, Input in) {
-		pc.state.upPressed = in.isKeyDown(l.settings.UP);
-		pc.state.leftPressed = in.isKeyDown(l.settings.LEFT);
-		pc.state.rightPressed = in.isKeyDown(l.settings.RIGHT);
-		pc.state.downPressed = in.isKeyDown(l.settings.DOWN);
-		if (in.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) && firePressed == false) {
-			pc.fire();
-			firePressed = true;
-		} else if (firePressed && !in.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
-			firePressed = false;
-		}
-		
-		if (in.isKeyDown(Input.KEY_Q)) {
-			gc.exit();
+	@Override
+	public void keyPressed(int code, char c) {
+		l.keyPressed(code, c);
+	}
+
+	@Override
+	public void keyReleased(int code, char c) {
+		l.keyReleased(code, c);
+		if (code == l.settings.USE) {
+			pc.toggleHold();
 		}
 	}
+	
+	@Override
+	public void mousePressed(int btn, int x, int y) {
+		if (btn == Input.MOUSE_LEFT_BUTTON)
+			pc.fire();
+	}
+	
+	public void keys(GameContainer gc, Input in) {
+		pc.state.upPressed    = in.isKeyDown(l.settings.UP);
+		pc.state.leftPressed  = in.isKeyDown(l.settings.LEFT);
+		pc.state.rightPressed = in.isKeyDown(l.settings.RIGHT);
+		pc.state.downPressed  = in.isKeyDown(l.settings.DOWN);		
+	}
+	
 }

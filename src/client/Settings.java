@@ -16,7 +16,13 @@ import physics.Console;
 
 import nanoxml.XMLElement;
 
-/*Client settings*/
+/**
+ * Client specific settings.
+ * Just declare what you want to store, and then it should 
+ * automagically be generated next time the settings are saved.
+ * @author kyle
+ *
+ */
 public class Settings {
 	/* Keys
 	 * TODO: make UP or W valid entries
@@ -108,7 +114,7 @@ public class Settings {
 		}
 
 		try {
-			Writer w = new FileWriter(new File(ResourceLoader.getResource("data/ClientSettings.xml").toURI()));
+			Writer w = new FileWriter( new File("data/ClientSettings.xml") );
 			top.write(w);
 			w.close();
 			Console.out.println("Settings saved.");
