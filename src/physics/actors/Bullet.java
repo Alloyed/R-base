@@ -19,12 +19,13 @@ public class Bullet extends Actor {
 		s.m_radius = size.length() / 2f;
 		fd.shape = s;
 		fd.friction = .3f;
-		fd.density = 50;
+		fd.density = 5;
 		d.bullet = true;
 	}
-	
+	/*
 	@Override
 	public void destroy() {
 		
 	}
+	*/
 }

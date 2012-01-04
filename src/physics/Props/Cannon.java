@@ -30,7 +30,8 @@ public class Cannon extends Prop {
 				unfired.add(a);
 			} else {
 				a.b.applyLinearImpulse(
-						a.b.getWorldCenter().sub(pos).mul(100000), 
+						a.b.getWorldCenter().sub(pos)
+						.mul(50).mul(a.b.getMass()), 
 						a.b.getWorldCenter());
 			}
 		}
