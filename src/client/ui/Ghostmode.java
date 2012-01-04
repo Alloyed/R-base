@@ -14,7 +14,7 @@ import TWLSlick.BasicTWLGameState;
 
 /**
  * This is observer mode, where you can see what's happening w/o affecting anything.
- * The name ghost comes from SS13 where you literally are a ghost, haunting the ship with your off-topic nonsense
+ * The name ghost comes from SS13 where you literally are a ghost, haunting the chaplain with your off-topic nonsense
  * 
  * @author kyle
  *
@@ -71,10 +71,10 @@ public class Ghostmode  extends BasicTWLGameState {
 	}
 	
 	public void keys(GameContainer gc, StateBasedGame sg, Input in) {
-		cursor.state.upPressed = in.isKeyDown(r.settings.UP);
-		cursor.state.leftPressed = in.isKeyDown(r.settings.LEFT);
+		cursor.state.upPressed    = in.isKeyDown(r.settings.UP);
+		cursor.state.leftPressed  = in.isKeyDown(r.settings.LEFT);
 		cursor.state.rightPressed = in.isKeyDown(r.settings.RIGHT);
-		cursor.state.downPressed = in.isKeyDown(r.settings.DOWN);
+		cursor.state.downPressed  = in.isKeyDown(r.settings.DOWN);
 		if (in.isKeyDown(Input.KEY_PERIOD)) {
 			sg.enterState(Botmode.id);
 			return;
@@ -94,4 +94,15 @@ public class Ghostmode  extends BasicTWLGameState {
 	public void keyReleased(int code, char c) {
 		r.keyReleased(code, c);
 	}
+	
+	@Override
+	protected void createRootPane() {
+		super.createRootPane();
+		r.createRootPane(rootPane);
+	}
+	
+    @Override
+    protected void layoutRootPane() {
+    	r.layoutRootPane(rootPane);
+    }
 }

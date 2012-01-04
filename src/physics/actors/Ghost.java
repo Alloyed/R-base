@@ -16,7 +16,7 @@ public class Ghost extends Actor {
 		super();
 		label = "ghost";
 		baseImage = "none";
-		state = new PlayerState();
+		state = new PlayerState(this);
 	}
 	
 	@Override

@@ -24,34 +24,36 @@ public class Stage {
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
 			A.beginContact(c, B);
-			B.beginContact(c, A);
+			//B.beginContact(c, A);
 		}
 		@Override
 		public void endContact(Contact c) {
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
 			A.endContact(c, B);
-			B.endContact(c, A);
+			//B.endContact(c, A);
 		}
 		@Override
 		public void postSolve(Contact c, ContactImpulse imp) {
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
 			A.postSolve(c, imp, B);
-			B.postSolve(c, imp, A);
+			//B.postSolve(c, imp, A);
 		}
 		@Override
 		public void preSolve(Contact c, Manifold m) {
 			Actor A = (Actor)c.getFixtureA().getBody().getUserData();
 			Actor B = (Actor)c.getFixtureB().getBody().getUserData();
 			A.preSolve(c, m, B);
-			B.preSolve(c, m, A);
+			//B.preSolve(c, m, A);
 		}
 	}
 	
 	public static float fps = 60;
 	public static float frame = 1/60f;
-	public long frameNum;
+	//Time, right now, is measured by the number of frames that have been calculated.
+	//Measured in 60ths of a second then.
+	public long time = 0;
 	public World w;
 	public HashMap<Integer, Actor> actors; //Every actor, retrievable by id.
 	public LinkedList<Actor> activeActors; //Every actor in the world right now
@@ -111,6 +113,7 @@ public class Stage {
 		}
 		
 		w.step(dt, 8, 3);
+		time ++;
 		for (Body b = w.getBodyList(); b != null; b = b.getNext()) {
 			Actor a = (Actor) b.getUserData();
 			if (a.toStore) {

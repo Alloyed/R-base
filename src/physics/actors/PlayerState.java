@@ -10,13 +10,17 @@ import org.jbox2d.dynamics.Body;
  * @author kyle
  *
  */
-public class PlayerState {
+public class PlayerState extends Snapshot {
 	public boolean upPressed, downPressed, leftPressed, rightPressed, ROTATE_FORCE;
 	public Vec2 aim = new Vec2(0, 0), move = new Vec2(0, 0);
 	
+	public PlayerState(Actor a) {
+		super(a);
+	}
+	
 	/**
 	 * Tells the Actor which way to go.
-	 * @param a
+	 * @param a the Actor
 	 * @param speed the max force (ie. not really a speed)
 	 */
 	public void force(Actor a, float speed) {
@@ -56,5 +60,7 @@ public class PlayerState {
 			}
 		}
 		b.applyForce(move.mul(speed), b.getWorldCenter());
+		
+		snap(a);
 	}
 }

@@ -42,7 +42,7 @@ public class Robot extends Actor {
 			inventory.add(b);
 		}
 		
-		state = new PlayerState();
+		state = new PlayerState(this);
 	}
 	
 	@Override

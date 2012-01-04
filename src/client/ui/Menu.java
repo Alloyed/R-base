@@ -175,7 +175,7 @@ public class Menu extends BasicTWLGameState {
         connect = new Button("Connect");
         connect.addCallback(new Runnable() {
             public void run() {
-                l.net.connect("localhost", 9001, 9002);
+                l.net.connect("localhost", l.net.TCP, l.net.UDP);
             }
         });
         rootPane.add(connect);

@@ -21,6 +21,8 @@ import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.util.FileSystemLocation;
 import org.newdawn.slick.util.ResourceLoader;
 
+import physics.Console;
+
 import TWLSlick.TWLStateBasedGame;
 import client.ui.Loading;
 import client.ui.Loop;
