@@ -78,6 +78,7 @@ public class RootPane extends DesktopArea {
 
     @Override
     protected boolean handleEvent(Event evt) {
+    	
         if (super.handleEvent(evt)) {
             return true;
         }

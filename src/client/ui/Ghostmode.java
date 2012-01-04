@@ -71,10 +71,10 @@ public class Ghostmode  extends BasicTWLGameState {
 	}
 	
 	public void keys(GameContainer gc, StateBasedGame sg, Input in) {
-		cursor.state.upPressed = in.isKeyDown(r.settings.UP);
-		cursor.state.leftPressed = in.isKeyDown(r.settings.LEFT);
+		cursor.state.upPressed    = in.isKeyDown(r.settings.UP);
+		cursor.state.leftPressed  = in.isKeyDown(r.settings.LEFT);
 		cursor.state.rightPressed = in.isKeyDown(r.settings.RIGHT);
-		cursor.state.downPressed = in.isKeyDown(r.settings.DOWN);
+		cursor.state.downPressed  = in.isKeyDown(r.settings.DOWN);
 		if (in.isKeyDown(Input.KEY_PERIOD)) {
 			sg.enterState(Botmode.id);
 			return;
@@ -94,4 +94,15 @@ public class Ghostmode  extends BasicTWLGameState {
 	public void keyReleased(int code, char c) {
 		r.keyReleased(code, c);
 	}
+	
+	@Override
+	protected void createRootPane() {
+		super.createRootPane();
+		r.createRootPane(rootPane);
+	}
+	
+    @Override
+    protected void layoutRootPane() {
+    	r.layoutRootPane(rootPane);
+    }
 }

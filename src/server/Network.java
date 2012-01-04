@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import newNet.Message;
 import newNet.Player;
 import physics.Console;
+import physics.actors.PlayerState;
 
 import com.esotericsoftware.kryonet.*;
 
@@ -18,7 +20,7 @@ public class Network extends newNet.Network {
 	class HEYLISTEN extends Listener {
 		@Override
 		public void connected(Connection connection) {
-			Console.dbg.println("WHAT!");
+			Console.dbg.println("WHAT! " + connection.toString());
 		}
 		
 		@Override
@@ -32,6 +34,10 @@ public class Network extends newNet.Network {
 				Player p = (Player) o;
 				//If this player is already part of the playerlist, add the changes
 				//Else, give the player an ID etc.
+			} else if (o instanceof Message) {
+				Message m = (Message) o;
+			} else if (o instanceof PlayerState) {
+				PlayerState ps = (PlayerState) o;
 			}
 		}
 	}

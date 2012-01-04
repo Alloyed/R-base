@@ -1,11 +1,17 @@
 package client.ui;
 
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.jbox2d.common.Vec2;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import de.matthiasmann.twl.*;
 
 import physics.Console;
 import physics.Team;
@@ -23,6 +29,7 @@ import TWLSlick.BasicTWLGameState;
 public class Botmode extends BasicTWLGameState {
 	public Robot pc;
 	Loop l;
+	
 //	public PGraphics inv, health;
 //	private Vec2 lerped;
 	
@@ -266,4 +273,14 @@ public class Botmode extends BasicTWLGameState {
 		pc.state.downPressed  = in.isKeyDown(l.settings.DOWN);		
 	}
 	
+	@Override
+	protected void createRootPane() {
+		super.createRootPane();
+		l.createRootPane(rootPane);
+	}
+	
+    @Override
+    protected void layoutRootPane() {
+    	l.layoutRootPane(rootPane);
+    }
 }

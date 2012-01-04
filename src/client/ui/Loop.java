@@ -1,10 +1,15 @@
 package client.ui;
 
+import java.io.PrintStream;
+
 import org.jbox2d.common.Vec2;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
+import TWLSlick.RootPane;
+
+import physics.Console;
 import physics.Stage;
 import physics.Team;
 import physics.actors.Actor;
@@ -14,6 +19,7 @@ import client.Chat;
 import client.Net;
 import client.Settings;
 import client.sprites.Skin;
+import de.matthiasmann.twl.Button;
 
 /**
  * Holds all the stuff pertinent to the game's main loop.
@@ -38,7 +44,6 @@ public class Loop {
 	 */
 	public Loop(GameContainer gc) {
 		cam = new Camera(gc);
-		chat = new Chat(this, 5);
 		settings = new Settings();
 		stage = new Stage();
 		net = new Net();
@@ -86,4 +91,13 @@ public class Loop {
 		}
 	}
 	
+	public void createRootPane(RootPane rootPane) {
+		chat = new Chat(this, 5);
+		chat.createRootPane(rootPane);
+		Console.chat = new PrintStream(chat);
+	}
+	
+	public void layoutRootPane(RootPane rootPane) {
+		chat.layoutRootPane(rootPane);
+	}
 }

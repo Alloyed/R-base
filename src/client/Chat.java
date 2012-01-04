@@ -2,14 +2,18 @@ package client;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.Random;
 
-import org.newdawn.slick.Input;
+
+import TWLSlick.RootPane;
 
 import client.ui.Loop;
+import de.matthiasmann.twl.EditField;
+import de.matthiasmann.twl.Event;
+import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.TextArea;
-import physics.Console;
-import physics.actors.Actor;
+import de.matthiasmann.twl.textarea.SimpleTextAreaModel;
 
 /**
  * A stream that should print to an onscreen chat console.
@@ -19,66 +23,105 @@ import physics.actors.Actor;
  *
  */
 public class Chat extends OutputStream {
-	//Textlabel labels[];
-	//Textlabel input;
+	SimpleTextAreaModel outModel;
+	TextArea output;
+	EditField input;
+	ScrollPane sp;
 	boolean isChatting;
-	String out, in;
+	String out, in, line;
 	Random r;
 	Loop c;
-	//PApplet p;
-	
+	class chatback implements EditField.Callback {
+		Net n;
+		public chatback(Net n) {
+			this.n = n;
+		}
+		@Override
+		public void callback(int evt) {
+			if (evt == Event.KEY_RETURN) {
+				input.setVisible(false);
+				n.say(input.getText());
+				input.setText("");
+			}
+		}
+	}
 	public Chat(Loop c, int size) {
 		this.c = c;
-		//p = c.p;
-		//labels = new Textlabel[size];
 		r = new Random();
-		/*
-		for (int i = 0; i < labels.length; ++i) {
-			Textlabel l = c.gooey.addTextlabel("chatlabel-"+i, 
-												" ", 
-												110, 
-												c.p.height-40-(10*i));
-			labels[i] = l;
-		}
-		input = c.gooey.addTextlabel("inlabel", "", 110, c.p.height-30);
-		*/
 		out = "";
 		in = "";
+		line = "";
+		input = new EditField();
+		input.addCallback(new chatback(c.net));
+		
+		output = new TextArea();
+		outModel = new SimpleTextAreaModel();
+		outModel.setText(out);
+		output.setModel(outModel);
+		sp = new ScrollPane(output);
+		sp.setTheme("ChatWin");
 	}
-
+	
+	public void createRootPane(RootPane rootPane) {
+		input.setVisible(false);
+		rootPane.add(input);
+		rootPane.add(sp);
+	}
+	
+	public void layoutRootPane(RootPane rootPane) {
+		input.setSize(rootPane.getWidth(), 20);
+    	input.setPosition(0, rootPane.getHeight()-20);
+    	output.setSize(rootPane.getWidth(), 80);
+    	output.setPosition(0, rootPane.getHeight()-100);
+    	sp.setSize(rootPane.getWidth(), 80);
+    	sp.setPosition(0, rootPane.getHeight()-100);
+	}
+	
 	public void keyPressed(int code, char key) {
-		/*
-		if (isChatting) {
-			Console.dbg.print(key);
-			if (key == '\n') {
-				String name = ((Actor)c.stage.get(0)).label;
-				Console.out.println("I AM DONE CHATY");
-				//c.net.call(c.stage, "chat", 
-				//		new Object[] {name, System.currentTimeMillis(), in});
-				in = "";
-				//input.setStringValue(in);
-				isChatting = false;
-			} else if (in.length() > 0 && 
-					code == Input.KEY_BACK) {
-				in = in.substring(0, in.length()-1);
-				//input.setStringValue("> "+in+"_");
-			} else if (key > 31) {
-				in += key;
-				//input.setStringValue("> "+in+"_");
-			}
-		} else if (code == c.settings.CHAT) { 
-			in = "";
-//			input.setStringValue("> "+in+"_");
-			isChatting = true;
-			System.out.println("SO CHATY");
+		if (code == c.settings.CHAT) {
+			input.setVisible(true);
+			input.requestKeyboardFocus();
 		}
-		*/
 	}
-
+	
+	public static void openWebSight(String u) {
+		final String url = u;
+		new Thread () {
+			public void run() {
+				try {
+					URI sight = new URI(url);
+					java.awt.Desktop.getDesktop().browse(sight);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
 	@Override
 	public void write(int b) throws IOException {
 		char c = (char) b;
+		out += c;
+		line += c;
+		outModel.setText(out);
+		if (c == '\n') {
+			if (line.contains("ytraw{")) {
+				String st = line.split("ytraw\\{")[1].split("\\}")[0];
+				openWebSight("http://www.youtube.com/watch?v=" + st);
+			}
+			/* This is the feature I am most proud of. */
+			if (line.toLowerCase().contains("chocolate")) {
+				openWebSight("http://www.youtube.com/watch?v=8LXinl_vP90#t=0m6s");
+			}
+			if (line.contains("gogogo")) {
+				openWebSight("http://www.youtube.com/watch?v=1EKTw50Uf8M");
+			}
+			line = "";
+		}
 		
+		
+		
+		/*
 		if (c == '\n') {
 			Console.dbg.println(out);
 //			for (int i = labels.length-1; i > 0 ; --i) {
@@ -104,6 +147,6 @@ public class Chat extends OutputStream {
 		} else {
 			out += c;
 		}
-		
+		*/
 	}
 }
