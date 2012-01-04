@@ -47,10 +47,11 @@ public class Loop {
 		settings = new Settings();
 		stage = new Stage();
 		net = new Net();
-		((Map)stage.addActor(Map.class, -2, 
-				Team.NUETRAL, new Vec2(0,0), 
-				new Vec2(0,0))).startGame(System.currentTimeMillis());
 		skin = new Skin(this);
+		Map m = new Map();
+		m.create(new Vec2(0,0), new Vec2(0,0));
+		m.place(stage);
+		m.startGame(System.currentTimeMillis());
 		//gc.setVSync(true);
 	}
 	

@@ -107,7 +107,7 @@ public class Robot extends Actor {
 				if (held != null)
 					return false;
 				Object data = f.getBody().getUserData();
-				if (data instanceof Actor) {
+				try {
 					Actor a = (Actor)data;
 					if (!a.isHeld &&
 							a.id != id &&
@@ -117,6 +117,8 @@ public class Robot extends Actor {
 						held = a;
 						return false;
 					}
+				} catch (Exception e) {
+					;	
 				}
 				return true;
 			}

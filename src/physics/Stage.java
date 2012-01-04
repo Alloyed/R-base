@@ -85,7 +85,8 @@ public class Stage {
 			a.setTeam(t);
 			a.id = id;
 			a.create(size, pos);
-			a.place(this);
+			//a.place(this);
+			toAdd.add(a);
 			return a;
 		} catch (InstantiationException e) {
 			e.printStackTrace();
