@@ -49,8 +49,8 @@ public class Actor {
 	public float oldAng;
 	public boolean hit = false;
 	
-	BodyDef d;
-	FixtureDef fd;
+	protected BodyDef d;
+	protected FixtureDef fd;
 	public boolean toStore = false;
 	
 	/*Construction methods*/

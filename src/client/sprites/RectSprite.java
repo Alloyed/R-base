@@ -6,8 +6,8 @@ import org.newdawn.slick.Graphics;
 
 import client.ui.Loop;
 
+import physics.Props.Prop;
 import physics.actors.Actor;
-import physics.actors.Prop;
 
 public class RectSprite implements Sprite {
 	Loop c;

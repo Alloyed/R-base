@@ -13,6 +13,7 @@ import org.jbox2d.dynamics.joints.DistanceJointDef;
 import physics.Console;
 import physics.Stage;
 import physics.Team;
+import physics.map.Map;
 
 /**
  * One of the robot players
@@ -173,7 +174,8 @@ public class Robot extends Actor {
 		
 		Vec2 vel = b.getLinearVelocity();
 		
-		treads.b.setTransform(treads.b.getWorldCenter(), (float)Math.atan2(vel.y, vel.x));
+		treads.b.setTransform(treads.b.getWorldCenter(), 
+				(float)Math.atan2(vel.y, vel.x));
 		if (held != null)
 			held.b.setTransform(getPointAhead(held.size.length()), held.b.getAngle());
 	}

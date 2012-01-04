@@ -2,9 +2,9 @@ package client.sprites;
 
 import org.newdawn.slick.Graphics;
 
+import physics.Props.Prop;
 import physics.actors.Actor;
-import physics.actors.Map;
-import physics.actors.Prop;
+import physics.map.Map;
 import client.ui.Loop;
 
 /*the map*/

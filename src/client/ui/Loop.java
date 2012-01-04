@@ -13,7 +13,7 @@ import physics.Console;
 import physics.Stage;
 import physics.Team;
 import physics.actors.Actor;
-import physics.actors.Map;
+import physics.map.Map;
 import client.Camera;
 import client.Chat;
 import client.Net;
@@ -49,7 +49,7 @@ public class Loop {
 		net = new Net();
 		((Map)stage.addActor(Map.class, -2, 
 				Team.NUETRAL, new Vec2(0,0), 
-				new Vec2(0,0))).startGame(123l);
+				new Vec2(0,0))).startGame(System.currentTimeMillis());
 		skin = new Skin(this);
 		//gc.setVSync(true);
 	}
