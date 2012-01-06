@@ -75,9 +75,10 @@ public class Botmode extends BasicTWLGameState {
 		*/
 	
 	public void start() {
-		pc = (Robot)l.stage.addActor(Robot.class, 0, 
-				l.settings.team == 0 ? Team.ORANGE : Team.BLUE,
-				new Vec2(1, 1), new Vec2(1,1));
+		pc = new Robot();
+		pc.create(new Vec2(1, 1), new Vec2(1, 1));
+		pc.setTeam(l.settings.team == 0 ? Team.ORANGE : Team.BLUE);
+		pc.place(l.stage);
 //		lerped = new Vec2(0,0);
 		Console.chat.println("\\You are a robot. Kill the other team!");
 	}
@@ -241,7 +242,7 @@ public class Botmode extends BasicTWLGameState {
 		int mouseX = input.getAbsoluteMouseX();
 		int mouseY = input.getAbsoluteMouseY();
 //		Vec2 oldAim = pc.state.aim;
-		pc.state.aim = l.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(pc.b.getPosition());
+		pc.ps.aim = l.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(pc.b.getPosition());
 //		lerped = oldAim.mul(1-Actor.alpha).add(pc.state.aim.mul(Actor.alpha));
 //		lerped = pc.state.aim;
 		keys(gc, input);
@@ -267,10 +268,10 @@ public class Botmode extends BasicTWLGameState {
 	}
 	
 	public void keys(GameContainer gc, Input in) {
-		pc.state.upPressed    = in.isKeyDown(l.settings.UP);
-		pc.state.leftPressed  = in.isKeyDown(l.settings.LEFT);
-		pc.state.rightPressed = in.isKeyDown(l.settings.RIGHT);
-		pc.state.downPressed  = in.isKeyDown(l.settings.DOWN);		
+		pc.ps.upPressed    = in.isKeyDown(l.settings.UP);
+		pc.ps.leftPressed  = in.isKeyDown(l.settings.LEFT);
+		pc.ps.rightPressed = in.isKeyDown(l.settings.RIGHT);
+		pc.ps.downPressed  = in.isKeyDown(l.settings.DOWN);		
 	}
 	
 	@Override

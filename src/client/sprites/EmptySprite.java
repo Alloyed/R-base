@@ -2,8 +2,8 @@ package client.sprites;
 
 import org.newdawn.slick.Graphics;
 
+import physics.Props.Prop;
 import physics.actors.Actor;
-import physics.actors.Prop;
 
 /*Does nothing.*/
 public class EmptySprite implements Sprite {

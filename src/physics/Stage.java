@@ -105,7 +105,7 @@ public class Stage {
 	 */
 	public void step(float dt) {
 		for (Actor a : toAdd)
-			a.place(this);
+			activeActors.add(a);
 		toAdd.clear();
 		
 		for (Actor a : activeActors) {
@@ -123,6 +123,7 @@ public class Stage {
 				a.destroy();
 				delete(a);
 			}
+			a.state.snap(a);
 		}
 		
 		w.clearForces();

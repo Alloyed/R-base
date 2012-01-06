@@ -82,16 +82,16 @@ public class Godmode  extends BasicTWLGameState {
 		int mouseX = input.getAbsoluteMouseX();
 		int mouseY = input.getAbsoluteMouseY();
 		//Vec2 oldAim = cursor.state.aim;
-		cursor.state.aim = r.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(cursor.b.getPosition());
+		cursor.ps.aim = r.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(cursor.b.getPosition());
 		keys(gc, sg, gc.getInput());
 	}
 	
 	public void keys(GameContainer gc, StateBasedGame sg, Input in) {
 		if (cursor != null) {
-			cursor.state.upPressed = in.isKeyDown(r.settings.UP);
-			cursor.state.leftPressed = in.isKeyDown(r.settings.LEFT);
-			cursor.state.rightPressed = in.isKeyDown(r.settings.RIGHT);
-			cursor.state.downPressed = in.isKeyDown(r.settings.DOWN);
+			cursor.ps.upPressed = in.isKeyDown(r.settings.UP);
+			cursor.ps.leftPressed = in.isKeyDown(r.settings.LEFT);
+			cursor.ps.rightPressed = in.isKeyDown(r.settings.RIGHT);
+			cursor.ps.downPressed = in.isKeyDown(r.settings.DOWN);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class Godmode  extends BasicTWLGameState {
 	@Override
 	public void mousePressed(int btn, int x, int y) {
 		if (btn == Input.MOUSE_MIDDLE_BUTTON) {
-			Vec2 pos = cursor.state.aim.add(cursor.b.getWorldCenter());
+			Vec2 pos = cursor.ps.aim.add(cursor.b.getWorldCenter());
 			r.stage.addActor(Actor.class, new Vec2(1,1), pos);
 		} else if (btn == Input.MOUSE_LEFT_BUTTON) {
 			selecting = r.cam.screenToWorld(new Vec2(x, y));

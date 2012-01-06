@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.Random;
 
+import physics.Console;
+
 
 import TWLSlick.RootPane;
 
@@ -107,14 +109,15 @@ public class Chat extends OutputStream {
 		if (c == '\n') {
 			if (line.contains("ytraw{")) {
 				String st = line.split("ytraw\\{")[1].split("\\}")[0];
-				openWebSight("http://www.youtube.com/watch?v=" + st);
+				openWebSight("http://www.youtube.com/apiplayer?video_id=" + st + "&version=3&autoplay=1");
 			}
 			/* This is the feature I am most proud of. */
-			if (line.toLowerCase().contains("chocolate")) {
-				openWebSight("http://www.youtube.com/watch?v=8LXinl_vP90#t=0m6s");
+			if (line.contains("chocolate") && !line.contains("\\Did")) {
+				Console.chat.println("\\Did you say CHOCOLATE?");
+				openWebSight("http://www.youtube.com/apiplayer?video_id=8LXinl_vP90");
 			}
 			if (line.contains("gogogo")) {
-				openWebSight("http://www.youtube.com/watch?v=1EKTw50Uf8M");
+				openWebSight("http://www.youtube.com/apiplayer?video_id=1EKTw50Uf8M&version=3&autoplay=1");
 			}
 			line = "";
 		}

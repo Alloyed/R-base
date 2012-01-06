@@ -9,14 +9,15 @@ package physics.actors;
  *
  */
 public class Ghost extends Actor {
-	public PlayerState state;
+	public PlayerState ps;
 	final int speed=60;
 	
 	public Ghost() {
 		super();
 		label = "ghost";
 		baseImage = "none";
-		state = new PlayerState(this);
+		ps = new PlayerState(this);
+		state = ps;
 	}
 	
 	@Override
@@ -26,7 +27,7 @@ public class Ghost extends Actor {
 	
 	@Override
 	public void force() {
-		state.force(this, speed);
+		ps.force(this, speed);
 	}
 
 }

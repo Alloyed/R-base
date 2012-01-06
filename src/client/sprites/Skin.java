@@ -105,17 +105,20 @@ public class Skin {
 		sprites.put("floor", new RectSprite(c,getColor("bg")));
 		sprites.put("floor-blue", new RectSprite(c,getColor("bg-blue")));
 		sprites.put("floor-orange", new RectSprite(c,getColor("bg-orange")));
-		
+		sprites.put("portal", new RectSprite(c, Color.white));
 		//c.font = p.createFont("uni05_53.ttf",8,false);
 		//p.textFont(c.font);
 		
 		File dir = new File("data/" + path);
 		if(dir.exists()) {
 			for (File f : dir.listFiles()) {
-				if(f.getName().endsWith(".png") || f.getName().endsWith(".svg") || f.getName().endsWith(".svgz")) {
+				if(f.getName().endsWith(".png") 
+						|| f.getName().endsWith(".svg") 
+						|| f.getName().endsWith(".svgz")) {
 					String s = f.getName().split("\\.")[0];
 					toLoad.add(new ImagePromise(s, f.toString()));
-				} else if (f.getName().endsWith(".ogg") || f.getName().endsWith(".wav")) {
+				} else if (f.getName().endsWith(".ogg") 
+						|| f.getName().endsWith(".wav")) {
 					String s = f.getName().split("\\.")[0];
 					Console.out.println("Sound" + s);
 					toLoad.add(new SoundPromise(s, f.toString()));
@@ -191,7 +194,12 @@ public class Skin {
 	/**
 	 * Plays a sound effect in a certain spot in the world.
 	 * Absolute coordinates only. 
+<<<<<<< HEAD
 	 * If you want a sound with a reference point, you'll need to set it up yourself
+=======
+	 * If you want a sound with a reference point, 
+	 * you'll need to set it up yourself
+>>>>>>> eb0e9fbd738fbfe2555b133678eec47b3a198aae
 	 * @param name the sound
 	 * @param spot the spot where it will be played
 	 */
@@ -218,7 +226,8 @@ public class Skin {
 	public Color getColor(String s) {
 		Color i = colors.get(s);
 		if ( i == null ) {
-			Console.dbg.println("WARNING: color " + s + " doesn't exist. Using black instead.");
+			Console.dbg.println("WARNING: color " + s 
+					+ " doesn't exist. Using black instead.");
 			colors.put(s, Color.black);
 		}
 		return i;

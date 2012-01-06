@@ -19,8 +19,8 @@ import com.kitfox.svg.*;
 import client.ui.Loop;
 
 import physics.Console;
+import physics.Props.Prop;
 import physics.actors.Actor;
-import physics.actors.Prop;
 
 /**
  * draws vectors or images. 

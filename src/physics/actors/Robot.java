@@ -13,6 +13,7 @@ import org.jbox2d.dynamics.joints.DistanceJointDef;
 import physics.Console;
 import physics.Stage;
 import physics.Team;
+import physics.map.Map;
 
 /**
  * One of the robot players
@@ -22,13 +23,14 @@ import physics.Team;
  */
 public class Robot extends Actor {
 	final int speed=200;
-	public PlayerState state;
 	public Actor treads;
 	public Actor held;
 	public LinkedList<Actor> inventory;
+	public PlayerState ps;
 
 	public Robot() {
 		super();
+		state = new PlayerState(this);
 		treads = new Treads();
 		maxWear = 100;
 		wear    = maxWear;
@@ -41,8 +43,9 @@ public class Robot extends Actor {
 			b.create(new Vec2(.3f, .3f), new Vec2(0, 0));
 			inventory.add(b);
 		}
-		
-		state = new PlayerState(this);
+
+		ps = new PlayerState(this);
+		state = ps;
 	}
 	
 	@Override
@@ -71,7 +74,7 @@ public class Robot extends Actor {
 	 * @return
 	 */
 	public Vec2 getLocalPointAhead(float dist) {
-		float ang = (float)Math.atan2(state.aim.y, state.aim.x);
+		float ang = (float)Math.atan2(ps.aim.y, ps.aim.x);
 		return new Vec2(dist*(float)Math.cos(ang),dist*(float)Math.sin(ang));
 	}
 	
@@ -106,7 +109,7 @@ public class Robot extends Actor {
 				if (held != null)
 					return false;
 				Object data = f.getBody().getUserData();
-				if (data instanceof Actor) {
+				try {
 					Actor a = (Actor)data;
 					if (!a.isHeld &&
 							a.id != id &&
@@ -116,6 +119,8 @@ public class Robot extends Actor {
 						held = a;
 						return false;
 					}
+				} catch (Exception e) {
+					;	
 				}
 				return true;
 			}
@@ -169,11 +174,12 @@ public class Robot extends Actor {
 	 */
 	@Override
 	public void force() {
-		state.force(this, speed);
+		ps.force(this, speed);
 		
 		Vec2 vel = b.getLinearVelocity();
 		
-		treads.b.setTransform(treads.b.getWorldCenter(), (float)Math.atan2(vel.y, vel.x));
+		treads.b.setTransform(treads.b.getWorldCenter(), 
+				(float)Math.atan2(vel.y, vel.x));
 		if (held != null)
 			held.b.setTransform(getPointAhead(held.size.length()), held.b.getAngle());
 	}

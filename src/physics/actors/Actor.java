@@ -36,6 +36,8 @@ public class Actor {
 	//The name of the sprite used to represent it
 	public String baseImage="box";
 	public String[] modifiers;
+	//Position
+	public Snapshot state;
 	//Has the actor been picked up by another?
 	public boolean isHeld;
 	//Health, damage, etc.
@@ -49,14 +51,15 @@ public class Actor {
 	public float oldAng;
 	public boolean hit = false;
 	
-	BodyDef d;
-	FixtureDef fd;
+	protected BodyDef d;
+	protected FixtureDef fd;
 	public boolean toStore = false;
 	
 	/*Construction methods*/
 	public Actor() {
 		modifiers = new String[5];
 		wear = maxWear;
+		state = new Snapshot(this);
 	}
 	
 	/**
@@ -107,7 +110,7 @@ public class Actor {
 		b.setAngularDamping(friction*9.8f);
 		if (!s.actors.containsKey(id))
 			s.actors.put(id, this);
-		s.activeActors.add(this);
+		s.toAdd.add(this);
 	}
 	
 	/**

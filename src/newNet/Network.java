@@ -2,6 +2,8 @@ package newNet;
 
 import java.util.ArrayList;
 
+import org.jbox2d.common.Vec2;
+
 import physics.Team;
 import physics.actors.*;
 import com.esotericsoftware.kryo.Kryo;
@@ -14,6 +16,7 @@ public class Network {
 	public ArrayList<Player> players = new ArrayList<Player>();
 	
 	public static void register(Kryo k) {
+		k.register(Vec2.class);
 		k.register(Team.class);
 		k.register(Player.class);
 		k.register(Message.class);

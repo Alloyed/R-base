@@ -1,11 +1,14 @@
 package client;
 
-import java.io.IOException;
-
 import physics.Console;
+import physics.actors.Actor;
+import physics.actors.Snapshot;
 
 import newNet.Message;
 import newNet.Network;
+import newNet.Player;
+
+import client.ui.Loop;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -16,6 +19,7 @@ public class Net extends newNet.Network {
 		@Override
 		public void connected(Connection connection) {
 			Console.dbg.println("WHAT!");
+			connection.sendTCP(us);
 		}
 		
 		@Override
@@ -25,14 +29,25 @@ public class Net extends newNet.Network {
 		
 		@Override
 		public void received(Connection connection, Object o) {
-			
+			Console.dbg.println("DASDADA");
+			if (o instanceof Snapshot) {
+				Snapshot s = (Snapshot) o;
+				Console.dbg.println(s.actor + " " + l.stage.get(s.actor));
+				s.develop((Actor)l.stage.get(s.actor));
+			}
 		}
 	}
 	
+	Loop l;
 	Client cl;
-	public Net() {
+	Player us;
+	public Net(Loop l) {
+		this.l = l;
 		cl = new Client();
 		Network.register(cl.getKryo());
+		us = new Player();
+		
+		us.name = "faggot";
 		cl.addListener(new HEYLISTEN());
 		cl.start();
 	}
@@ -40,7 +55,6 @@ public class Net extends newNet.Network {
 	String host; int tcpPort; int udpPort;
 	public void connect(String h, int t, int u) {
 			host = h; tcpPort = t; udpPort = u;
-			System.out.println("CONNETICAL!");
 			new Thread("CON"){
 				public void run() {
 					try {
@@ -58,10 +72,15 @@ public class Net extends newNet.Network {
 		try {
 			//if (cl.isConnected())
 				cl.update(0);
+=======
+		try {
+			cl.update(0);
+>>>>>>> eb0e9fbd738fbfe2555b133678eec47b3a198aae
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+<<<<<<< HEAD
 		*/
 	}
 	

@@ -13,7 +13,7 @@ import physics.Console;
 import physics.Stage;
 import physics.Team;
 import physics.actors.Actor;
-import physics.actors.Map;
+import physics.map.Map;
 import client.Camera;
 import client.Chat;
 import client.Net;
@@ -46,11 +46,12 @@ public class Loop {
 		cam = new Camera(gc);
 		settings = new Settings();
 		stage = new Stage();
-		net = new Net();
-		((Map)stage.addActor(Map.class, -2, 
-				Team.NUETRAL, new Vec2(0,0), 
-				new Vec2(0,0))).startGame(123l);
+		net = new Net(this);
 		skin = new Skin(this);
+		Map m = new Map();
+		m.create(new Vec2(0,0), new Vec2(0,0));
+		m.place(stage);
+		m.startGame(System.currentTimeMillis());
 		//gc.setVSync(true);
 	}
 	
@@ -65,7 +66,7 @@ public class Loop {
 		net.update();
 		accum += dt;
 		while (accum > 16) {
-			stage.step(Stage.frame);
+			//stage.step(Stage.frame);
 			accum -= 16;
 		}
 		Actor.alpha = accum / 16;
