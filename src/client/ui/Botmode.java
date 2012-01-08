@@ -237,7 +237,6 @@ public class Botmode extends BasicTWLGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
-		l.update(dt);
 		Input input = gc.getInput();
 		int mouseX = input.getAbsoluteMouseX();
 		int mouseY = input.getAbsoluteMouseY();
@@ -246,6 +245,7 @@ public class Botmode extends BasicTWLGameState {
 //		lerped = oldAim.mul(1-Actor.alpha).add(pc.state.aim.mul(Actor.alpha));
 //		lerped = pc.state.aim;
 		keys(gc, input);
+		l.update(dt);
 	}
 	
 	@Override

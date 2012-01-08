@@ -39,4 +39,9 @@ public class Player {
 		team = p2.team;
 		currentMode = p2.currentMode;
 	}
+	
+	@Override
+	public String toString() {
+		return name + ", id " + id;
+	}
 }

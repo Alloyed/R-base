@@ -94,12 +94,13 @@ public class ImageSprite implements Sprite {
 
 	public void draw(Graphics g, Actor a) {
 		//This does linear interpolation: new*alpha + old*( 1.0 - alpha );
-		Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha)
-				.add(a.oldPos.mul(1 - Actor.alpha) );
+		//Vec2 pos = a.b.getWorldCenter().mul(Actor.alpha)
+		//		.add(a.oldPos.mul(1 - Actor.alpha) );
 		//Vec2 pos = a.b.getWorldCenter();
-		float angle = a.b.getAngle()*Actor.alpha + 
-					a.oldAng * (1 - Actor.alpha);
-
+		//float angle = a.b.getAngle()*Actor.alpha + 
+		//			a.oldAng * (1 - Actor.alpha);
+		Vec2 pos = a.state.pos;
+		float angle = a.state.ang;
 		//float angle = a.b.getAngle();
 		g.pushTransform();
 		g.resetTransform();  {

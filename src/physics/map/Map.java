@@ -37,7 +37,7 @@ public class Map extends Actor {
 		rooms = new ArrayList<Room>();
 		rooms.add(new BoxRoom());
 		rooms.add(new ConveyorRoom());
-		rooms.add(new CannonRoom());
+		//rooms.add(new CannonRoom());
 		rooms.add(new BoosterRoom());
 		thinking = new PortalRoom();
 		rooms.add(thinking);

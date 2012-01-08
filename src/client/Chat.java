@@ -34,8 +34,8 @@ public class Chat extends OutputStream {
 	Random r;
 	Loop c;
 	class chatback implements EditField.Callback {
-		Net n;
-		public chatback(Net n) {
+		CNet n;
+		public chatback(CNet n) {
 			this.n = n;
 		}
 		@Override

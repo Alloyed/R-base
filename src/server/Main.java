@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import org.jbox2d.common.Vec2;
 
+import newNet.Message;
 import newNet.Player;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -15,6 +16,8 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import physics.*;
+import physics.actors.Actor;
+import physics.actors.PlayerState;
 import physics.actors.Snapshot;
 import physics.map.Map;
 
@@ -27,9 +30,9 @@ import physics.map.Map;
 
 public class Main {
 	Stage main; //we might need extra states to emulate the client's state
-	Network net;
+	SNet net;
 	public Main() {
-		net = new Network();
+		net = new SNet();
 		try {
 			net.start(net.TCP, net.UDP);
 		} catch (IOException e) {
@@ -39,19 +42,17 @@ public class Main {
 	
 	int ind = 0;
 	public void game() {
+		net.mesg("Waiting for at least two players");
+		while (net.players.size() < 2) {}
+		net.mesg("Players found, Game started.");
+		int time = 0;
 		main = new Stage();
+		net.stage = main;
 		Map m = (Map) main.addActor(Map.class, new Vec2(0, 0), new Vec2(0, 0));
 		m.startGame(1234l);
-//		long seed = System.currentTimeMillis();
-		try {
-			//
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		Console.out.println("Game started.");
-		int time = 0;
 		while (true) {
 			//Send state to clients here.
+			/*
 			if (time % 10 == 0) {
 				
 			if ( main.activeActors.size() > 0)
@@ -62,12 +63,25 @@ public class Main {
 			}
 			}
 			time++;
+			*/
+			for (Player p : net.players) {
+				net.waitingfor.add(p);
+			}
 			
-			try { Thread.sleep((long) Stage.frame * 1000); } 
+			try { Thread.sleep((long) Stage.frame * 1000); }
 			catch (Exception e) {}
+			
+			while (!net.waitingfor.isEmpty()) {}
+			for (Player p : net.players) {
+				Actor a = main.actors.get(p.id);
+				if (a != null) {
+					net.serv.sendToAllExceptTCP(p.from.getID(), (PlayerState) a.state);
+				}
+			}
+			
 			main.step(Stage.frame);
 			if (!main.won()) {
-				Console.out.println("Game finished, restarting.");
+				net.mesg("Game finished, restarting.");
 				//TODO: empty state across all clients
 				break;
 			}
@@ -80,7 +94,7 @@ public class Main {
 		new Thread ("GAME") {
 			public void run() {
 				while (true) {
-				s.game();
+					s.game();
 				}
 			}
 		}.start();

@@ -1,5 +1,6 @@
 package client.ui;
 
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -142,11 +143,11 @@ public class Menu extends BasicTWLGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
-		l.update(dt);
 		if (toResume)
 			sg.enterState(1);
 		if (toQuit)
 			gc.exit();
+		l.update(dt);
 	}
 	
 	public boolean toResume = false, toQuit = false;
@@ -180,6 +181,7 @@ public class Menu extends BasicTWLGameState {
         });
         rootPane.add(connect);
     }
+    
     //btn("resume").setPosition(30, 30).setSize(100, 30);
   	//btn("quit").setPosition(30, 70).setSize(100, 30);		
   	//btn("connect").setPosition(670, 120).setSize(100, 30);

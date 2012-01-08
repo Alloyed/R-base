@@ -59,7 +59,7 @@ public class Stage {
 	public LinkedList<Actor> activeActors; //Every actor in the world right now
 	public LinkedList<Actor> toAdd;
 	public int orangebots=0, bluebots=0;
-	static int nextId = 0;
+	int nextId = 0;
 	
 	public Stage() {
 		w = new World(new Vec2(0, 0), true);
@@ -133,7 +133,7 @@ public class Stage {
 	 * returns the next free ID number.
 	 * @return
 	 */
-	public static int getNewId() {
+	public int getNewId() {
 		return nextId++;
 	}
 	

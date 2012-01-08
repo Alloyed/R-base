@@ -40,6 +40,7 @@ public class Ghostmode  extends BasicTWLGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sg)
 			throws SlickException {
+		r.net.us.wantedMode = id;
 		
 	}
 	
@@ -66,8 +67,8 @@ public class Ghostmode  extends BasicTWLGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
-		r.update(dt);
 		keys(gc, sg, gc.getInput());
+		r.update(dt);
 	}
 	
 	public void keys(GameContainer gc, StateBasedGame sg, Input in) {

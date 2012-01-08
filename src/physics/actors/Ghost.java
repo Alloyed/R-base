@@ -15,7 +15,7 @@ public class Ghost extends Actor {
 	public Ghost() {
 		super();
 		label = "ghost";
-		baseImage = "none";
+		baseImage = "box";
 		ps = new PlayerState(this);
 		state = ps;
 	}

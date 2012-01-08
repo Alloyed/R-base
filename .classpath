@@ -8,9 +8,7 @@
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/svgSalamander.jar"/>
 	<classpathentry kind="lib" path="lib/Slick/AppleJavaExtensions.jar"/>
-	<classpathentry kind="lib" path="lib/Slick/hiero.jar"/>
 	<classpathentry kind="lib" path="lib/Slick/ibxm.jar"/>
-	<classpathentry kind="lib" path="lib/Slick/jinput.jar"/>
 	<classpathentry kind="lib" path="lib/Slick/jnlp.jar"/>
 	<classpathentry kind="lib" path="lib/Slick/jogg-0.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/Slick/jorbis-0.0.15.jar"/>
@@ -20,9 +18,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/Slick/lzma.jar"/>
-	<classpathentry kind="lib" path="lib/Slick/packulike.jar"/>
-	<classpathentry kind="lib" path="lib/Slick/pedigree.jar"/>
-	<classpathentry kind="lib" path="lib/Slick/scalar.jar"/>
 	<classpathentry kind="lib" path="lib/Slick/slick.jar"/>
 	<classpathentry kind="lib" path="lib/Slick/tinylinepp.jar"/>
 	<classpathentry kind="lib" path="lib/Slick/TWL.jar"/>
