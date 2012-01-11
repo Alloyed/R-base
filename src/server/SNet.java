@@ -8,12 +8,13 @@ import java.util.LinkedList;
 import newNet.Message;
 import newNet.Player;
 import physics.Console;
-import physics.Stage;
 import physics.actors.Actor;
 import physics.actors.PlayerState;
 
-import com.esotericsoftware.kryonet.*;
-
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.kryonet.rmi.ObjectSpace;
 
 public class SNet extends newNet.Net {
 	Server serv;
@@ -21,7 +22,7 @@ public class SNet extends newNet.Net {
 	String motd; 
 	URL master;
 	URLConnection c;
-	Stage stage;
+	ObjectSpace space;
 	
 	class HEYLISTEN extends Listener {
 		@Override
@@ -32,6 +33,18 @@ public class SNet extends newNet.Net {
 		@Override
 		public void disconnected(Connection connection) {
 			Console.dbg.println(connection.getID() + " disconnected! " + connection.toString());
+			
+			Player toRemove = null;
+			for (Player p : players) {
+				if (p.from.getID() == connection.getID()) {
+					toRemove = p;
+					break;
+				}
+			}
+			if (toRemove != null) {
+				players.remove(toRemove);
+				
+			}
 		}
 		
 		@Override
@@ -69,10 +82,13 @@ public class SNet extends newNet.Net {
 	
 	public void start(int tcpPort, int udpPort) throws IOException {
 		serv = new Server();
+		end = serv;
+		register();
+		
 		serv.bind(tcpPort, udpPort);
-		SNet.register(serv.getKryo());
 		serv.addListener(new HEYLISTEN());
 		serv.start();
+		
 		waitingfor = new LinkedList<Player>();
 		Console.dbg.println("Server Started");
 	}
@@ -90,7 +106,7 @@ public class SNet extends newNet.Net {
 	
 	//Send a server message
 	public void mesg(String body) {
-		Message m = new Message(body);
+		Message m = new Message("Server", body);
 		serv.sendToAllTCP(m);
 		messages.add(m);
 		m.print();

@@ -1,42 +1,42 @@
 package client;
 
-import java.util.Random;
-
+import newNet.Message;
+import newNet.Player;
 import physics.Console;
 import physics.actors.Actor;
 import physics.actors.Snapshot;
-
-import newNet.Message;
-import newNet.Net;
-import newNet.Player;
-
 import client.ui.Loop;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+/**
+ * The client class.
+ *
+ */
 public class CNet extends newNet.Net {
 	class HEYLISTEN extends Listener {
 		@Override
 		public void connected(Connection connection) {
-			Console.dbg.println("WHAT!");
+			//Send them our player, to be validated
 			connection.sendTCP(us);
 		}
 		
 		@Override
 		public void disconnected(Connection connection) {
-			
+			//TODO: clean everything up
 		}
 		
 		@Override
 		public void received(Connection connection, Object o) {
 			if (o instanceof Snapshot) {
 				Snapshot s = (Snapshot) o;
-				Console.dbg.println(s.actor + " " + l.stage.get(s.actor) + " " + s.pos);
-				s.develop((Actor)l.stage.get(s.actor));
+				Console.dbg.println(s.actor + " " + stage.get(s.actor) + " " + s.pos);
+				s.develop((Actor)stage.get(s.actor));
 			} else if (o instanceof Player) {
 				Player p = (Player) o;
+				//FIXME: this will break if two people are named the same thing
 				if (!addPlayer(p) && us.name.equals(p.name)) {
 					us = p;
 				}
@@ -53,11 +53,12 @@ public class CNet extends newNet.Net {
 	public Player us;
 	public CNet(Loop l) {
 		this.l = l;
+		setStage(l.stage);
 		cl = new Client();
-		Net.register(cl.getKryo());
+		register();
 		us = new Player();
 		
-		us.name = "faggot"+ new Random().nextInt(100);
+		us.name = l.settings.USERNAME;
 		cl.addListener(new HEYLISTEN());
 		cl.start();
 	}
@@ -65,7 +66,7 @@ public class CNet extends newNet.Net {
 	String host; int tcpPort; int udpPort;
 	public void connect(String h, int t, int u) {
 			host = h; tcpPort = t; udpPort = u;
-			new Thread("CON"){
+			new Thread("CONNECT"){
 				public void run() {
 					try {
 						cl.connect(5000, host, tcpPort, udpPort);
@@ -77,25 +78,8 @@ public class CNet extends newNet.Net {
 		
 	}
 	
-	public void update() {
-		/*
-		try {
-			//if (cl.isConnected())
-				cl.update(0);
-=======
-		try {
-			cl.update(0);
->>>>>>> eb0e9fbd738fbfe2555b133678eec47b3a198aae
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-<<<<<<< HEAD
-		*/
-	}
-	
 	public void say(String s) {
-		Message m = new Message(s);
+		Message m = new Message(us.name, s);
 		cl.sendTCP(m);
 		m.print();
 	}

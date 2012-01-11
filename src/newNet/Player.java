@@ -13,7 +13,7 @@ import com.esotericsoftware.kryonet.Connection;
 
 public class Player {
 	public String name;
-	public transient Connection from; //Clients ignore this
+	public transient Connection from; //Clients don't need this
 	public int id;
 	public Team team;
 	public int currentMode, wantedMode; //use the statebasedgame ids here

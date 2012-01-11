@@ -22,11 +22,11 @@ import TWLSlick.BasicTWLGameState;
 /*One Giant TODO*/
 public class Godmode  extends BasicTWLGameState {
 	public Ghost cursor;
-	public Loop r;
+	public Loop loop;
 	ArrayList<Actor> selected;
 	public Godmode(Loop l) {
 		super();
-		r = l;
+		loop = l;
 	}
 	
 	final static int id = 3;
@@ -47,7 +47,7 @@ public class Godmode  extends BasicTWLGameState {
 	}
 	
 	public void start() {
-		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), new Vec2(1,1), new Vec2(1,1));
+		cursor = (Ghost) loop.stage.addActor(Ghost.class, 0, Team.get(loop.settings.team), new Vec2(1,1), new Vec2(1,1));
 		Console.chat.println("\\You are the commander. Help your team kill the other team!");
 		selected = new ArrayList<Actor>();
 	}
@@ -62,12 +62,12 @@ public class Godmode  extends BasicTWLGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
 			throws SlickException {
-		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
-		r.render(gc, sg, g);
+		loop.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
+		loop.render(gc, sg, g);
 		
 		if (selecting != null) {
 			Input in = gc.getInput();
-			Vec2 start = r.cam.worldToScreen(selecting);
+			Vec2 start = loop.cam.worldToScreen(selecting);
 			g.drawRect(start.x, start.y, in.getAbsoluteMouseX()-start.x, in.getAbsoluteMouseY()-start.y);
 		}
 	}
@@ -75,23 +75,23 @@ public class Godmode  extends BasicTWLGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
-		r.update(dt);
+		loop.update(dt);
 		if (cursor == null)
 			start();
 		Input input = gc.getInput();
 		int mouseX = input.getAbsoluteMouseX();
 		int mouseY = input.getAbsoluteMouseY();
 		//Vec2 oldAim = cursor.state.aim;
-		cursor.ps.aim = r.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(cursor.b.getPosition());
+		cursor.ps.aim = loop.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(cursor.b.getPosition());
 		keys(gc, sg, gc.getInput());
 	}
 	
 	public void keys(GameContainer gc, StateBasedGame sg, Input in) {
 		if (cursor != null) {
-			cursor.ps.upPressed = in.isKeyDown(r.settings.UP);
-			cursor.ps.leftPressed = in.isKeyDown(r.settings.LEFT);
-			cursor.ps.rightPressed = in.isKeyDown(r.settings.RIGHT);
-			cursor.ps.downPressed = in.isKeyDown(r.settings.DOWN);
+			cursor.ps.upPressed = in.isKeyDown(loop.settings.UP);
+			cursor.ps.leftPressed = in.isKeyDown(loop.settings.LEFT);
+			cursor.ps.rightPressed = in.isKeyDown(loop.settings.RIGHT);
+			cursor.ps.downPressed = in.isKeyDown(loop.settings.DOWN);
 		}
 	}
 	
@@ -101,9 +101,9 @@ public class Godmode  extends BasicTWLGameState {
 	public void mousePressed(int btn, int x, int y) {
 		if (btn == Input.MOUSE_MIDDLE_BUTTON) {
 			Vec2 pos = cursor.ps.aim.add(cursor.b.getWorldCenter());
-			r.stage.addActor(Actor.class, new Vec2(1,1), pos);
+			loop.stage.addActor(Actor.class, new Vec2(1,1), pos);
 		} else if (btn == Input.MOUSE_LEFT_BUTTON) {
-			selecting = r.cam.screenToWorld(new Vec2(x, y));
+			selecting = loop.cam.screenToWorld(new Vec2(x, y));
 		} else if (btn == Input.MOUSE_RIGHT_BUTTON) {
 			//TODO:Orders/interactions.
 		}
@@ -119,7 +119,7 @@ public class Godmode  extends BasicTWLGameState {
 			}
 			
 			Vec2 lower = selecting;
-			Vec2 upper = r.cam.screenToWorld(new Vec2(x, y));
+			Vec2 upper = loop.cam.screenToWorld(new Vec2(x, y));
 			//AABB needs to order the coords so that lower is in top left
 			if (lower.x > upper.x) { 
 				float t = lower.x;
@@ -147,14 +147,15 @@ public class Godmode  extends BasicTWLGameState {
 					return true;
 				}
 			};
-			r.stage.w.queryAABB(q, box);
+			loop.stage.w.queryAABB(q, box);
 			selecting = null;
 		}
 	}
 	
 	@Override 
 	public void keyPressed(int key, char c) {
-		
+		if (key == loop.settings.CHAT)
+			cb.startChat();
 	}
 
 	void unselect() {
@@ -163,5 +164,17 @@ public class Godmode  extends BasicTWLGameState {
 		}
 		selected.clear();
 	}
-
+	
+	ChatBox cb;
+	@Override
+	protected void createRootPane() {
+		super.createRootPane();
+		cb = new ChatBox(loop);
+		cb.add(rootPane);
+	}
+	
+    @Override
+    protected void layoutRootPane() {
+    	cb.layout(rootPane);
+    }
 }

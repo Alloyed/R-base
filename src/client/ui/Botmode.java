@@ -1,8 +1,6 @@
 package client.ui;
 
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import org.jbox2d.common.Vec2;
 import org.newdawn.slick.GameContainer;
@@ -10,8 +8,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-
-import de.matthiasmann.twl.*;
 
 import physics.Console;
 import physics.Team;
@@ -28,7 +24,7 @@ import TWLSlick.BasicTWLGameState;
  */
 public class Botmode extends BasicTWLGameState {
 	public Robot pc;
-	Loop l;
+	Loop loop;
 	
 //	public PGraphics inv, health;
 //	private Vec2 lerped;
@@ -51,7 +47,7 @@ public class Botmode extends BasicTWLGameState {
 	
 	public Botmode(Loop l) {
 		super();
-		this.l = l;
+		this.loop = l;
 	}
 //		ControllerGroup m = r.gooey.addGroup(group, 0, 0);
 		//this sets off a segfault, it's harmless though
@@ -77,8 +73,8 @@ public class Botmode extends BasicTWLGameState {
 	public void start() {
 		pc = new Robot();
 		pc.create(new Vec2(1, 1), new Vec2(1, 1));
-		pc.setTeam(l.settings.team == 0 ? Team.ORANGE : Team.BLUE);
-		pc.place(l.stage);
+		pc.setTeam(loop.settings.team == 0 ? Team.ORANGE : Team.BLUE);
+		pc.place(loop.stage);
 //		lerped = new Vec2(0,0);
 		Console.chat.println("\\You are a robot. Kill the other team!");
 	}
@@ -180,21 +176,21 @@ public class Botmode extends BasicTWLGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
 			throws SlickException {
-		l.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
+		loop.cam.set(pc.b.getWorldCenter(), pc.b.getAngle());
 		
 		if (pc.wear <= 1) {
 			sg.enterState(Ghostmode.id);
 		}
 		
 		//TODO:Find some nicer way to trigger sounds
-		for (Actor a:l.stage.activeActors) {
+		for (Actor a:loop.stage.activeActors) {
 			if (a.hit) {
 				a.hit = false;
-				l.skin.playAt("hit", pc.b.getLocalPoint(a.b.getWorldCenter()));
+				loop.skin.playAt("hit", pc.b.getLocalPoint(a.b.getWorldCenter()));
 			}
 		}
 		
-		l.render(gc, sg, g);
+		loop.render(gc, sg, g);
 		
 		//crosshairs
 		//FIXME: This is broken still
@@ -241,23 +237,26 @@ public class Botmode extends BasicTWLGameState {
 		int mouseX = input.getAbsoluteMouseX();
 		int mouseY = input.getAbsoluteMouseY();
 //		Vec2 oldAim = pc.state.aim;
-		pc.ps.aim = l.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(pc.b.getPosition());
+		pc.ps.aim = loop.cam.screenToWorld(new Vec2(mouseX, mouseY)).sub(pc.b.getPosition());
 //		lerped = oldAim.mul(1-Actor.alpha).add(pc.state.aim.mul(Actor.alpha));
 //		lerped = pc.state.aim;
 		keys(gc, input);
-		l.update(dt);
+		loop.update(dt);
 	}
 	
 	@Override
 	public void keyPressed(int code, char c) {
-		l.keyPressed(code, c);
+		loop.keyPressed(code, c);
 	}
 
 	@Override
 	public void keyReleased(int code, char c) {
-		l.keyReleased(code, c);
-		if (code == l.settings.USE) {
+		loop.keyReleased(code, c);
+		if (code == loop.settings.USE) {
 			pc.toggleHold();
+		}
+		if (code == loop.settings.CHAT) {
+			cb.startChat();
 		}
 	}
 	
@@ -268,20 +267,23 @@ public class Botmode extends BasicTWLGameState {
 	}
 	
 	public void keys(GameContainer gc, Input in) {
-		pc.ps.upPressed    = in.isKeyDown(l.settings.UP);
-		pc.ps.leftPressed  = in.isKeyDown(l.settings.LEFT);
-		pc.ps.rightPressed = in.isKeyDown(l.settings.RIGHT);
-		pc.ps.downPressed  = in.isKeyDown(l.settings.DOWN);		
+		//TODO: make back into events
+		pc.ps.upPressed    = in.isKeyDown(loop.settings.UP);
+		pc.ps.leftPressed  = in.isKeyDown(loop.settings.LEFT);
+		pc.ps.rightPressed = in.isKeyDown(loop.settings.RIGHT);
+		pc.ps.downPressed  = in.isKeyDown(loop.settings.DOWN);		
 	}
 	
+	ChatBox cb;
 	@Override
 	protected void createRootPane() {
 		super.createRootPane();
-		l.createRootPane(rootPane);
+		cb = new ChatBox(loop);
+		cb.add(rootPane);
 	}
 	
     @Override
     protected void layoutRootPane() {
-    	l.layoutRootPane(rootPane);
+    	cb.layout(rootPane);
     }
 }

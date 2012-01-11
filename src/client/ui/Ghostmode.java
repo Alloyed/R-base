@@ -21,9 +21,9 @@ import TWLSlick.BasicTWLGameState;
  */
 public class Ghostmode  extends BasicTWLGameState {
 	public Ghost cursor;
-	public Loop r;
+	public Loop loop;
 	public Ghostmode(Loop l) {
-		r = l;
+		loop = l;
 	}
 	
 	final static int id = 1;
@@ -33,14 +33,14 @@ public class Ghostmode  extends BasicTWLGameState {
 	}
 	
 	public void start(Vec2 pos) {
-		cursor = (Ghost) r.stage.addActor(Ghost.class, 0, Team.get(r.settings.team), new Vec2(1,1), pos);
+		cursor = (Ghost) loop.stage.addActor(Ghost.class, 0, Team.get(loop.settings.team), new Vec2(1,1), pos);
 		Console.chat.println("\\Press '.' to spawn in Robot mode, and ',' to spawn in Commander mode.");
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sg)
 			throws SlickException {
-		r.net.us.wantedMode = id;
+		loop.net.us.wantedMode = id;
 		
 	}
 	
@@ -60,22 +60,22 @@ public class Ghostmode  extends BasicTWLGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sg, Graphics g)
 			throws SlickException {
-		r.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
-		r.render(gc, sg, g);
+		loop.cam.set(cursor.b.getWorldCenter(), cursor.b.getAngle());
+		loop.render(gc, sg, g);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
 		keys(gc, sg, gc.getInput());
-		r.update(dt);
+		loop.update(dt);
 	}
 	
 	public void keys(GameContainer gc, StateBasedGame sg, Input in) {
-		cursor.ps.upPressed    = in.isKeyDown(r.settings.UP);
-		cursor.ps.leftPressed  = in.isKeyDown(r.settings.LEFT);
-		cursor.ps.rightPressed = in.isKeyDown(r.settings.RIGHT);
-		cursor.ps.downPressed  = in.isKeyDown(r.settings.DOWN);
+		cursor.ps.upPressed    = in.isKeyDown(loop.settings.UP);
+		cursor.ps.leftPressed  = in.isKeyDown(loop.settings.LEFT);
+		cursor.ps.rightPressed = in.isKeyDown(loop.settings.RIGHT);
+		cursor.ps.downPressed  = in.isKeyDown(loop.settings.DOWN);
 		if (in.isKeyDown(Input.KEY_PERIOD)) {
 			sg.enterState(Botmode.id);
 			return;
@@ -88,22 +88,27 @@ public class Ghostmode  extends BasicTWLGameState {
 	
 	@Override
 	public void keyPressed(int code, char c) {
-		r.keyPressed(code, c);
+		loop.keyPressed(code, c);
 	}
 
 	@Override
 	public void keyReleased(int code, char c) {
-		r.keyReleased(code, c);
+		loop.keyReleased(code, c);
+		if (code == loop.settings.CHAT) {
+			cb.startChat();
+		}
 	}
 	
+	ChatBox cb;
 	@Override
 	protected void createRootPane() {
 		super.createRootPane();
-		r.createRootPane(rootPane);
+		cb = new ChatBox(loop);
+		cb.add(rootPane);
 	}
 	
     @Override
     protected void layoutRootPane() {
-    	r.layoutRootPane(rootPane);
+    	cb.layout(rootPane);
     }
 }

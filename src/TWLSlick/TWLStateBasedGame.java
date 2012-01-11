@@ -40,6 +40,7 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -140,7 +141,10 @@ public abstract class TWLStateBasedGame extends StateBasedGame {
             gui.applyTheme(theme);
 
             Input input = getContainer().getInput();
-            TWLInputForwarder inputForwarder = new TWLInputForwarder(gui, input);
+            InputListener inputForwarder = new 
+//            		TWLInputAdapter
+            		TWLInputForwarder
+            		(gui, input);
             input.addPrimaryListener(inputForwarder);
         } catch (Throwable e) {
             throw new SlickException("Could not initialize TWL GUI", e);

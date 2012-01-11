@@ -2,7 +2,12 @@ package newNet;
 
 import physics.Console;
 import physics.Team;
-
+/**
+ * A chat message.
+ * TODO: team rooms, non-chat messages(The server ones should get there own window), timestamps
+ * @author kyle
+ *
+ */
 public class Message {
 	String from;
 	//Me love you
@@ -13,8 +18,8 @@ public class Message {
 		
 	}
 	
-	public Message(String message) {
-		from = "DSD";
+	public Message(String player, String message) {
+		from = player;
 		body = message;
 	}
 	

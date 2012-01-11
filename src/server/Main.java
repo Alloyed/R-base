@@ -1,24 +1,14 @@
 package server;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Scanner;
+
+import newNet.Player;
 
 import org.jbox2d.common.Vec2;
 
-import newNet.Message;
-import newNet.Player;
-
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-
-import physics.*;
+import physics.Stage;
 import physics.actors.Actor;
 import physics.actors.PlayerState;
-import physics.actors.Snapshot;
 import physics.map.Map;
 
 /*
@@ -42,12 +32,11 @@ public class Main {
 	
 	int ind = 0;
 	public void game() {
+		main = new Stage();
+		net.stage = main;
 		net.mesg("Waiting for at least two players");
 		while (net.players.size() < 2) {}
 		net.mesg("Players found, Game started.");
-		int time = 0;
-		main = new Stage();
-		net.stage = main;
 		Map m = (Map) main.addActor(Map.class, new Vec2(0, 0), new Vec2(0, 0));
 		m.startGame(1234l);
 		while (true) {
@@ -71,7 +60,9 @@ public class Main {
 			try { Thread.sleep((long) Stage.frame * 1000); }
 			catch (Exception e) {}
 			
+			//Wait to get all the players input
 			while (!net.waitingfor.isEmpty()) {}
+			//Send the input back out
 			for (Player p : net.players) {
 				Actor a = main.actors.get(p.id);
 				if (a != null) {
@@ -98,12 +89,5 @@ public class Main {
 				}
 			}
 		}.start();
-		Scanner sc = new Scanner(System.in);
-		while (true) {
-			System.out.print(">");
-			String str = sc.nextLine();
-			if (str.contains("players"))
-				System.out.println(s.net.players);
-		}
 	}
 }
