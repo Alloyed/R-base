@@ -71,7 +71,6 @@ public class Net {
 			}
 		}
 		players.add(newp);
-		space.addConnection(newp.from);
 		return false;
 	}
 	
