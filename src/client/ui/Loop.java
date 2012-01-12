@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import newNet.Player;
 
+import org.jbox2d.common.Vec2;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -14,6 +15,7 @@ import physics.Console;
 import physics.Stage;
 import physics.actors.Actor;
 import physics.actors.PlayerState;
+import physics.map.Map;
 import client.Camera;
 import client.Chat;
 import client.CNet;
@@ -47,10 +49,10 @@ public class Loop {
 		skin = new Skin(this);
 		chat = new Chat(5);
 		Console.chat = new PrintStream(chat);
-		//Map m = new Map();
-		//m.create(new Vec2(0,0), new Vec2(0,0));
-		//m.place(stage);
-		//m.startGame(System.currentTimeMillis());
+		Map m = new Map();
+		m.create(new Vec2(0,0), new Vec2(0,0));
+		m.place(stage);
+		m.startGame(System.currentTimeMillis());
 	}
 	
 	int accum = 0;

@@ -49,7 +49,7 @@ public class Net {
 		k.register(Snapshot.class);
 		k.register(PlayerState.class);
 		ObjectSpace.registerClasses(k);
-		
+		System.out.println("REGISTR");
 		space = new ObjectSpace();
 		space.register(netID, this);
 	}
