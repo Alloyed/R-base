@@ -137,7 +137,7 @@ public class Menu extends BasicTWLGameState {
 			throws SlickException {
 		g.setBackground(bg);
 		g.drawImage(logo, (gc.getWidth() / 2f) - (logo.getWidth()/2), 
-				(gc.getHeight() / 2f) - (logo.getHeight() / 2));		
+				(gc.getHeight() / 2f) - (logo.getHeight() / 2));
 	}
 	
 	@Override
@@ -145,8 +145,10 @@ public class Menu extends BasicTWLGameState {
 			throws SlickException {
 		if (toResume)
 			sg.enterState(1);
-		if (toQuit)
+		if (toQuit) {
+			sg.closeRequested();
 			gc.exit();
+		}
 		l.update(dt);
 	}
 	

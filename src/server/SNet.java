@@ -22,7 +22,6 @@ public class SNet extends newNet.Net {
 	String motd; 
 	URL master;
 	URLConnection c;
-	ObjectSpace space;
 	
 	class HEYLISTEN extends Listener {
 		@Override
@@ -70,6 +69,7 @@ public class SNet extends newNet.Net {
 		if (!addPlayer(p)) {
 			p.from = c;
 			p.id = stage.getNewId();
+			space.addConnection(c);
 			for (Player i: players)
 				if (i != p)
 					c.sendTCP(i);

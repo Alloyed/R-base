@@ -54,6 +54,7 @@ public class CNet extends newNet.Net {
 	public CNet(Loop l) {
 		this.l = l;
 		cl = new Client();
+		end = cl;
 		register();
 		setStage(l.stage);
 		us = new Player();
