@@ -2,14 +2,18 @@ package server;
 
 import java.io.IOException;
 
-import newNet.Player;
-
 import org.jbox2d.common.Vec2;
 
+import newNet.Player;
+import physics.AddDef;
 import physics.Stage;
+import physics.Stagelike;
 import physics.actors.Actor;
 import physics.actors.PlayerState;
+import physics.map.IMap;
 import physics.map.Map;
+
+import com.esotericsoftware.kryonet.rmi.ObjectSpace;
 
 /*
  * All this thing does is wait for new clients.
@@ -33,12 +37,22 @@ public class Main {
 	int ind = 0;
 	public void game() {
 		main = new Stage();
+		main.space = net.space;
 		net.stage = main;
-		net.mesg("Waiting for at least two players");
-		while (net.players.size() < 2) {}
+		net.mesg("Waiting for at least 1 players");
+		while (net.players.size() < 1) { try {Thread.sleep(100);} catch (Exception e) {} }
 		net.mesg("Players found, Game started.");
-		Map m = (Map) main.addActor(Map.class, new Vec2(0, 0), new Vec2(0, 0));
-		m.startGame(1234l);
+		AddDef map = new AddDef(Map.class, new Vec2(0, 0), new Vec2(0, 0));
+		map.id = main.getNewId();
+		for (Player p : net.players) {
+			p.currentMode = 2;
+			p.from.sendTCP(map);
+		}
+		for (Player p : net.players) {
+			IMap a = ObjectSpace.getRemoteObject(p.from, map.id, IMap.class);
+			a.startGame(12345l);
+		}
+		main.addDef(map);
 		while (true) {
 			//Send state to clients here.
 			/*

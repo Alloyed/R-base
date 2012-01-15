@@ -23,7 +23,7 @@ import com.kitfox.svg.*;
  * @author kyle
  *
  */
-public class Map extends Actor {
+public class Map extends Actor implements IMap {
 	public ArrayList<Prop> props;
 	public ArrayList<Room> rooms;
 	PortalRoom thinking;
@@ -117,8 +117,9 @@ public class Map extends Actor {
 	public Prop addProp(Class<? extends Prop> type, Vec2 size, Vec2 pos) {
 		return addProp(type, size, pos, 0);
 	}
-
-	public void startGame(Long seed) {
+	
+	public void startGame(long seed) {
+		System.out.println("GAEM STRAT");
 		Random rand = new Random(seed); // We need the seed because DETERMINISM!
 		// Two different loops because we have no layers
 		int maxX = 10, maxY = 2;

@@ -14,7 +14,6 @@ import physics.actors.PlayerState;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.kryonet.rmi.ObjectSpace;
 
 public class SNet extends newNet.Net {
 	Server serv;
@@ -59,7 +58,8 @@ public class SNet extends newNet.Net {
 			} else if (o instanceof PlayerState && stage != null) {
 				PlayerState ps = (PlayerState) o;
 				Actor a = stage.actors.get(ps.actor);
-				ps.develop(a);
+				if (a != null)
+					ps.develop(a);
 				waitingfor.remove(getPlayer(ps.actor));
 			}
 		}

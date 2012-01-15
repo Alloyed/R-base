@@ -47,7 +47,7 @@ public class Godmode  extends BasicTWLGameState {
 	}
 	
 	public void start() {
-		cursor = (Ghost) loop.stage.addActor(Ghost.class, 0, Team.get(loop.settings.team), new Vec2(1,1), new Vec2(1,1));
+		cursor = (Ghost)loop.stage.get( loop.stage.addActor(Ghost.class, 0, Team.get(loop.settings.team), new Vec2(1,1), new Vec2(1, 1)));
 		Console.chat.println("\\You are the commander. Help your team kill the other team!");
 		selected = new ArrayList<Actor>();
 	}

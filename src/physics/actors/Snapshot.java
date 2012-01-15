@@ -48,6 +48,7 @@ public class Snapshot {
 	 * @param the actor this is a snapshot of
 	 */
 	public void develop(Actor actor2) {
+		System.out.println(actor2);
 		actor2.b.setTransform(pos, ang);
 	}
 }

@@ -11,13 +11,16 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
+import com.esotericsoftware.kryonet.rmi.ObjectSpace;
+
 import physics.actors.Actor;
 
 /**
  * The representation of the in-game world.
  * 
  */
-public class Stage {
+public class Stage implements Stagelike {
+	public void say() {System.err.println("SUP NIGGA");}
 	class HEYLISTEN implements ContactListener {
 		@Override
 		public void beginContact(Contact c) {
@@ -59,7 +62,8 @@ public class Stage {
 	public LinkedList<Actor> activeActors; //Every actor in the world right now
 	public LinkedList<Actor> toAdd;
 	public int orangebots=0, bluebots=0;
-	int nextId = 0;
+	int nextId = 1;
+	public ObjectSpace space;
 	
 	public Stage() {
 		w = new World(new Vec2(0, 0), true);
@@ -77,26 +81,64 @@ public class Stage {
 	 * @param t the team the Actor is part of
 	 * @param size the size of the actor. this is a scale, so (1, 1) is normal size
 	 * @param pos the absolute position in the world for the actor
-	 * @return the resulting actor.
+	 * @return the id of the actor.
 	 */
-	public Actor addActor(Class<? extends Actor> type, int id, Team t, Vec2 size, Vec2 pos) {
+	public int addActor(Class<? extends Actor> type, int id, Team t, Vec2 size, Vec2 pos) {
 		try {
 			Actor a = type.newInstance();
 			a.setTeam(t);
 			a.id = id;
 			a.create(size, pos);
 			a.place(this);
-			return a;
+			Console.dbg.println(a.toString() + " created");
+			return a.id;
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return -1;
 	}
 	
-	public Actor addActor(Class<? extends Actor> type, Vec2 size, Vec2 pos) {
+	public int addActor(Class<? extends Actor> type, Vec2 size, Vec2 pos) {
 		return addActor(type, getNewId(), Team.NUETRAL, size, pos);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addDef(AddDef map) {
+		try {
+			addActor((Class<? extends Actor>) Class.forName(map.type),
+					map.id,
+					map.team,
+					map.size,
+					map.pos);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/*FIXME: ugh what the fuck is going on here*/
+	@SuppressWarnings("unchecked")
+	public int addActor(String type, Vec2 size, Vec2 pos) {
+		Console.dbg.println("HI");
+		try {
+			return addActor((Class<? extends Actor>) Class.forName(type), getNewId(), Team.NUETRAL, size, pos);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public int addActor(String type, int id, Team t, Vec2 size, Vec2 pos) {
+		Console.dbg.println("HI");
+		try {
+			return addActor((Class<? extends Actor>) Class.forName(type), id, t, size, pos);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
 	
 	/**
@@ -193,15 +235,4 @@ public class Stage {
 		activeActors.remove(a);
 		w.destroyBody(a.b);
 	}
-	
-	/**
-	 * FIXME: I don't remember why this is here tbh.
-	 * @param origin
-	 * @param time
-	 * @param message
-	 */
-	public void chat(String origin, Long time, String message) {
-		Console.chat(origin, time, message);
-	}
-	
 }

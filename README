@@ -29,8 +29,8 @@ POSSIBLE PROBLEMS:
 	right click on file->build path->exclude from build path
 	and then do that again, this time including to build path 
 
---Processing notes--
-To run this mess in processing: 
-Export all the non-default packages to a Jar file, 
-put that in the processing libraries, 
-and open Applet.pde
+--For the networking--
+Objecspace ids:
+-1 : The stage
+0 : i dunno lol
+1 to MAX_INT: Actors

@@ -14,6 +14,10 @@ public class PlayerState extends Snapshot {
 	public boolean upPressed, downPressed, leftPressed, rightPressed, ROTATE_FORCE;
 	public Vec2 aim = new Vec2(0, 0), move = new Vec2(0, 0);
 	
+	public PlayerState() {
+		super();
+	}
+	
 	public PlayerState(Actor a) {
 		super(a);
 	}

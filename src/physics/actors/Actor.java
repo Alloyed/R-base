@@ -108,8 +108,10 @@ public class Actor {
 		b.setUserData(this);
 		b.setLinearDamping(friction*9.8f);
 		b.setAngularDamping(friction*9.8f);
-		if (!s.actors.containsKey(id))
+		if (!s.actors.containsKey(id)) {
 			s.actors.put(id, this);
+			s.space.register(id, this);
+		}
 		s.toAdd.add(this);
 	}
 	
@@ -126,8 +128,10 @@ public class Actor {
 	 * Override this to change shape, friction, etc.
 	 */
 	public void makeBody() {
+		
 		PolygonShape p = new PolygonShape();
 		p.setAsBox(size.x/2, size.y/2);
+		
 		fd.shape = p;
 	}
 	

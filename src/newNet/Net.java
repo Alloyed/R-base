@@ -5,12 +5,14 @@ import java.util.LinkedList;
 
 import org.jbox2d.common.Vec2;
 
-import physics.Stage;
-import physics.Team;
+import physics.*;
 import physics.actors.*;
+import physics.map.*;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.rmi.ObjectSpace;
+import com.esotericsoftware.minlog.Log;
 
 /**
  * put things common between the two networking classes here maybe? 
@@ -38,9 +40,10 @@ public class Net {
 	 */
 	public ObjectSpace space;
 	//ids > 0 are for Actors
-	final int netID = 0, stageID = -1; 
+	public final int netID = 0, stageID = -1; 
 	
 	public void register() {
+		Log.set(Log.LEVEL_TRACE);
 		Kryo k = end.getKryo();
 		k.register(Vec2.class);
 		k.register(Team.class);
@@ -48,6 +51,10 @@ public class Net {
 		k.register(Message.class);
 		k.register(Snapshot.class);
 		k.register(PlayerState.class);
+		k.register(Stagelike.class);
+		k.register(IMap.class);
+		
+		k.register(AddDef.class);
 		ObjectSpace.registerClasses(k);
 		System.out.println("REGISTR");
 		space = new ObjectSpace();
@@ -90,6 +97,7 @@ public class Net {
 	public void setStage(Stage s) {
 		stage = s;
 		space.register(stageID, s);
+		stage.space = space;
 	}
 
 }

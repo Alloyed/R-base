@@ -33,7 +33,7 @@ public class Ghostmode  extends BasicTWLGameState {
 	}
 	
 	public void start(Vec2 pos) {
-		cursor = (Ghost) loop.stage.addActor(Ghost.class, 0, Team.get(loop.settings.team), new Vec2(1,1), pos);
+		cursor = (Ghost)loop.stage.get( loop.stage.addActor(Ghost.class, loop.net.us.id, Team.get(loop.settings.team), new Vec2(1,1), pos));
 		Console.chat.println("\\Press '.' to spawn in Robot mode, and ',' to spawn in Commander mode.");
 	}
 

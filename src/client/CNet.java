@@ -2,6 +2,7 @@ package client;
 
 import newNet.Message;
 import newNet.Player;
+import physics.AddDef;
 import physics.Console;
 import physics.actors.Actor;
 import physics.actors.Snapshot;
@@ -19,6 +20,8 @@ public class CNet extends newNet.Net {
 	class HEYLISTEN extends Listener {
 		@Override
 		public void connected(Connection connection) {
+			//WHY THE FUCK DID IT TAKE ME THIS LONG TO REALIZE THIS LINE WASN'T HERE FGJAODISAJFDFGAKFJSHJHKJFHSDKDFALSFDJKH
+			space.addConnection(connection);
 			//Send them our player, to be validated
 			connection.sendTCP(us);
 		}
@@ -26,6 +29,7 @@ public class CNet extends newNet.Net {
 		@Override
 		public void disconnected(Connection connection) {
 			//TODO: clean everything up
+			space.removeConnection(connection);
 		}
 		
 		@Override
@@ -44,6 +48,9 @@ public class CNet extends newNet.Net {
 				Message m = (Message) o;
 				messages.add(m);
 				m.print();
+			} else if (o instanceof AddDef) {
+				AddDef ad = (AddDef)o;
+				stage.addDef(ad);
 			}
 		}
 	}
