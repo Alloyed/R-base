@@ -11,6 +11,7 @@ package client;
 
 //Util
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URL;
 
 import org.newdawn.slick.AppGameContainer;
@@ -75,14 +76,22 @@ public class Main extends TWLStateBasedGame {
 	 */
 	public static void main(String argv[]) {
 		try {
+			//Find native libaries
+			System.setProperty( "java.library.path", "lib/natives" );
+			Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
+			fieldSysPath.setAccessible( true );
+			fieldSysPath.set( null, null );
+			
 			Renderer.setRenderer(Renderer.VERTEX_ARRAY_RENDERER);
 			Renderer.setLineStripRenderer(Renderer.QUAD_BASED_LINE_STRIP_RENDERER);
 			
 			AppGameContainer container = new AppGameContainer(new Main("R-base"));
 			container.setDisplayMode(800,600,false);
+			container.setAlwaysRender(true);
+			container.setUpdateOnlyWhenVisible(false);
 			
 			container.start();
-		} catch (SlickException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

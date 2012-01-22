@@ -12,5 +12,4 @@ import org.jbox2d.common.Vec2;
 public interface Stagelike {
 	public int addActor(String type, int id, Team t, Vec2 size, Vec2 pos);
 	public int addActor(String type, Vec2 size, Vec2 pos);
-	public void say();
 }

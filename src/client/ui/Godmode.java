@@ -75,7 +75,7 @@ public class Godmode  extends BasicTWLGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
-		loop.update(dt);
+		loop.update(sg, dt);
 		if (cursor == null)
 			start();
 		Input input = gc.getInput();

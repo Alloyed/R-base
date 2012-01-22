@@ -27,7 +27,10 @@ public class Map extends Actor implements IMap {
 	public ArrayList<Prop> props;
 	public ArrayList<Room> rooms;
 	PortalRoom thinking;
-	
+	//FIXME: this is a cheap way to solve comodification errors, 
+	//the right way would be to update in the main thread instead of its own
+	public boolean started = false;
+
 	public Map() {
 		super();
 		Console.dbg.println("MAPALIZE");
@@ -53,6 +56,8 @@ public class Map extends Actor implements IMap {
 	
 	@Override
 	public void force() {
+		if (!started)
+			return;
 		for (Prop p: props)
 			p.force();
 	}
@@ -135,12 +140,16 @@ public class Map extends Actor implements IMap {
 			}
 		}
 		thinking.link();
+		started = true;
 	}
 
 	public void genFloor(Random rand, int x, int y) {
 		float x0 = x * size, y0 = y * size;
+		//FIXME: floors are gen'd on top of players
+		/*
 		addProp(Floor.class, new Vec2(size, size), new Vec2(x0 + (size / 2), y0
 				+ (size / 2)));
+		*/
 	}
 	
 	final float size = 20f;

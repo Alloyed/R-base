@@ -1,11 +1,12 @@
 package physics.Props;
 
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.contacts.Contact;
 
-import physics.Team;
+import physics.*;
 import physics.actors.Actor;
 import physics.map.Map;
 
@@ -43,7 +44,10 @@ public class Prop {
 	public void place(Map parent) {
 		this.parent = parent;
 		f = parent.b.createFixture(fd);
-		f.setUserData(this);
+		if (f == null) {
+			Console.dbg.println(fd);
+		} else
+			f.setUserData(this);
 	}
 	
 	public void makeFixture() {

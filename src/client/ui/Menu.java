@@ -143,13 +143,15 @@ public class Menu extends BasicTWLGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
+		/*
 		if (toResume)
 			sg.enterState(1);
+		*/
 		if (toQuit) {
 			sg.closeRequested();
 			gc.exit();
 		}
-		l.update(dt);
+		l.update(sg, dt);
 	}
 	
 	public boolean toResume = false, toQuit = false;

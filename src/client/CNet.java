@@ -1,9 +1,13 @@
 package client;
 
+import java.io.IOException;
+import java.util.Random;
+
 import newNet.Message;
 import newNet.Player;
 import physics.AddDef;
 import physics.Console;
+import physics.Team;
 import physics.actors.Actor;
 import physics.actors.Snapshot;
 import client.ui.Loop;
@@ -66,9 +70,12 @@ public class CNet extends newNet.Net {
 		setStage(l.stage);
 		us = new Player();
 		
-		us.name = l.settings.USERNAME;
+		us.name = l.settings.USERNAME + new Random().nextInt(100);
+		us.team = l.settings.team == 0 ? Team.ORANGE : Team.BLUE;
+		us.wantedMode = 2;
+		us.currentMode = 0;
 		cl.addListener(new HEYLISTEN());
-		cl.start();
+		//cl.start();
 	}
 	
 	String host; int tcpPort; int udpPort;
@@ -90,5 +97,13 @@ public class CNet extends newNet.Net {
 		Message m = new Message(us.name, s);
 		cl.sendTCP(m);
 		m.print();
+	}
+	
+	public void update() {
+		try {
+			cl.update(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

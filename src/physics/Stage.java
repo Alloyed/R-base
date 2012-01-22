@@ -20,7 +20,6 @@ import physics.actors.Actor;
  * 
  */
 public class Stage implements Stagelike {
-	public void say() {System.err.println("SUP NIGGA");}
 	class HEYLISTEN implements ContactListener {
 		@Override
 		public void beginContact(Contact c) {
@@ -90,7 +89,6 @@ public class Stage implements Stagelike {
 			a.id = id;
 			a.create(size, pos);
 			a.place(this);
-			Console.dbg.println(a.toString() + " created");
 			return a.id;
 		} catch (InstantiationException e) {
 			e.printStackTrace();
@@ -176,7 +174,9 @@ public class Stage implements Stagelike {
 	 * @return
 	 */
 	public int getNewId() {
-		return nextId++;
+		while (actors.containsKey(nextId))
+			nextId++;
+		return nextId;
 	}
 	
 	/**

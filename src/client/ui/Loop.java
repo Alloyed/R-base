@@ -9,13 +9,11 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
-import com.esotericsoftware.minlog.Log;
-
-
 import physics.Console;
 import physics.Stage;
 import physics.actors.Actor;
 import physics.actors.PlayerState;
+import physics.actors.Robot;
 import client.Camera;
 import client.Chat;
 import client.CNet;
@@ -59,7 +57,7 @@ public class Loop {
 	 * TODO: an equivalent render();
 	 * @param dt
 	 */
-	public void update(int dt) {
+	public void update(StateBasedGame sg, int dt) {
 		/*
 		accum += dt;
 		while (accum > 16) {
@@ -73,18 +71,21 @@ public class Loop {
 			a.oldAng = a.b.getAngle();
 		}
 		*/
+		net.update();
+		if (sg.getCurrentStateID() != net.us.currentMode) {
+			Console.dbg.println("STATE CHANGE TO "+ net.us.currentMode);
+			sg.enterState(net.us.currentMode);
+		}
 		//TIME FOR LOCKSTEP
 		Actor a = stage.actors.get(net.us.id);
-		if (a != null && a.state instanceof PlayerState) {
-//			Log.set(Log.LEVEL_NONE);
-			//net.cl.sendTCP((PlayerState)a.state);
-			Log.set(Log.LEVEL_TRACE);
+		if (net.us.id != 0 && a != null && a instanceof Robot) {
+			net.cl.sendTCP((PlayerState)a.state);
 			for (Player p : net.players) {
 				if (p != net.us)
 					net.waitingfor.add(p);
 			}
 			
-			while (!net.waitingfor.isEmpty()) {}
+			//while (!net.waitingfor.isEmpty()) {net.update();}
 		}
 		
 		

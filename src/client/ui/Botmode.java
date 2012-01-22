@@ -12,6 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import physics.Console;
 import physics.Team;
 import physics.actors.Actor;
+import physics.actors.Ghost;
 import physics.actors.Robot;
 import TWLSlick.BasicTWLGameState;
 
@@ -71,10 +72,15 @@ public class Botmode extends BasicTWLGameState {
 		*/
 	
 	public void start() {
+		/*
 		pc = new Robot();
 		pc.create(new Vec2(1, 1), new Vec2(1, 1));
 		pc.setTeam(loop.settings.team == 0 ? Team.ORANGE : Team.BLUE);
 		pc.place(loop.stage);
+		*/
+		Actor a = (Actor)loop.stage.get(loop.net.us.id);
+		Console.out.println(a.label + " id " + a.id);
+		pc = (Robot)a;
 //		lerped = new Vec2(0,0);
 		Console.chat.println("\\You are a robot. Kill the other team!");
 	}
@@ -161,6 +167,7 @@ public class Botmode extends BasicTWLGameState {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sg) 
 			throws SlickException {
+		Console.dbg.println("BOTMODE STARET");
 		super.enter(gc, sg);
 		start();
 		//gc.getInput().addKeyListener(this);
@@ -241,7 +248,7 @@ public class Botmode extends BasicTWLGameState {
 //		lerped = oldAim.mul(1-Actor.alpha).add(pc.state.aim.mul(Actor.alpha));
 //		lerped = pc.state.aim;
 		keys(gc, input);
-		loop.update(dt);
+		loop.update(sg, dt);
 	}
 	
 	@Override

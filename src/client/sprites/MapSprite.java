@@ -16,6 +16,8 @@ public class MapSprite implements Sprite {
 	
 	@Override
 	public void draw(Graphics g, Actor a) {
+		if (!((Map)a).started)
+			return;
 		for (Prop pr : ((Map)a).props) {
 			if (pr != null) {
 				Sprite s = l.skin.get(pr.getImage());

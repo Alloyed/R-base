@@ -5,11 +5,15 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
 
+import org.jbox2d.common.Vec2;
+
 import newNet.Message;
 import newNet.Player;
+import physics.AddDef;
 import physics.Console;
 import physics.actors.Actor;
 import physics.actors.PlayerState;
+import physics.actors.Robot;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -69,12 +73,21 @@ public class SNet extends newNet.Net {
 		if (!addPlayer(p)) {
 			p.from = c;
 			p.id = stage.getNewId();
+			p.currentMode = 2;
+			
 			space.addConnection(c);
 			for (Player i: players)
 				if (i != p)
 					c.sendTCP(i);
 			for (Message m : messages)
 				c.sendTCP(m);
+			
+			AddDef bot = new AddDef(Robot.class, new Vec2(1, 1), new Vec2(1, 1));
+			bot.id = p.id;
+			bot.team = p.team;
+			serv.sendToAllTCP(bot);
+			stage.addDef(bot);
+			
 			serv.sendToAllTCP(p);
 			mesg("Player " + p + " has joined the game");
 		}

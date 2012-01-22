@@ -1,7 +1,9 @@
 package newNet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.jbox2d.common.Vec2;
 
@@ -22,7 +24,7 @@ public class Net {
 	public Stage stage;
 	
 	//FIXME: Used for the current lockstep TCP method.
-	public LinkedList<Player> waitingfor = new LinkedList<Player>(); 
+	public List<Player> waitingfor;
 	//The default ports, put here out of laziness
 	public final int UDP = 9002, TCP = 9001;
 	public ArrayList<Player> players = new ArrayList<Player>();
@@ -43,7 +45,7 @@ public class Net {
 	public final int netID = 0, stageID = -1; 
 	
 	public void register() {
-		Log.set(Log.LEVEL_TRACE);
+		Log.set(Log.LEVEL_INFO);
 		Kryo k = end.getKryo();
 		k.register(Vec2.class);
 		k.register(Team.class);
@@ -59,6 +61,7 @@ public class Net {
 		System.out.println("REGISTR");
 		space = new ObjectSpace();
 		space.register(netID, this);
+		waitingfor = Collections.synchronizedList(new LinkedList<Player>());
 	}
 	
 	public Player getPlayer(int id) {

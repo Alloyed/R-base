@@ -20,14 +20,14 @@ POSSIBLE PROBLEMS:
 
 
 
---Eclipse-is-a-piece-of-shit notes--
+--Packaging/running notes--
+	To change the svg files, change them in skin-inkscape/, then run convert.sh in skin/
+	
 	if eclipse complains that it can't find controlP5.xml or uni05_53.ttf, go to: 
 	run->run configurations->the run config for the client->arguments->working directory
 	and set it to: ${workspace_loc:R-base}
 	
-	if a source file gives errors claiming that other classes outside its package cannot be found, go to:
-	right click on file->build path->exclude from build path
-	and then do that again, this time including to build path 
+	Export using ANT, not eclipses built-in thing.
 
 --For the networking--
 Objecspace ids:

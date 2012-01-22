@@ -10,6 +10,7 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.contacts.Contact;
 
+import physics.Console;
 import physics.Stage;
 import physics.Team;
 

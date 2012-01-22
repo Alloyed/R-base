@@ -33,7 +33,8 @@ public class Ghostmode  extends BasicTWLGameState {
 	}
 	
 	public void start(Vec2 pos) {
-		cursor = (Ghost)loop.stage.get( loop.stage.addActor(Ghost.class, loop.net.us.id, Team.get(loop.settings.team), new Vec2(1,1), pos));
+		//cursor = (Ghost)loop.stage.get( loop.stage.addActor(Ghost.class, loop.net.us.id, Team.get(loop.settings.team), new Vec2(1,1), pos));
+		cursor = (Ghost)loop.stage.get(loop.net.us.id);
 		Console.chat.println("\\Press '.' to spawn in Robot mode, and ',' to spawn in Commander mode.");
 	}
 
@@ -68,7 +69,7 @@ public class Ghostmode  extends BasicTWLGameState {
 	public void update(GameContainer gc, StateBasedGame sg, int dt)
 			throws SlickException {
 		keys(gc, sg, gc.getInput());
-		loop.update(dt);
+		loop.update(sg, dt);
 	}
 	
 	public void keys(GameContainer gc, StateBasedGame sg, Input in) {

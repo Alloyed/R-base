@@ -6,10 +6,9 @@ import org.jbox2d.common.Vec2;
 
 import newNet.Player;
 import physics.AddDef;
+import physics.Console;
 import physics.Stage;
-import physics.Stagelike;
-import physics.actors.Actor;
-import physics.actors.PlayerState;
+import physics.actors.*;
 import physics.map.IMap;
 import physics.map.Map;
 
@@ -39,20 +38,22 @@ public class Main {
 		main = new Stage();
 		main.space = net.space;
 		net.stage = main;
-		net.mesg("Waiting for at least 1 players");
-		while (net.players.size() < 1) { try {Thread.sleep(100);} catch (Exception e) {} }
-		net.mesg("Players found, Game started.");
 		AddDef map = new AddDef(Map.class, new Vec2(0, 0), new Vec2(0, 0));
 		map.id = main.getNewId();
-		for (Player p : net.players) {
-			p.currentMode = 2;
-			p.from.sendTCP(map);
-		}
+		main.addDef(map);
+		Map m = (Map)main.get(map.id);
+		m.startGame(12345l);
+		net.mesg("Waiting for at least 2 players");
+		while (net.players.size() < 2) { try {Thread.sleep(100);} catch (Exception e) {} }
+		net.mesg("Players found, Game started.");
+		
+		//TODO: send this stuff when somebody else connects
+		net.serv.sendToAllTCP(map);
 		for (Player p : net.players) {
 			IMap a = ObjectSpace.getRemoteObject(p.from, map.id, IMap.class);
 			a.startGame(12345l);
 		}
-		main.addDef(map);
+		
 		while (true) {
 			//Send state to clients here.
 			/*
@@ -75,7 +76,8 @@ public class Main {
 			catch (Exception e) {}
 			
 			//Wait to get all the players input
-			while (!net.waitingfor.isEmpty()) {}
+			//while (!net.waitingfor.isEmpty()) {}
+			Console.dbg.println("INPUT GET");
 			//Send the input back out
 			for (Player p : net.players) {
 				Actor a = main.actors.get(p.id);
